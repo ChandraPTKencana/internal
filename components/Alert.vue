@@ -19,16 +19,18 @@ if (process.client) {
 }
 </script>
 <template>
-    <div id="alert" class="fixed w-full h-14 bg-slate-800 bottom-0 text-white p-1" v-show="show">
-        <!-- @click="display(false)" -->
+    <div id="alert" class="fixed w-full h-14 bg-slate-800 bottom-0 text-white p-1 border-t-2 border-slate-700" v-show="show"
+        @click="show = false">
         <div class="h-full flex flex-row flex-wrap">
             <div class="flex flex-col flex-grow">
-                <strong>
-                    {{ status }}
-                </strong>
-                <small>
-                    {{ message }}
-                </small>
+                <ClientOnly>
+                    <strong>
+                        {{ status }}
+                    </strong>
+                    <small>
+                        {{ message }}
+                    </small>
+                </ClientOnly>
             </div>
             <div class="flex items-center justify-center">
                 <IconsTimes class="text-2xl cursor-pointer" />

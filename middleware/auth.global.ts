@@ -1,6 +1,6 @@
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '~/store/auth';
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive
   const token = useCookie('token'); // get token from cookies
   // console.log(token.value, "token when route");
@@ -25,6 +25,12 @@ export default defineNuxtRouteMiddleware((to) => {
 
   if (to?.name !== 'login') {
     const { checkUser } = useAuthStore();
-    checkUser();
+    checkUser()
+      .then((res) => {
+      }).catch((error) => {
+      })
+      .finally(() => {
+        return;
+      });
   }
 });

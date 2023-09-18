@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { useErrorStore } from '~/store/error';
+import { useCommonStore } from '~/store/common';
 
 interface UserPayloadInterface {
   email: string;
@@ -10,15 +11,17 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     authenticated: false,
     loading: false,
-    loading_full: false,
+    // loading_full: false,
   }),
   actions: {
     async authenticateUser({ email, password }: UserPayloadInterface) {
       return new Promise<any>(async (resolve, reject) => {
 
-        const { data, error, status, pending }: any = useLazyFetch('http://127.0.0.1:8000/api/internal/login', {
+        const { data, error, status, pending }: any = useLazyFetch('/api/internal/login', {
           method: 'post',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            // 'Content-Type': 'application/json'
+          },
           body: {
             email,
             password,
@@ -70,34 +73,39 @@ export const useAuthStore = defineStore('auth', {
         // }
       })
     },
-    checkUser() {
+    async checkUser() {
       const token = useCookie('token'); // useCookie new hook in nuxt 3
 
-      return new Promise<any>(async (resolve, reject) => {
-        const { data, error, status, pending }: any = useLazyFetch('http://127.0.0.1:8000/api/internal/check_user', {
-          method: 'get',
-          headers: {
-            'Authorization': `Bearer ${token.value}`,
-            'Content-Type': 'application/json'
-          },
-          // body: {
-          //   email,
-          //   password,
-          // },
-          timeout: 1000,
-        });
+      const { data, error, status, pending }: any = useLazyFetch('/api/internal/check_user', {
+        method: 'get',
+        headers: {
+          'Authorization': `Bearer ${token.value}`,
+          // 'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        // body: {
+        //   email,
+        //   password,
+        // },
+        timeout: 1000,
+      });
 
-        this.loading_full = pending.value;
-        while (pending.value) {
-          await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-        this.loading_full = pending.value;
+      useCommonStore().loading_full = pending.value;
+      while (pending.value) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+      useCommonStore().loading_full = pending.value;
 
+      return await new Promise<any>((resolve, reject) => {
+        // console.log(status);
         if (status.value == "error") {
           const { trigger } = useErrorStore();
+          // console.log(error);
+
           trigger(error);
           reject(error);
         } else {
+
           if (data.value) {
             const email = useCookie('email'); // useCookie new hook in nuxt 3
             email.value = data?.value?.user?.email; // set token to cookie
@@ -122,5 +130,15 @@ export const useAuthStore = defineStore('auth', {
       const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
       scopes.value = null;
     },
+
+    checkScopes(scopes: Array<string> = []) {
+      const allowed_scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
+      const setA: Set<string> = new Set(allowed_scopes.value);
+      const setB: Set<string> = new Set(scopes);
+      const intersection = new Set([...setA].filter((x: string) => setB.has(x)));
+      return Array.from(intersection).length > 0;
+    }
+
+
   },
 });

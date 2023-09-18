@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia';
 
 
-export const useSetupStore = defineStore('setup', {
+export const useCommonStore = defineStore('common', {
   state: () => ({
     is_sidebar_open: false,
+    loading_full: false,
     // loading: false,
   }),
   actions: {

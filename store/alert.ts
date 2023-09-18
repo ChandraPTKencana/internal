@@ -9,20 +9,20 @@ interface AlertPayloadInterface {
 export const useAlertStore = defineStore('alert', {
   state: () => ({
     show: false,
-    status: "Success | Failed",
-    message: "Message"
+    status: "",
+    message: ""
   }),
   actions: {
-    display({show,status="",message=""}:AlertPayloadInterface){
-        this.show = show;
-        if(this.show){
-            this.status = status;
-            this.message = message;
-        }else{
-            this.status = "";
-            this.message = "";
-        }
+    display({ show, status = "", message = "" }: AlertPayloadInterface) {
+      this.show = show;
+      if (this.show) {
+        this.status = status;
+        this.message = message;
+      } else {
+        this.status = "";
+        this.message = "";
+      }
     },
-},
+  },
 
 });

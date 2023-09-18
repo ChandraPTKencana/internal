@@ -17,3 +17,43 @@ div#__nuxt {
 div#__nuxt>div {
     @apply h-full;
 }
+
+
+table.tacky {
+    @apply whitespace-nowrap m-0 border-none border-collapse border-spacing-0 table-fixed;
+}
+
+// table.sticky:focus {
+//     box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.5);
+//     outline: 0;
+// }
+
+table.tacky thead th,
+table.tacky tbody td,
+table.tacky tbody th {
+    @apply border-2 border-solid border-slate-600 p-1 w-[25vw];
+}
+
+table.tacky thead th {
+    @apply z-[1] bg-slate-600 text-white sticky top-[inherit];
+    // width: 25vw;
+}
+
+table.tacky td {
+    @apply bg-white py-1 px-2 text-center;
+}
+
+table.tacky tbody th {
+    @apply sticky left-0 bg-white z-[1];
+}
+
+table.tacky thead th.tools,
+table.tacky tbody td.tools {
+    @apply p-3 w-10;
+}
+
+
+tr.active td,
+tr.active th {
+    @apply bg-green-300;
+}

@@ -3,56 +3,57 @@
     <Header :title="'List User'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button type="button" name="button" class=" m-1 ">
-          <!-- @click="form_add()" -->
+        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+          @click="form_add()">
           <IconsPlus />
         </button>
-        <button type="button" name="button" class=" m-1 ">
-          <!-- @click="form_edit()" -->
+        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+          @click="form_edit()">
           <IconsEdit />
         </button>
         <!-- <button type="button" name="button" style="margin:4px; " @click="cetak()">
           <fa :icon="['fas','print']"/>
         </button> -->
       </div>
-      <!-- <div class="w-full flex p-1">
+      <div class="w-full flex p-1">
         <div class="grow">
           <div class="font-bold"> Keyword </div>
-          <input class="w-full" type="text" v-model="search" name="search" placeholder="Keyword">
+          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="search" name="search"
+            placeholder="Keyword">
         </div>
         <div class="pl-1">
           <div class="font-bold"> Sort By </div>
-          <select v-model="sort.field">
+          <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
             <option value=""></option>
-            <option value="username">Username</option>
+            <option value="email">Email</option>
             <option value="fullname">Fullname</option>
           </select>
         </div>
         <div class="pl-1">
           <div class="font-bold"> Sort Order </div>
-          <select v-model="sort.by">
+          <select class="w-full border-black border-solid border-2 p-1" v-model="sort.by">
             <option value="asc">Asc</option>
             <option value="desc">Desc</option>
           </select>
         </div>
         <div class="flex items-end pl-1">
-          <button type="button" name="button" @click="searching()">
-            <IconsSearch />
+          <button class="w-full border-black border-solid border-2 p-1" type="button" name="button" @click="searching()">
+            <IconsSearch class="text-2xl" />
           </button>
         </div>
-      </div> -->
-      <!-- <div class="flex justify-items-center items-center grow h-0 p-1">
+      </div>
+      <div class="flex justify-items-center items-center grow h-0 p-1">
 
         <div v-if="users.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
         <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
-          <table class=" whitespace-nowrap m-0 border-none border-collapse border-spacing-0 table-fixed">
+          <table class="tacky">
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Username</th>
+                <th>Email</th>
                 <th>Fullname</th>
                 <th>Role</th>
                 <th>Tanggal Dibuat</th>
@@ -63,7 +64,7 @@
               <tr v-for="(user, index) in users" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="bold">{{ user.username }}</td>
+                <td class="bold">{{ user.email }}</td>
                 <td>{{ user.fullname }}</td>
                 <td>{{ user.role }}</td>
                 <td>{{ $moment(user.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
@@ -72,175 +73,187 @@
             </tbody>
           </table>
         </div>
-      </div> -->
+      </div>
 
-
+      <!-- {{ data.greetings }} -->
+      <!-- {{ users }} -->
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
+const { $moment } = useNuxtApp()
+import { storeToRefs } from 'pinia';
+import { useErrorStore } from '~/store/error';
+import { useCommonStore } from '~/store/common';
+import { useAlertStore } from '~/store/alert';
+
+// const { sayHello } = useUtils();
+// sayHello();
+
+const token = useCookie('token');
+const { data: users } = await useAsyncData(async () => {
+  useCommonStore().loading_full = true;
+  const { data, error, status } = await useFetch("/api/internal/users", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    // body: {
+    //   sort: "updated_at:desc"
+    // },
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return [];
+  }
+
+  return data.value.data;
+});
 
 
-// export default {
-//   // layout:'defaultSide',
-//   middleware: [
-//     'auth-user',
-//     function ({ $auth, redirect, store, route }) {
-//       if ($auth.hasScope('User')) {
-//         redirect(`/dashboard`);
-//       }
-//     }
-//   ],
+const search = ref("");
+const sort = ref({
+  field: "",
+  by: "asc"
+});
+const selected = ref(-1);
+const params = ref({});
+const scrolling = ref({
+  page: 1,
+  is_last_record: false,
+  scrollLeft: 0,
+  may_get_data: true
+});
 
-//   async asyncData(context) {
-//     context.store.commit("SET_LOADING", true);
+const inject_params = () => {
+  this.params.value._TimeZoneOffset = new Date().getTimezoneOffset();
+  this.params.value.like = "";
+  if (this.search.value != "") {
+    this.params.like = `id:%${this.search.value}%,email:%${this.search.value}%,fullname:%${this.search.value}%`;
+  }
+  this.params.value.sort = "";
+  if (this.sort.value.field) {
+    this.params.value.sort = this.sort.value.field + ":" + this.sort.value.by;
+  }
+};
 
-//     let users = [];
-//     await context.app.$axios.$get(`/users`, { sort: "updated_at:desc" })
-//       .then((res) => {
-//         users = res.data;
-//       }).catch((error) => {
-//         context.store.dispatch('error/errAct', error);
-//       }).then(() => {
-//       })
-//     context.store.commit("SET_LOADING", false);
-//     return { users }
-//   },
-//   data() {
-//     return {
-//       params: {},
-//       users: [],
-//       search: "",
-//       action: "Tambah",
-//       selected: -1,
-//       scrolling: {
-//         page: 1,
-//         is_last_record: false,
-//         scrollLeft: 0,
-//         may_get_data: true
-//       },
-//       sort: {
-//         field: "",
-//         by: "asc",
-//       },
-//     }
-//   },
-//   // created(){
-//   //   // console.log(process.env.API_URL);
-//   //   // this.start();
-//   // },
-//   methods: {
-//     inject_params() {
-//       //getTimezoneOffset
-//       this.params._TimeZoneOffset = new Date().getTimezoneOffset();
-//       //inject filter
-//       this.params.like = "";
-//       if (this.search != "") {
-//         let like = `id:%${this.search}%,username:%${this.search}%,fullname:%${this.search}%`;
-//         this.params.like = like;
-//       }
-//       this.params.sort = "";
-//       if (this.sort.field) {
-//         this.params.sort = this.sort.field + ":" + this.sort.by;
-//       }
-//     },
-//     async start() {
-//       this.$store.commit("SET_LOADING", true);
-//       this.scrolling.may_get_data = false;
+const loadRef = ref(null);
 
-//       this.params.page = this.scrolling.page;
-//       if (this.params.page == 1) this.users = [];
+const callData = async () => {
+  useCommonStore().loading_full = true;
+  this.scrolling.value.may_get_data = false;
+  this.params.value.page = this.scrolling.value.page;
+  if (this.params.value.page == 1) users.value = [];
 
-//       await this.$axios.$get('/users', { params: this.params })
-//         .then((res) => {
-//           if (this.scrolling.page == 1) {
-//             this.users = res.data;
-//             this.$nextTick(() => {
-//               if (this.$refs.loadRef) this.$refs.loadRef.scrollTop = 0;
-//             });
-//             // this.$store.commit('_product/ASSIGN_DATA', res.data);
-//           } else if (this.scrolling.page > 1) {
-//             this.users = [...this.users, ...res.data];
-//             // this.$store.commit('_product/CONCAT_DATA', res.data);
-//           }
-//           // this.$store.commit('_role/ASSIGN_SINGLE', res.data);
-//           if (res.data.length == 0) {
-//             this.scrolling.is_last_record = true;
-//           }
-//         }).catch((error) => {
-//           this.$store.dispatch('error/errAct', error);
-//         });
+  const { data, error, status } = await useFetch("/api/internal/users", {
+    method: 'get',
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      // 'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
+    // body: {
+    //   sort: "updated_at:desc"
+    // },
+    retry: 0,
+    // server: true
+  });
+  useCommonStore().loading_full = false;
+  this.scrolling.value.may_get_data = true;
 
-//       this.scrolling.may_get_data = true;
-//       this.$store.commit("SET_LOADING", false);
-//     },
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }
 
-//     async loadMore() {
-//       if (!this.scrolling.may_get_data) return;
-//       let parent = this.$refs.loadRef;
+  if (this.scrolling.value.page == 1) {
+    users.value = data.value.data;
+    if (this.loadRef) this.loadRef.value.scrollTop = 0;
+  } else if (this.scrolling.value.page > 1) {
+    users.value = [...users.value, ...data.value.data];
+  }
+  if (data.value.data.length == 0) {
+    this.scrolling.value.is_last_record = true;
+  }
+}
 
-//       if (parent.scrollLeft != this.scrolling.scrollLeft) {
-//         this.scrolling.scrollLeft = parent.scrollLeft;
-//         return;
-//       }
+const loadMore = async () => {
 
-//       if (this.scrolling.is_last_record) return;
+  if (!this.scrolling.value.may_get_data) return;
+  let parent = this.loadRef.value;
 
-//       let stuck = Math.round(parent.scrollTop) + parent.clientHeight >= parent.scrollHeight - 1 ? true : false;
-//       if (!stuck) return;
+  if (parent.scrollLeft != this.scrolling.value.scrollLeft) {
+    this.scrolling.value.scrollLeft = parent.scrollLeft;
+    return;
+  }
 
-//       this.scrolling.page++;
-//       await this.start();
-//     },
-//     searching() {
-//       this.scrolling.page = 1;
-//       this.scrolling.is_last_record = false;
-//       this.inject_params();
-//       this.start();
-//     },
+  if (this.scrolling.value.is_last_record) return;
 
-//     form_add() {
-//       // this.$store.commit('_product/CLEAR_SINGLE');
-//       this.$router.push({ name: 'user-form', query: { id: "" } });
-//     },
-//     form_edit() {
-//       if (this.selected == -1) {
-//         this.$store.commit('alert/SET_ALERT', {
-//           show: true,
-//           status: "Gagal",
-//           message: "Silahkan Pilih Data Terlebih Dahulu"
-//         });
-//       } else {
-//         this.$router.push({ name: 'user-form', query: { id: this.users[this.selected].id } })
-//       }
-//     },
+  let stuck = Math.round(parent.scrollTop) + parent.clientHeight >= parent.scrollHeight - 1 ? true : false;
+  if (!stuck) return;
+
+  this.scrolling.value.page++;
+  await this.callData();
+
+}
+
+const searching = () => {
+  this.scrolling.value.page = 1;
+  this.scrolling.value.is_last_record = false;
+  this.inject_params();
+  this.callData();
+}
+
+const router = useRouter();
+
+const form_add = () => {
+  router.push({ name: 'user-form', query: { id: "" } });
+}
+
+const { display } = useAlertStore();
+const { show, status, message } = storeToRefs(useAlertStore());
+
+const form_edit = () => {
+  if (selected.value == -1) {
+
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    router.push({ name: 'user-form', query: { id: users.value[selected.value].id } });
+  }
+};
 //     // form_inject(){
-//     //   if (this.selected==-1) {
+//     //   if (selected==-1) {
 //     //     this.$store.commit('alert/SET_ALERT',{
 //     //       show:true,
 //     //       status:"Gagal",
 //     //       message:"Silahkan Pilih Data Terlebih Dahulu"
 //     //     });
 //     //   }else {
-//     //     this.$router.push({name:'product-material_controls',query:{product_id:this.users[this.selected].id,status:"Inject"}})
+//     //     this.$router.push({name:'product-material_controls',query:{product_id:users[selected].id,status:"Inject"}})
 //     //   }
 //     // },
 //     // form_rest(){
-//     //   if (this.selected==-1) {
+//     //   if (selected==-1) {
 //     //     this.$store.commit('alert/SET_ALERT',{
 //     //       show:true,
 //     //       status:"Gagal",
 //     //       message:"Silahkan Pilih Data Terlebih Dahulu"
 //     //     });
 //     //   }else {
-//     //     this.$router.push({name:'product-material_controls',query:{product_id:this.users[this.selected].id,status:"Rest"}})
+//     //     this.$router.push({name:'product-material_controls',query:{product_id:users[selected].id,status:"Rest"}})
 //     //   }
 //     // },
 
 
 //     // async cetak(){
-//     //   if (this.selected==-1) {
+//     //   if (selected==-1) {
 //     //     this.$store.commit('alert/SET_ALERT',{
 //     //       show:true,
 //     //       status:"Gagal",
@@ -253,7 +266,7 @@
 //     //     this.$store.commit("SET_LOADING",true);
 //     //     let response = await this.$axios.$get('/product/cetak', {
 //     //       params:{
-//     //         id:this.users[this.selected].id
+//     //         id:users[selected].id
 //     //       }
 //     //     },{});
 //     //     // downloadFile(response);
@@ -264,8 +277,14 @@
 //     //   }
 //     // },
 //   },
+// })
+
+</script>
+<!-- <scipt>
+
+
 //   computed: {
-//     ...mapState('error', ['errors']),
+//     // ...mapState('error', ['errors']),
 //     // ...mapState('_product',{
 //     //    users: state => state.users,
 //     //    state_product: state => state.product,
@@ -275,7 +294,7 @@
 //   },
 
 // }
-</script>
+</script> -->
 <style scoped="">
 /* table.sticky thead th:nth-child(2) {
   position: -webkit-sticky;

@@ -87,12 +87,18 @@ export const useErrorStore = defineStore('error', {
       let errorStatusCode = error.value.statusCode;
 
       const { show, status, message } = storeToRefs(useAlertStore());
-      if (error.value.data == undefined || errorStatusCode == 404) {
-        // console.log("trigger error", errorStatusCode);
+      const { display } = useAlertStore();
 
-        show.value = true;
-        status.value = "Failed";
-        message.value = "Aplikasi mengalami kegagalan mohon di informasikan ke bagian Terkait";
+      if (error.value.data == undefined || errorStatusCode == 500 || errorStatusCode == 404) {
+        // console.log("trigger error", errorStatusCode);
+        display({
+          show: true,
+          status: "Failed",
+          message: "Aplikasi mengalami kegagalan mohon di informasikan ke bagian Terkait"
+        })
+        // show.value = true;
+        // status.value = "Failed";
+        // message.value = "Aplikasi mengalami kegagalan mohon di informasikan ke bagian Terkait";
         return;
       }
 
@@ -111,9 +117,11 @@ export const useErrorStore = defineStore('error', {
       }
 
       if (errorStatusCode == 400 || errorStatusCode == 403) {
-        show.value = true;
-        status.value = "Failed";
-        message.value = errorMessage;
+        display({
+          show: true,
+          status: "Failed",
+          message: errorMessage
+        })
         return;
       }
 
@@ -160,7 +168,6 @@ export const useErrorStore = defineStore('error', {
 
     },
     setErrors(m_fields: Record<string, any> = {}, r_fields = []) {
-      m_fields = {};
       for (let field in r_fields) {
         m_fields.value[field] = r_fields[field][0];
       }

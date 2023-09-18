@@ -1,11 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import {resolve} from 'path';
+import { resolve } from 'path';
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  alias:{
-    '@': resolve(__dirname, '/'), 
+  alias: {
+    '@': resolve(__dirname, '/'),
   },
-  css:[
+  css: [
     '~/assets/main.scss'
   ],
   postcss: {
@@ -18,4 +18,18 @@ export default defineNuxtConfig({
     // ...
     '@pinia/nuxt',
   ],
+  nitro: {
+    routeRules: {
+      "/api/**": { proxy: 'http://127.0.0.1:8000/api/**' }
+      // '/proxy/example': { proxy: 'http://39.98.58.238:8594' },
+      // "/proxy/**": { proxy: '/api/**' },
+    }
+  },
+  // proxy: {
+  //   '/api/': {
+  //     target: process.env.API_URL,
+  //     pathRewrite: { '^/api/': '/' },
+  //     // changeOrigin:true 
+  //   }
+  // },
 })
