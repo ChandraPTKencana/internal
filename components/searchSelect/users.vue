@@ -1,24 +1,9 @@
 <template>
-  <div class="w-full h-full flex flex-col">
-    <Header :title="'List User'" />
-    <div class="w-full flex grow flex-col overflow-auto h-0">
-      <div class="w-full flex">
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
-          @click="form_add()">
-          <IconsPlus />
-        </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
-          @click="form_edit()">
-          <IconsEdit />
-        </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
-          @click="form_permission()">
-          <IconsEdit />
-        </button>
-        <!-- <button type="button" name="button" style="margin:4px; " @click="cetak()">
-          <fa :icon="['fas','print']"/>
-        </button> -->
-      </div>
+  <section v-show="show" class="box-fixed">
+    <div>
+      <HeaderPopup :title="'Search And Select Employees'" :fn="fnClose" class="w-100 d-flex align-items-center"
+        style="color:white;" />
+
       <div class="w-full flex p-1">
         <div class="grow">
           <div class="font-bold"> Keyword </div>
@@ -78,43 +63,53 @@
           </table>
         </div>
       </div>
-
-      <!-- {{ data.greetings }} -->
-      <!-- {{ users }} -->
+      <div class="d-flex" style="justify-content:end; padding:5px;">
+        <button @click="selectRow()" class="w-36 m-1 bg-blue-600 text-white p-2 rounded-sm">
+          Select
+        </button>
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script setup>
+
 const { $moment } = useNuxtApp()
 import { storeToRefs } from 'pinia';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
-const { sayHello } = useUtils();
-sayHello();
+
+const props = defineProps({
+  show: {
+    type: Boolean,
+    required: true,
+  },
+  fnClose: {
+    type: Function,
+    required: false,
+  },
+  fnSelect: {
+    type: Function,
+    required: false,
+  },
+  excludes: {
+    type: String,
+    required: false,
+    // default: '',
+  },
+  exclude_lists: {
+    type: Array,
+    required: false,
+    // default: '',
+  },
+})
+
 
 const token = useCookie('token');
-const { data: users } = await useAsyncData(async () => {
-  useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/internal/users", {
-    method: 'get',
-    headers: {
-      'Authorization': `Bearer ${token.value}`,
-      'Accept': 'application/json'
-    },
-    retry: 0,
-  });
-  useCommonStore().loading_full = false;
 
-  if (status.value === 'error') {
-    useErrorStore().trigger(error);
-    return [];
-  }
-
-  return data.value.data;
-});
+const users = ref([]);
 
 
 const search = ref("");
@@ -158,7 +153,6 @@ const callData = async () => {
       // 'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    params: params.value,
     // body: {
     //   sort: "updated_at:desc"
     // },
@@ -211,104 +205,55 @@ const searching = () => {
   callData();
 }
 
-const router = useRouter();
-
-const form_add = () => {
-  router.push({ name: 'user-form', query: { id: "" } });
+const selectRow = () => {
+  if (selected.value > -1) {
+    props.fnSelect(users.value[selected.value]);
+  } else {
+    props.fnSelect({
+      id: "",
+      email: "",
+      fullname: ""
+    });
+  }
 }
 
-const { display } = useAlertStore();
-const { show, status, message } = storeToRefs(useAlertStore());
-
-const form_edit = () => {
-  if (selected.value == -1) {
-
-    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-  } else {
-    router.push({ name: 'user-form', query: { id: users.value[selected.value].id } });
-  }
-};
-
-const form_permission = () => {
-  if (selected.value == -1) {
-
-    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-  } else {
-    router.push({ name: 'user-permission', query: { id: users.value[selected.value].id } });
-  }
-};
-//     // form_inject(){
-//     //   if (selected==-1) {
-//     //     this.$store.commit('alert/SET_ALERT',{
-//     //       show:true,
-//     //       status:"Gagal",
-//     //       message:"Silahkan Pilih Data Terlebih Dahulu"
-//     //     });
-//     //   }else {
-//     //     this.$router.push({name:'product-material_controls',query:{product_id:users[selected].id,status:"Inject"}})
-//     //   }
-//     // },
-//     // form_rest(){
-//     //   if (selected==-1) {
-//     //     this.$store.commit('alert/SET_ALERT',{
-//     //       show:true,
-//     //       status:"Gagal",
-//     //       message:"Silahkan Pilih Data Terlebih Dahulu"
-//     //     });
-//     //   }else {
-//     //     this.$router.push({name:'product-material_controls',query:{product_id:users[selected].id,status:"Rest"}})
-//     //   }
-//     // },
-
-
-//     // async cetak(){
-//     //   if (selected==-1) {
-//     //     this.$store.commit('alert/SET_ALERT',{
-//     //       show:true,
-//     //       status:"Gagal",
-//     //       message:"Silahkan Pilih Data Terlebih Dahulu"
-//     //     });
-//     //     return;
-//     //   }
-
-//     //   try {
-//     //     this.$store.commit("SET_LOADING",true);
-//     //     let response = await this.$axios.$get('/product/cetak', {
-//     //       params:{
-//     //         id:users[selected].id
-//     //       }
-//     //     },{});
-//     //     // downloadFile(response);
-//     //     viewFile(response);
-//     //   } catch (e) {
-//     //   } finally {
-//     //     this.$store.commit("SET_LOADING",false);
-//     //   }
-//     // },
-//   },
-// })
+watch(() => props.show, (newVal, oldVal) => {
+  if (newVal == true)
+    searching();
+}, {
+  immediate: true
+});
 
 </script>
-<!-- <scipt>
-
-
-//   computed: {
-//     // ...mapState('error', ['errors']),
-//     // ...mapState('_product',{
-//     //    users: state => state.users,
-//     //    state_product: state => state.product,
-//     //    last_record: state => state.last_record,
-//     //    highlight_search:state=>state.search,
-//     // }),
-//   },
-
-// }
-</script> -->
 <style scoped="">
-/* table.sticky thead th:nth-child(2) {
+table.sticky thead th:nth-child(2) {
   position: -webkit-sticky;
   position: sticky;
   left: 0;
   z-index: 2;
-} */
+}
+
+table.sticky thead tr {
+  top: 0;
+}
+
+.box-fixed {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: 0px;
+}
+
+.box-fixed>div {
+  width: 95%;
+  height: 95%;
+  background-color: white;
+  border: solid 1px #ccc;
+  display: flex;
+  flex-direction: column;
+}
 </style>

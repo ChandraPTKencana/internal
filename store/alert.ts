@@ -10,7 +10,8 @@ export const useAlertStore = defineStore('alert', {
   state: () => ({
     show: false,
     status: "",
-    message: ""
+    message: "",
+    permit_close: true,
   }),
   actions: {
     display({ show, status = "", message = "" }: AlertPayloadInterface) {
@@ -18,6 +19,10 @@ export const useAlertStore = defineStore('alert', {
       if (this.show) {
         this.status = status;
         this.message = message;
+        this.permit_close = false;
+        setTimeout(() => {
+          this.permit_close = true;
+        }, 100);
       } else {
         this.status = "";
         this.message = "";

@@ -4,7 +4,7 @@
     <div class="w-full flex grow flex-col h-0 overflow-auto bg-white">
       <div class="w-full align-items-center justify-content-center grow overflow-auto">
         <div class="w-full flex flex-col flex-wrap p-1">
-          <label for="">Nama Pengguna</label>
+          <label for="">Email</label>
           <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="user.email">
           <p class="text-red-500">{{ field_errors.email }}</p>
         </div>
@@ -18,11 +18,12 @@
           <input class="w-full border-black border-solid border-2 p-1" type="password" v-model="user.password">
           <p class="text-red-500">{{ field_errors.password }}</p>
         </div>
-        <div v-if="isPermitRole" class="w-full flex flex-col flex-wrap p-1">
+        <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Jabatan</label>
           <select class="w-full border-black border-solid border-2 p-1" v-model="user.role">
             <option value="User">User</option>
             <option value="Admin">Admin</option>
+            <option value="Marketing">Marketing</option>
             <option value="Super_Admin">Super Admin</option>
           </select>
           <p class="text-red-500">{{ field_errors.role }}</p>
@@ -70,7 +71,7 @@ definePageMeta({
 const token = useCookie('token');
 const field_errors = ref<Record<string, any>>({})
 
-const isPermitRole = ref(false);
+// const isPermitRole = ref(false);
 const router = useRouter();
 const route = useRoute();
 
@@ -78,7 +79,7 @@ const route = useRoute();
 
 const { data: user } = await useAsyncData(async () => {
   // isPermitRole.value = checkScopes(['dp-user-manage-role']);
-  isPermitRole.value = checkScopes(['ap-user-manage-role']);
+  // isPermitRole.value = checkScopes(['ap-user-manage-role']);
   const id = route.query.id;
 
   if (id !== undefined && id !== "") {
@@ -133,19 +134,19 @@ const doSave = async () => {
     "role": user.value.role,
     "can_login": user.value.can_login,
   };
-  let $method = "post";
+  let req_method: any = "post";
 
   let id = route.query.id;
   if (id === "") {
   } else {
-    $method = "put";
+    req_method = "put";
     data_in['id'] = id;
     // data_in.append("id", id);
     // data_in.append("_method", "PUT");
   }
 
   const { data, error, status }: any = await useFetch("http://127.0.0.1:8000/api/internal/user", {
-    method: 'put',
+    method: req_method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
       // 'Content-Type': 'application/json',

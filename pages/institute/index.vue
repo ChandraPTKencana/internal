@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <Header :title="'List User'" />
+    <Header :title="'List Institute'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
         <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
@@ -11,14 +11,8 @@
           @click="form_edit()">
           <IconsEdit />
         </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
-          @click="form_permission()">
-          <IconsEdit />
-        </button>
-        <!-- <button type="button" name="button" style="margin:4px; " @click="cetak()">
-          <fa :icon="['fas','print']"/>
-        </button> -->
       </div>
+
       <div class="w-full flex p-1">
         <div class="grow">
           <div class="font-bold"> Keyword </div>
@@ -29,8 +23,9 @@
           <div class="font-bold"> Sort By </div>
           <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
             <option value=""></option>
-            <option value="email">Email</option>
-            <option value="fullname">Fullname</option>
+            <option value="name">Name</option>
+            <option value="contact_number">Contact Number</option>
+            <option value="contact_person">Contact Person</option>
           </select>
         </div>
         <div class="pl-1">
@@ -48,7 +43,7 @@
       </div>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="users.length == 0" class="">
+        <div v-if="institutes.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -57,30 +52,31 @@
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Email</th>
-                <th>Fullname</th>
-                <th>Role</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Contact Number</th>
+                <th>Contact Person</th>
+                <th>Marketer</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tanggal Diubah</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(user, index) in users" :key="index" @click="selected = index"
+              <tr v-for="(institute, index) in institutes" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="bold">{{ user.email }}</td>
-                <td>{{ user.fullname }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ $moment(user.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(user.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td class="bold">{{ institute.name }}</td>
+                <td>{{ institute.address }}</td>
+                <td>{{ institute.contact_number }}</td>
+                <td>{{ institute.contact_person }}</td>
+                <td>{{ institute.internal_marketer.email }}</td>
+                <td>{{ $moment(institute.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(institute.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
-
-      <!-- {{ data.greetings }} -->
-      <!-- {{ users }} -->
     </div>
   </div>
 </template>
@@ -88,17 +84,31 @@
 <script setup>
 const { $moment } = useNuxtApp()
 import { storeToRefs } from 'pinia';
+
+import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
-const { sayHello } = useUtils();
-sayHello();
+console.log(useAuthStore().checkScopes(['ap-institute-view']));
+
+definePageMeta({
+  // layout: "clear",
+  middleware: [
+    function (to, from) {
+      if (!useAuthStore().checkScopes(['ap-institute-view']))
+        return navigateTo('/');
+    },
+    // 'auth',
+  ],
+});
+
+const date = ref();
 
 const token = useCookie('token');
-const { data: users } = await useAsyncData(async () => {
+const { data: institutes } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/internal/users", {
+  const { data, error, status } = await useFetch("/api/internal/institutes", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -107,12 +117,10 @@ const { data: users } = await useAsyncData(async () => {
     retry: 0,
   });
   useCommonStore().loading_full = false;
-
   if (status.value === 'error') {
     useErrorStore().trigger(error);
     return [];
   }
-
   return data.value.data;
 });
 
@@ -135,7 +143,7 @@ const inject_params = () => {
   params.value._TimeZoneOffset = new Date().getTimezoneOffset();
   params.value.like = "";
   if (search.value != "") {
-    params.value.like = `id:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%`;
+    params.value.like = `id:%${search.value}%,name:%${search.value}%,address:%${search.value}%,contact_number:%${search.value}%,contact_person:%${search.value}%`;
   }
   params.value.sort = "";
   if (sort.value.field) {
@@ -149,21 +157,15 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.value.page = scrolling.value.page;
-  if (params.value.page == 1) users.value = [];
+  if (params.value.page == 1) institutes.value = [];
 
-  const { data, error, status } = await useFetch("/api/internal/users", {
+  const { data, error, status } = await useFetch("/api/internal/institutes", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
-      // 'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    params: params.value,
-    // body: {
-    //   sort: "updated_at:desc"
-    // },
     retry: 0,
-    // server: true
   });
   useCommonStore().loading_full = false;
   scrolling.value.may_get_data = true;
@@ -174,10 +176,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    users.value = data.value.data;
+    institutes.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    users.value = [...users.value, ...data.value.data];
+    institutes.value = [...institutes.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -214,7 +216,7 @@ const searching = () => {
 const router = useRouter();
 
 const form_add = () => {
-  router.push({ name: 'user-form', query: { id: "" } });
+  router.push({ name: 'institute-form', query: { id: "" } });
 }
 
 const { display } = useAlertStore();
@@ -222,93 +224,17 @@ const { show, status, message } = storeToRefs(useAlertStore());
 
 const form_edit = () => {
   if (selected.value == -1) {
-
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    router.push({ name: 'user-form', query: { id: users.value[selected.value].id } });
+    router.push({ name: 'institute-form', query: { id: institutes.value[selected.value].id } });
   }
 };
 
 const form_permission = () => {
   if (selected.value == -1) {
-
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    router.push({ name: 'user-permission', query: { id: users.value[selected.value].id } });
+    router.push({ name: 'institute-permission', query: { id: institutes.value[selected.value].id } });
   }
 };
-//     // form_inject(){
-//     //   if (selected==-1) {
-//     //     this.$store.commit('alert/SET_ALERT',{
-//     //       show:true,
-//     //       status:"Gagal",
-//     //       message:"Silahkan Pilih Data Terlebih Dahulu"
-//     //     });
-//     //   }else {
-//     //     this.$router.push({name:'product-material_controls',query:{product_id:users[selected].id,status:"Inject"}})
-//     //   }
-//     // },
-//     // form_rest(){
-//     //   if (selected==-1) {
-//     //     this.$store.commit('alert/SET_ALERT',{
-//     //       show:true,
-//     //       status:"Gagal",
-//     //       message:"Silahkan Pilih Data Terlebih Dahulu"
-//     //     });
-//     //   }else {
-//     //     this.$router.push({name:'product-material_controls',query:{product_id:users[selected].id,status:"Rest"}})
-//     //   }
-//     // },
-
-
-//     // async cetak(){
-//     //   if (selected==-1) {
-//     //     this.$store.commit('alert/SET_ALERT',{
-//     //       show:true,
-//     //       status:"Gagal",
-//     //       message:"Silahkan Pilih Data Terlebih Dahulu"
-//     //     });
-//     //     return;
-//     //   }
-
-//     //   try {
-//     //     this.$store.commit("SET_LOADING",true);
-//     //     let response = await this.$axios.$get('/product/cetak', {
-//     //       params:{
-//     //         id:users[selected].id
-//     //       }
-//     //     },{});
-//     //     // downloadFile(response);
-//     //     viewFile(response);
-//     //   } catch (e) {
-//     //   } finally {
-//     //     this.$store.commit("SET_LOADING",false);
-//     //   }
-//     // },
-//   },
-// })
-
 </script>
-<!-- <scipt>
-
-
-//   computed: {
-//     // ...mapState('error', ['errors']),
-//     // ...mapState('_product',{
-//     //    users: state => state.users,
-//     //    state_product: state => state.product,
-//     //    last_record: state => state.last_record,
-//     //    highlight_search:state=>state.search,
-//     // }),
-//   },
-
-// }
-</script> -->
-<style scoped="">
-/* table.sticky thead th:nth-child(2) {
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  z-index: 2;
-} */
-</style>
