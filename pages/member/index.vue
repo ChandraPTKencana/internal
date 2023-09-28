@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <Header :title="'List Institute'" />
+    <Header :title="'List Member'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
         <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
@@ -23,9 +23,10 @@
           <div class="font-bold"> Sort By </div>
           <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
             <option value=""></option>
-            <option value="name">Name</option>
-            <option value="contact_number">Contact Number</option>
-            <option value="contact_person">Contact Person</option>
+            <option value="username">Username</option>
+            <option value="email">Email</option>
+            <option value="fullname">Fullname</option>
+            <!-- <option value="role">Role</option> -->
           </select>
         </div>
         <div class="pl-1">
@@ -43,7 +44,7 @@
       </div>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="institutes.length == 0" class="">
+        <div v-if="members.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -52,26 +53,28 @@
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Name</th>
-                <th>Address</th>
-                <th>Contact Number</th>
-                <th>Contact Person</th>
-                <th>Marketer</th>
-                <th>Tanggal Dibuat</th>
-                <th>Tanggal Diubah</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Fullname</th>
+                <th>Can Login</th>
+                <th>Created At</th>
+                <th>Creator</th>
+                <th>Updated At</th>
+                <th>Updator</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(institute, index) in institutes" :key="index" @click="selected = index"
+              <tr v-for="(member, index) in members" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="bold">{{ institute.name }}</td>
-                <td>{{ institute.address }}</td>
-                <td>{{ institute.contact_number }}</td>
-                <td>{{ institute.contact_person }}</td>
-                <td>{{ institute.internal_marketer.email }}</td>
-                <td>{{ $moment(institute.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(institute.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td class="bold">{{ member.username }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.fullname }}</td>
+                <td>{{ member.can_login ? 'Ya' : 'Tidak' }}</td>
+                <td>{{ $moment(member.internal_created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ member.internal_creator.email }}</td>
+                <td>{{ $moment(member.internal_updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ member.internal_updator.email }}</td>
               </tr>
             </tbody>
           </table>
@@ -90,13 +93,13 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
-console.log(useAuthStore().checkScopes(['ap-institute-view']));
+console.log(useAuthStore().checkScopes(['ap-member-view']));
 
 definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      if (!useAuthStore().checkScopes(['ap-institute-view']))
+      if (!useAuthStore().checkScopes(['ap-member-view']))
         return navigateTo('/');
     },
     // 'auth',
@@ -106,9 +109,9 @@ definePageMeta({
 const date = ref();
 
 const token = useCookie('token');
-const { data: institutes } = await useAsyncData(async () => {
+const { data: members } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/internal/institutes", {
+  const { data, error, status } = await useFetch("/api/internal/members", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -143,7 +146,7 @@ const inject_params = () => {
   params.value._TimeZoneOffset = new Date().getTimezoneOffset();
   params.value.like = "";
   if (search.value != "") {
-    params.value.like = `id:%${search.value}%,name:%${search.value}%,address:%${search.value}%,contact_number:%${search.value}%,contact_person:%${search.value}%`;
+    params.value.like = `id:%${search.value}%,username:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%,role:%${search.value}%`;
   }
   params.value.sort = "";
   if (sort.value.field) {
@@ -157,9 +160,9 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.value.page = scrolling.value.page;
-  if (params.value.page == 1) institutes.value = [];
+  if (params.value.page == 1) members.value = [];
 
-  const { data, error, status } = await useFetch("/api/internal/institutes", {
+  const { data, error, status } = await useFetch("/api/internal/members", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -176,10 +179,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    institutes.value = data.value.data;
+    members.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    institutes.value = [...institutes.value, ...data.value.data];
+    members.value = [...members.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -216,7 +219,7 @@ const searching = () => {
 const router = useRouter();
 
 const form_add = () => {
-  router.push({ name: 'institute-form', query: { id: "" } });
+  router.push({ name: 'member-form', query: { id: "" } });
 }
 
 const { display } = useAlertStore();
@@ -226,7 +229,7 @@ const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    router.push({ name: 'institute-form', query: { id: institutes.value[selected.value].id } });
+    router.push({ name: 'member-form', query: { id: members.value[selected.value].id } });
   }
 };
 
@@ -234,7 +237,7 @@ const form_edit = () => {
 //   if (selected.value == -1) {
 //     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
 //   } else {
-//     router.push({ name: 'institute-permission', query: { id: institutes.value[selected.value].id } });
+//     router.push({ name: 'member-permission', query: { id: members.value[selected.value].id } });
 //   }
 // };
 </script>

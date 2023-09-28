@@ -15,6 +15,7 @@
             <li><nuxt-link to="/events">Events</nuxt-link></li>
             <li><nuxt-link to="/user">User</nuxt-link></li>
             <li><nuxt-link to="/institute">Institute</nuxt-link></li>
+            <li><nuxt-link to="/member">Member</nuxt-link></li>
             <!-- <li v-if="!authenticated" class="loginBtn" style="float: right">
               <nuxt-link to="/login">Login</nuxt-link>
             </li> -->
