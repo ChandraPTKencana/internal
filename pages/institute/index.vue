@@ -90,7 +90,6 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
-console.log(useAuthStore().checkScopes(['ap-institute-view']));
 
 definePageMeta({
   // layout: "clear",

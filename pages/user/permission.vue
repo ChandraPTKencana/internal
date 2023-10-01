@@ -222,7 +222,6 @@ let action_permission_view = computed(() => {
     });
   }
 
-  // console.log('action_permission_view', result);
   return result;
 });
 

@@ -31,7 +31,6 @@ const login = async () => {
         trigger(error, field_errors);
     }
     finally {
-        // console.log(field_errors.value);
     }
 };
 </script>

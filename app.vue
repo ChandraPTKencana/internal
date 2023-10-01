@@ -7,8 +7,6 @@
   </div>
 </template>
 <script lang="ts" setup>
-console.log("refresh");
-
 // import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 // import { useAlertStore } from '~/store/alert'
 

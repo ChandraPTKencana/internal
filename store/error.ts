@@ -12,77 +12,7 @@ export const useErrorStore = defineStore('error', {
     // loading: false,
   }),
   actions: {
-    // async authenticateUser({ email, password }: UserPayloadInterface) {
-    //   const { data, error, status, pending }: any = await useFetch('http://127.0.0.1:8800/internal/login', {
-    //     method: 'post',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: {
-    //       email,
-    //       password,
-    //     },
-    //     timeout: 1000,
-    //   });
-    //   if (error) {
-    //     switch (error.status) {
-    //       case 404:
-    //         console.error("The resource was not found.");
-    //         break;
-    //       case 500:
-    //         console.error("An internal server error occurred.");
-    //         break;
-    //       default:
-    //         console.log(status);
-    //         console.log(error.value.statusCode);
-    //     }
-    //   }
-    //   // if (error) {
-    //   //   console.error(error.status);
-    //   // } else {
-    //   //   console.log(status); // 200
-    //   // }
 
-    //   this.loading = pending;
-    //   // console.log(data);
-
-    //   if (data.value) {
-
-    //     const token = useCookie('token'); // useCookie new hook in nuxt 3
-    //     token.value = data?.value?.data?.access_token; // set token to cookie
-    //     console.log(token.value, "token when login");
-    //     this.authenticated = true; // set authenticated  state value to true
-    //   }
-
-    //   // useFetch from nuxt 3
-    //   // try {
-    //   //   const { data, pending }: any = await useFetch('http://127.0.0.1:8000/internal/login', {
-    //   //     method: 'post',
-    //   //     headers: { 'Content-Type': 'application/json' },
-    //   //     body: {
-    //   //       email,
-    //   //       password,
-    //   //     },
-    //   //     timeout: 1000,
-    //   //   });
-    //   //   this.loading = pending;
-    //   //   console.log(data);
-
-    //   //   if (data.value) {
-
-    //   //     const token = useCookie('token'); // useCookie new hook in nuxt 3
-    //   //     token.value = data?.value?.data?.access_token; // set token to cookie
-    //   //     console.log(token.value, "token when login");
-    //   //     this.authenticated = true; // set authenticated  state value to true
-    //   //   }
-
-    //   // } catch (error) {
-    //   //   console.log("auth");
-    //   //   console.log(error);
-
-    //   //   // console.log(error, "auth");
-
-
-    //   // }
-    // },
     trigger(error: any, fields = {}) {
       let errorStatusCode = error.value.statusCode;
 
@@ -90,15 +20,11 @@ export const useErrorStore = defineStore('error', {
       const { display } = useAlertStore();
 
       if (error.value.data == undefined || errorStatusCode == 500 || errorStatusCode == 404) {
-        // console.log("trigger error", errorStatusCode);
         display({
           show: true,
           status: "Failed",
           message: "Aplikasi mengalami kegagalan mohon di informasikan ke bagian Terkait"
         })
-        // show.value = true;
-        // status.value = "Failed";
-        // message.value = "Aplikasi mengalami kegagalan mohon di informasikan ke bagian Terkait";
         return;
       }
 
@@ -142,29 +68,6 @@ export const useErrorStore = defineStore('error', {
         router.push('/login');
         return;
       }
-
-
-
-      // if (error.response.status == 422) {
-      //   commit('error/SET_ERRORS', error.response.data, { root: true });
-      // }
-
-      // if (error.response.status == 400 || error.response.status == 403) {
-      //   commit('alert/SET_ALERT', {
-      //     show: true,
-      //     status: "Gagal",
-      //     message: error.response.data.message
-      //   }, { root: true });
-      // }
-
-      // if (error.response.status == 403) {
-      //   // this.$router.push({path:"/dashboard"});
-      // }
-
-      // if (error.response.status == 401) {
-      //   this.$auth.strategy.token.set("");
-      //   this.$router.push({ path: "/" });
-      // }
 
     },
     setErrors(m_fields: Record<string, any> = {}, r_fields = []) {

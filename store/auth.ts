@@ -11,6 +11,8 @@ export const useAuthStore = defineStore('auth', {
   state: () => ({
     authenticated: false,
     loading: false,
+    done_get_user_info: false,
+
     // loading_full: false,
   }),
   actions: {
@@ -58,7 +60,6 @@ export const useAuthStore = defineStore('auth', {
         // });
 
         // this.loading = pending;
-        // console.log(pending.value);
 
 
         // if (status.value == "error") {
@@ -97,10 +98,8 @@ export const useAuthStore = defineStore('auth', {
       useCommonStore().loading_full = pending.value;
 
       return await new Promise<any>((resolve, reject) => {
-        // console.log(status);
         if (status.value == "error") {
           const { trigger } = useErrorStore();
-          // console.log(error);
 
           trigger(error);
           reject(error);
@@ -112,6 +111,8 @@ export const useAuthStore = defineStore('auth', {
 
             const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
             scopes.value = data?.value?.user?.scopes; // set token to cookie
+
+            this.done_get_user_info = true;
           }
           resolve(data);
         }
@@ -120,6 +121,7 @@ export const useAuthStore = defineStore('auth', {
     },
     logUserOut() {
       this.authenticated = false; // set authenticated  state value to false
+      this.done_get_user_info = false;
 
       const token = useCookie('token'); // useCookie new hook in nuxt 3
       token.value = null; // clear the token cookie

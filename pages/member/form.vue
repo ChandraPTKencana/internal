@@ -71,7 +71,18 @@
           </select>
           <p class="text-red-500">{{ field_errors.role }}</p>
         </div> -->
-        <div class="w-full flex" style="flex-flow:column wrap; padding:4px;">
+        <!-- <div class="w-full flex flex-col flex-wrap p-1">
+          <label for="">Foto {{ member.photo }}</label>
+          <div class="flex justify-center items-center w-24 h-24">
+            <img :src="member.photo" alt="" class=" max-w-full max-h-full">
+          </div>
+          <button v-show="photo" class="bg-gray-600" @click="resetPhoto()">Remove Avatar</button>
+          <input v-show="!photo" @change="changePhoto($event)" ref="photo_input" type="file" name="photo" value="">
+
+          <small>Upload file image : jpg, jpeg</small>
+          <p class="help-err">{{ field_errors.photo }}</p>
+        </div> -->
+        <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Izinkan Masuk?</label>
           <select class="w-full border-black border-solid border-2 p-1" v-model="member.can_login">
             <option value="1">Ya</option>
@@ -103,7 +114,7 @@ const { checkScopes } = useAuthStore();
 definePageMeta({
   layout: "clear",
   middleware: [
-    function (to, from) {
+    function (route) {
       if (!useAuthStore().checkScopes(['ap-member-add', 'ap-member-edit']))
         return navigateTo('/');
     },
@@ -121,6 +132,7 @@ const route = useRoute();
 //   email: "",
 //   fullname: ""
 // };
+const photo = ref(false);
 
 const { data: member } = await useAsyncData(async () => {
   const id = route.query.id;
@@ -140,6 +152,7 @@ const { data: member } = await useAsyncData(async () => {
     if (status.value === 'error') {
       useErrorStore().trigger(error, field_errors);
     } else {
+      if (data.value.data.photo) photo.value = true;
       return data.value.data;
     }
   }
@@ -150,41 +163,75 @@ const { data: member } = await useAsyncData(async () => {
     fullname: "",
     password: "",
     can_login: '0',
+    photo: ""
     // internal_marketer: {
     //   ...emptyMarketer
     // }
   };
 });
 
+const photo_input = ref<HTMLInputElement | null>(null);
+const changePhoto = ($e: any) => {
+
+  var files = $e.target.files;
+  if (files.length > 0) {
+    let reader = new FileReader();
+
+    reader.onload = function (e) {
+      let result = e.target?.result as string;
+
+      if (result.match(/image/)) {
+        member.value.photo = result;
+      }
+    }
+    reader.readAsDataURL(files[0]);
+    photo.value = true;
+  }
+};
+
+
+const resetPhoto = () => {
+  photo.value = false;
+  member.value.photo = '';
+  let elPhotoInput = photo_input.value;
+  if (elPhotoInput) {
+    elPhotoInput.value = "";
+  }
+};
 
 
 const doSave = async () => {
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
-  // const data_in = new FormData();
-  // data_in.append("name", member.value.name);
-  // data_in.append("password", member.value.password);
-  // data_in.append("fullname", member.value.fullname);
-  // data_in.append("role", member.value.role);
-  // data_in.append("can_login", member.value.can_login);
+  const data_in = new FormData();
+  data_in.append("username", member.value.username);
+  data_in.append("email", member.value.email);
+  data_in.append("fullname", member.value.fullname);
+  data_in.append("password", member.value.password);
+  data_in.append("can_login", member.value.can_login);
+  if (photo_input.value?.files)
+    data_in.append("photo", photo_input.value.files[0] || '');
+  if (photo_input.value)
+    data_in.append("photo_preview", member.value.photo);
 
-  let data_in: Record<string, any> = {
-    "username": member.value.username,
-    "email": member.value.email,
-    "fullname": member.value.fullname,
-    "password": member.value.password,
-    "can_login": member.value.can_login,
-  };
+
+  // let data_in: Record<string, any> = {
+  //   "username": member.value.username,
+  //   "email": member.value.email,
+  //   "fullname": member.value.fullname,
+  //   "password": member.value.password,
+  //   "can_login": member.value.can_login,
+  // };
   let $method: any = "post";
 
-  let id = route.query.id;
+  let id = route.query.id as string;
   if (id === "") {
   } else {
-    $method = "put";
-    data_in['id'] = id;
-    // data_in.append("id", id);
-    // data_in.append("_method", "PUT");
+    $method = "post";
+    // data_in['id'] = id;
+    data_in.append("id", id);
+    data_in.append("_method", "PUT");
   }
 
   const { data, error, status }: any = await useFetch("http://127.0.0.1:8000/api/internal/member", {

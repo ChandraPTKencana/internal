@@ -56,6 +56,7 @@
                 <th>Username</th>
                 <th>Email</th>
                 <th>Fullname</th>
+                <!-- <th>Photo</th> -->
                 <th>Can Login</th>
                 <th>Created At</th>
                 <th>Creator</th>
@@ -70,6 +71,9 @@
                 <td class="bold">{{ member.username }}</td>
                 <td>{{ member.email }}</td>
                 <td>{{ member.fullname }}</td>
+                <!-- <td>
+                  <img :src="member.photo" />
+                </td> -->
                 <td>{{ member.can_login ? 'Ya' : 'Tidak' }}</td>
                 <td>{{ $moment(member.internal_created_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ member.internal_creator.email }}</td>
@@ -92,8 +96,6 @@ import { useAuthStore } from '~/store/auth';
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
-
-console.log(useAuthStore().checkScopes(['ap-member-view']));
 
 definePageMeta({
   // layout: "clear",
