@@ -1,7 +1,7 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Search And Select Employees'" :fn="fnClose" class="w-100 d-flex align-items-center"
+      <HeaderPopup :title="'Search And Select Members'" :fn="fnClose" class="w-100 d-flex align-items-center"
         style="color:white;" />
 
       <div class="w-full flex p-1">
@@ -14,6 +14,7 @@
           <div class="font-bold"> Sort By </div>
           <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
             <option value=""></option>
+            <option value="Username">Username</option>
             <option value="email">Email</option>
             <option value="fullname">Fullname</option>
           </select>
@@ -33,7 +34,7 @@
       </div>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="users.length == 0" class="">
+        <div v-if="members.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -42,22 +43,22 @@
             <thead>
               <tr>
                 <th>No.</th>
+                <th>Username</th>
                 <th>Email</th>
                 <th>Fullname</th>
-                <th>Role</th>
                 <th>Tanggal Dibuat</th>
                 <th>Tanggal Diubah</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(user, index) in users" :key="index" @click="selected = index"
+              <tr v-for="(member, index) in members" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="bold">{{ user.email }}</td>
-                <td>{{ user.fullname }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ $moment(user.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(user.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td class="bold">{{ member.username }}</td>
+                <td>{{ member.email }}</td>
+                <td>{{ member.fullname }}</td>
+                <td>{{ $moment(member.internal_created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(member.internal_updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
               </tr>
             </tbody>
           </table>
@@ -109,7 +110,7 @@ const props = defineProps({
 
 const token = useCookie('token');
 
-const users = ref([]);
+const members = ref([]);
 
 
 const search = ref("");
@@ -130,7 +131,7 @@ const inject_params = () => {
   params.value._TimeZoneOffset = new Date().getTimezoneOffset();
   params.value.like = "";
   if (search.value != "") {
-    params.value.like = `id:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%`;
+    params.value.like = `username:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%`;
   }
   params.value.sort = "";
   if (sort.value.field) {
@@ -144,9 +145,9 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.value.page = scrolling.value.page;
-  if (params.value.page == 1) users.value = [];
+  if (params.value.page == 1) members.value = [];
 
-  const { data, error, status } = await useFetch("/api/internal/users", {
+  const { data, error, status } = await useFetch("/api/internal/members", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -169,10 +170,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    users.value = data.value.data;
+    members.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    users.value = [...users.value, ...data.value.data];
+    members.value = [...members.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -208,10 +209,11 @@ const searching = () => {
 
 const selectRow = () => {
   if (selected.value > -1) {
-    props.fnSelect(users.value[selected.value]);
+    props.fnSelect(members.value[selected.value]);
   } else {
     props.fnSelect({
       id: "",
+      username: "",
       email: "",
       fullname: ""
     });

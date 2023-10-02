@@ -51,7 +51,7 @@
                   <div class="bold">{{ institute.internal_marketer.id }}</div>
                 </div>
                 <div class="p-1">
-                  <div class="text-sm text-gray-600">Username</div>
+                  <div class="text-sm text-gray-600">Email</div>
                   <div class="bold">{{ institute.internal_marketer.email }}</div>
                 </div>
               </div>
@@ -80,6 +80,38 @@
           </select>
           <p class="text-red-500">{{ field_errors.can_login }}</p>
         </div> -->
+
+        <div class="w-full flex flex-col flex-wrap p-1">
+          <label for="">Operator</label>
+          <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
+            <div v-if="!institute.operator_member || institute.operator_member.id == ''" class="w-full flex">
+              <button @click="searchOperatorMember()" class="flex items-center grow">
+                <IconsSearch class="text-2xl text-black" />
+                <div class="flex items-center grow p-1">
+                  Pilih Member
+                </div>
+              </button>
+            </div>
+            <div v-else class="w-full flex" style="">
+              <div class="flex flex-row flex-wrap grow">
+                <div class="p-1">
+                  <div class="text-sm text-gray-600">ID</div>
+                  <div class="bold">{{ institute.operator_member.id }}</div>
+                </div>
+                <div class="p-1">
+                  <div class="text-sm text-gray-600">Username</div>
+                  <div class="bold">{{ institute.operator_member.username }}</div>
+                </div>
+              </div>
+              <button class="w-10 bg-red-600 flex items-center justify-center" @click="clearOperatorMember()">
+                <IconsDelete class="text-2xl text-white" />
+              </button>
+            </div>
+          </div>
+          <p class="text-red-500">{{ field_errors.operator_member_id }}</p>
+
+        </div>
+
       </div>
       <div class="w-full flex items-center justify-end">
         <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
@@ -96,6 +128,9 @@
 
   <SearchSelectUsers :show="show_internal_marketer" :fnClose="closeSNSMarketer" :fnSelect="selectSNSMarketer"
     :excludes="'institute_had_which_institute_id'" />
+
+  <SearchSelectMembers :show="show_operator_member" :fnClose="closeSNSOperatorMember"
+    :fnSelect="selectSNSOperatorMember" />
 </template>
 
 <script lang="ts" setup>
@@ -128,6 +163,13 @@ let emptyMarketer = {
   fullname: ""
 };
 
+let emptyOperatorMember = {
+  id: "",
+  username: "",
+  email: "",
+  fullname: ""
+};
+
 const { data: institute } = await useAsyncData(async () => {
   const id = route.query.id;
   if (id !== undefined && id !== "") {
@@ -146,7 +188,13 @@ const { data: institute } = await useAsyncData(async () => {
     if (status.value === 'error') {
       useErrorStore().trigger(error, field_errors);
     } else {
-      return data.value.data;
+      let data_get = data.value.data;
+      if (data_get.members.length > 0) {
+        data_get["operator_member"] = data_get.members[0];
+      } else {
+        data_get["operator_member"] = { ...emptyOperatorMember };
+      }
+      return data_get;
     }
   }
   return {
@@ -158,6 +206,9 @@ const { data: institute } = await useAsyncData(async () => {
     can_login: '0',
     internal_marketer: {
       ...emptyMarketer
+    },
+    operator_member: {
+      ...emptyOperatorMember
     }
   };
 });
@@ -183,6 +234,28 @@ const selectSNSMarketer = (internal_marketer: any) => {
   show_internal_marketer.value = false;
 }
 
+
+
+let show_operator_member = ref(false);
+
+
+const clearOperatorMember = () => {
+  institute.value.operator_member = { ...emptyOperatorMember };
+};
+
+const searchOperatorMember = () => {
+  show_operator_member.value = true;
+};
+
+const closeSNSOperatorMember = () => {
+  show_operator_member.value = false;
+};
+
+const selectSNSOperatorMember = (operator_member: any) => {
+  institute.value.operator_member = operator_member;
+  show_operator_member.value = false;
+}
+
 const doSave = async () => {
   useCommonStore().loading_full = true;
   field_errors.value = {};
@@ -200,6 +273,7 @@ const doSave = async () => {
     "contact_number": institute.value.contact_number,
     "contact_person": institute.value.contact_person,
     "internal_marketer_id": institute.value.internal_marketer.id,
+    "operator_member_id": institute.value.operator_member.id,
   };
   let $method: any = "post";
 
