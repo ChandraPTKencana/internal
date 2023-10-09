@@ -55,7 +55,7 @@
         <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
           <table class="tacky">
             <thead>
-              <tr>
+              <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
                 <th>Email</th>
                 <th>Fullname</th>
@@ -95,15 +95,20 @@ import { useAlertStore } from '~/store/alert';
 const { sayHello } = useUtils();
 sayHello();
 
+const params = {};
+params._TimeZoneOffset = new Date().getTimezoneOffset();
+
+
 const token = useCookie('token');
 const { data: users } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/internal/users", {
+  const { data, error, status } = await useFetch("/api/users", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
+    params: params,
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -123,7 +128,6 @@ const sort = ref({
   by: "asc"
 });
 const selected = ref(-1);
-const params = ref({});
 const scrolling = ref({
   page: 1,
   is_last_record: false,
@@ -132,14 +136,13 @@ const scrolling = ref({
 });
 
 const inject_params = () => {
-  params.value._TimeZoneOffset = new Date().getTimezoneOffset();
-  params.value.like = "";
+  params.like = "";
   if (search.value != "") {
-    params.value.like = `id:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%`;
+    params.like = `id:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%`;
   }
-  params.value.sort = "";
+  params.sort = "";
   if (sort.value.field) {
-    params.value.sort = sort.value.field + ":" + sort.value.by;
+    params.sort = sort.value.field + ":" + sort.value.by;
   }
 };
 
@@ -148,17 +151,17 @@ const loadRef = ref(null);
 const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
-  params.value.page = scrolling.value.page;
-  if (params.value.page == 1) users.value = [];
+  params.page = scrolling.value.page;
+  if (params.page == 1) users.value = [];
 
-  const { data, error, status } = await useFetch("/api/internal/users", {
+  const { data, error, status } = await useFetch("/api/users", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       // 'Content-Type': 'application/json',
       'Accept': 'application/json'
     },
-    params: params.value,
+    params: params,
     // body: {
     //   sort: "updated_at:desc"
     // },

@@ -51,9 +51,9 @@
         <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
           <table class="tacky">
             <thead>
-              <tr>
+              <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
-                <th>Username</th>
+                <th class="sticky left-0 !z-[2]">Username</th>
                 <th>Email</th>
                 <th>Fullname</th>
                 <!-- <th>Photo</th> -->
@@ -68,7 +68,7 @@
               <tr v-for="(member, index) in members" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="bold">{{ member.username }}</td>
+                <td class="sticky left-0 !z-[1] bold">{{ member.username }}</td>
                 <td>{{ member.email }}</td>
                 <td>{{ member.fullname }}</td>
                 <!-- <td>
@@ -76,9 +76,9 @@
                 </td> -->
                 <td>{{ member.can_login ? 'Ya' : 'Tidak' }}</td>
                 <td>{{ $moment(member.internal_created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ member.internal_creator.email }}</td>
+                <!-- <td>{{ member.internal_creator.email }}</td> -->
                 <td>{{ $moment(member.internal_updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ member.internal_updator.email }}</td>
+                <!-- <td>{{ member.internal_updator.email }}</td> -->
               </tr>
             </tbody>
           </table>
@@ -108,17 +108,19 @@ definePageMeta({
   ],
 });
 
-const date = ref();
+const params = {};
+params._TimeZoneOffset = new Date().getTimezoneOffset();
 
 const token = useCookie('token');
 const { data: members } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/internal/members", {
+  const { data, error, status } = await useFetch("/api/members", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
+    params: params,
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -136,7 +138,6 @@ const sort = ref({
   by: "asc"
 });
 const selected = ref(-1);
-const params = ref({});
 const scrolling = ref({
   page: 1,
   is_last_record: false,
@@ -145,14 +146,13 @@ const scrolling = ref({
 });
 
 const inject_params = () => {
-  params.value._TimeZoneOffset = new Date().getTimezoneOffset();
-  params.value.like = "";
+  params.like = "";
   if (search.value != "") {
-    params.value.like = `id:%${search.value}%,username:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%,role:%${search.value}%`;
+    params.like = `id:%${search.value}%,username:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%,role:%${search.value}%`;
   }
-  params.value.sort = "";
-  if (sort.value.field) {
-    params.value.sort = sort.value.field + ":" + sort.value.by;
+  params.sort = "";
+  if (sort.field) {
+    params.sort = sort.value.field + ":" + sort.value.by;
   }
 };
 
@@ -161,15 +161,15 @@ const loadRef = ref(null);
 const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
-  params.value.page = scrolling.value.page;
-  if (params.value.page == 1) members.value = [];
-
-  const { data, error, status } = await useFetch("/api/internal/members", {
+  params.page = scrolling.value.page;
+  if (params.page == 1) members.value = [];
+  const { data, error, status } = await useFetch("/api/members", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
+    params: params,
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -207,6 +207,7 @@ const loadMore = async () => {
   if (!stuck) return;
 
   scrolling.value.page++;
+  console.log(scrolling.value.page)
   await callData();
 
 }

@@ -41,7 +41,7 @@
         <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
           <table class="tacky">
             <thead>
-              <tr>
+              <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
                 <th>Username</th>
                 <th>Email</th>
@@ -119,7 +119,6 @@ const sort = ref({
   by: "asc"
 });
 const selected = ref(-1);
-const params = ref({});
 const scrolling = ref({
   page: 1,
   is_last_record: false,
@@ -127,15 +126,18 @@ const scrolling = ref({
   may_get_data: true
 });
 
+const params = {};
+params._TimeZoneOffset = new Date().getTimezoneOffset();
+
+
 const inject_params = () => {
-  params.value._TimeZoneOffset = new Date().getTimezoneOffset();
-  params.value.like = "";
+  params.like = "";
   if (search.value != "") {
-    params.value.like = `username:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%`;
+    params.like = `username:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%`;
   }
-  params.value.sort = "";
+  params.sort = "";
   if (sort.value.field) {
-    params.value.sort = sort.value.field + ":" + sort.value.by;
+    params.sort = sort.value.field + ":" + sort.value.by;
   }
 };
 
@@ -144,10 +146,10 @@ const loadRef = ref(null);
 const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
-  params.value.page = scrolling.value.page;
-  if (params.value.page == 1) members.value = [];
+  params.page = scrolling.value.page;
+  if (params.page == 1) members.value = [];
 
-  const { data, error, status } = await useFetch("/api/internal/members", {
+  const { data, error, status } = await useFetch("/api/members", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

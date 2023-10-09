@@ -50,7 +50,7 @@
         <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
           <table class="tacky">
             <thead>
-              <tr>
+              <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
                 <th>Name</th>
                 <th>Address</th>
@@ -102,17 +102,19 @@ definePageMeta({
   ],
 });
 
-const date = ref();
+const params = {};
+params._TimeZoneOffset = new Date().getTimezoneOffset();
 
 const token = useCookie('token');
 const { data: institutes } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/internal/institutes", {
+  const { data, error, status } = await useFetch("/api/institutes", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
+    params: params,
     retry: 0,
   });
   useCommonStore().loading_full = false;
@@ -130,7 +132,6 @@ const sort = ref({
   by: "asc"
 });
 const selected = ref(-1);
-const params = ref({});
 const scrolling = ref({
   page: 1,
   is_last_record: false,
@@ -139,14 +140,13 @@ const scrolling = ref({
 });
 
 const inject_params = () => {
-  params.value._TimeZoneOffset = new Date().getTimezoneOffset();
-  params.value.like = "";
+  params.like = "";
   if (search.value != "") {
-    params.value.like = `id:%${search.value}%,name:%${search.value}%,address:%${search.value}%,contact_number:%${search.value}%,contact_person:%${search.value}%`;
+    params.like = `id:%${search.value}%,name:%${search.value}%,address:%${search.value}%,contact_number:%${search.value}%,contact_person:%${search.value}%`;
   }
-  params.value.sort = "";
+  params.sort = "";
   if (sort.value.field) {
-    params.value.sort = sort.value.field + ":" + sort.value.by;
+    params.sort = sort.value.field + ":" + sort.value.by;
   }
 };
 
@@ -155,15 +155,16 @@ const loadRef = ref(null);
 const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
-  params.value.page = scrolling.value.page;
-  if (params.value.page == 1) institutes.value = [];
+  params.page = scrolling.value.page;
+  if (params.page == 1) institutes.value = [];
 
-  const { data, error, status } = await useFetch("/api/internal/institutes", {
+  const { data, error, status } = await useFetch("/api/institutes", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
       'Accept': 'application/json'
     },
+    params: params,
     retry: 0,
   });
   useCommonStore().loading_full = false;

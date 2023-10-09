@@ -22,6 +22,8 @@ const router = useRouter();
 
 const login = async () => {
     try {
+        field_errors.value = {};
+
         await authenticateUser({ email: user.value.email, password: user.value.password }); // call authenticateUser and pass the user object
         // redirect to homepage if user is authenticated
         if (authenticated.value) {

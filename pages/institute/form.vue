@@ -174,7 +174,7 @@ const { data: institute } = await useAsyncData(async () => {
   const id = route.query.id;
   if (id !== undefined && id !== "") {
     useCommonStore().loading_full = true;
-    const { data, error, status }: any = await useFetch("/api/internal/institute", {
+    const { data, error, status }: any = await useFetch("/api/institute", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -286,7 +286,7 @@ const doSave = async () => {
     // data_in.append("_method", "PUT");
   }
 
-  const { data, error, status }: any = await useFetch("http://127.0.0.1:8000/api/internal/institute", {
+  const { data, error, status }: any = await useFetch("/api/institute", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,
