@@ -76,9 +76,9 @@
                 </td> -->
                 <td>{{ member.can_login ? 'Ya' : 'Tidak' }}</td>
                 <td>{{ $moment(member.internal_created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <!-- <td>{{ member.internal_creator.email }}</td> -->
+                <td>{{ member.internal_creator.email }}</td>
                 <td>{{ $moment(member.internal_updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <!-- <td>{{ member.internal_updator.email }}</td> -->
+                <td>{{ member.internal_updator.email }}</td>
               </tr>
             </tbody>
           </table>

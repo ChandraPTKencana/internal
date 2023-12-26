@@ -71,8 +71,8 @@
                 <td class="bold">{{ user.email }}</td>
                 <td>{{ user.fullname }}</td>
                 <td>{{ user.role }}</td>
-                <td>{{ $moment(user.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(user.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(user.internal_created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(user.internal_updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
               </tr>
             </tbody>
           </table>

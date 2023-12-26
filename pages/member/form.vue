@@ -14,6 +14,11 @@
           <p class="text-red-500">{{ field_errors.email }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
+          <label for="">Phone Number</label>
+          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="member.phone_number">
+          <p class="text-red-500">{{ field_errors.phone_number }}</p>
+        </div>
+        <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Fullname</label>
           <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="member.fullname">
           <p class="text-red-500">{{ field_errors.fullname }}</p>
@@ -160,6 +165,7 @@ const { data: member } = await useAsyncData(async () => {
     id: -1,
     username: "",
     email: "",
+    phone_number: "",
     fullname: "",
     password: "",
     can_login: '0',
@@ -207,6 +213,7 @@ const doSave = async () => {
   const data_in = new FormData();
   data_in.append("username", member.value.username);
   data_in.append("email", member.value.email);
+  data_in.append("phone_number", member.value.phone_number);
   data_in.append("fullname", member.value.fullname);
   data_in.append("password", member.value.password);
   data_in.append("can_login", member.value.can_login);
