@@ -1,6 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { resolve } from 'path';
 export default defineNuxtConfig({
+  // rootDir : "",
+  app:{
+    baseURL:process.env.MY_NODE_ENV === 'production' ? '/stok' : '/stok/dist',
+  },
   ssr: true,
   devtools: { enabled: true },
   alias: {
