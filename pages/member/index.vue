@@ -101,8 +101,11 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      if (!useAuthStore().checkScopes(['ap-member-view']))
-        return navigateTo('/');
+      // if (!useAuthStore().checkScopes(['ap-member-view']))
+      //   return navigateTo('/');
+      if (!useAuthStore().checkRole(["ClientPabrik", 'User']))
+      return navigateTo('/');
+
     },
     // 'auth',
   ],

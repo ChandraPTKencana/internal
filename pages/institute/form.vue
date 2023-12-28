@@ -140,13 +140,16 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
-const { checkScopes } = useAuthStore();
+const { checkScopes,checkRole } = useAuthStore();
 definePageMeta({
   layout: "clear",
   middleware: [
     function (to, from) {
-      if (!useAuthStore().checkScopes(['ap-institute-add', 'ap-institute-edit']))
-        return navigateTo('/');
+      // if (!useAuthStore().checkScopes(['ap-institute-add', 'ap-institute-edit']))
+      //   return navigateTo('/');
+      if (!useAuthStore().checkRole(["ClientPabrik", 'User']))
+      return navigateTo('/');
+
     },
     // 'auth',
   ],

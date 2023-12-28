@@ -26,9 +26,13 @@ export default defineNuxtConfig({
     // ...
     '@pinia/nuxt',
   ],
+  
   nitro: {
     routeRules: {
-      "/api/**": { proxy: 'http://127.0.0.1:8000/api/internal/**' }
+      // "/api/**": { proxy: 'http://127.0.0.1:8000/api/internal/**' },
+      "/api/**": { proxy: 'http://127.0.0.1/api/a9p/**' },
+      // "^/stok/api/**": { proxy: 'http://127.0.0.1/api/a9p/**' },
+      // "/stok/api/**": { proxy: 'http://127.0.0.1/api/a9p/**' }
       // '/proxy/example': { proxy: 'http://39.98.58.238:8594' },
       // "/proxy/**": { proxy: '/api/**' },
     }

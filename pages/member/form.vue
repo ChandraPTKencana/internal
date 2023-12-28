@@ -115,13 +115,16 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
-const { checkScopes } = useAuthStore();
+const { checkScopes,checkRole } = useAuthStore();
 definePageMeta({
   layout: "clear",
   middleware: [
     function (route) {
-      if (!useAuthStore().checkScopes(['ap-member-add', 'ap-member-edit']))
-        return navigateTo('/');
+      
+      // if (!useAuthStore().checkScopes(['ap-member-add', 'ap-member-edit']))
+      //   return navigateTo('/');
+      if (!useAuthStore().checkRole(["ClientPabrik", 'User']))
+      return navigateTo('/');
     },
     // 'auth',
   ],

@@ -3,7 +3,7 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 
 interface UserPayloadInterface {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', {
     // loading_full: false,
   }),
   actions: {
-    async authenticateUser({ email, password }: UserPayloadInterface) {
+    async authenticateUser({ username, password }: UserPayloadInterface) {
       return new Promise<any>(async (resolve, reject) => {
 
         const { data, error, status, pending }: any = useLazyFetch('/api/login', {
@@ -25,7 +25,7 @@ export const useAuthStore = defineStore('auth', {
             // 'Content-Type': 'application/json'
           },
           body: {
-            email,
+            username,
             password,
           },
           timeout: 1000,
@@ -106,8 +106,11 @@ export const useAuthStore = defineStore('auth', {
         } else {
 
           if (data.value) {
-            const email = useCookie('email'); // useCookie new hook in nuxt 3
-            email.value = data?.value?.user?.email; // set token to cookie
+            const username = useCookie('username'); // useCookie new hook in nuxt 3
+            username.value = data?.value?.user?.username; // set token to cookie
+
+            const role = useCookie('role'); // useCookie new hook in nuxt 3
+            role.value = data?.value?.user?.role; // set token to cookie
 
             const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
             scopes.value = data?.value?.user?.scopes; // set token to cookie
@@ -126,8 +129,11 @@ export const useAuthStore = defineStore('auth', {
       const token = useCookie('token'); // useCookie new hook in nuxt 3
       token.value = null; // clear the token cookie
 
-      const email = useCookie('email'); // useCookie new hook in nuxt 3
-      email.value = null; // set token to cookie
+      const username = useCookie('username'); // useCookie new hook in nuxt 3
+      username.value = null; // set token to cookie
+
+      const role = useCookie('role'); // useCookie new hook in nuxt 3
+      role.value = null;
 
       const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
       scopes.value = null;
@@ -139,8 +145,13 @@ export const useAuthStore = defineStore('auth', {
       const setB: Set<string> = new Set(scopes);
       const intersection = new Set([...setA].filter((x: string) => setB.has(x)));
       return Array.from(intersection).length > 0;
-    }
+    },
 
+
+    checkRole(roles: Array<string> = []) {
+      const role = useCookie('role'); // useCookie new hook in nuxt 3
+      return roles.includes(role.value as string);
+    }
 
   },
 });

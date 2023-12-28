@@ -58,8 +58,11 @@ export const useErrorStore = defineStore('error', {
         const { authenticated } = storeToRefs(useAuthStore());
         authenticated.value = false;
 
-        const email = useCookie('email'); // useCookie new hook in nuxt 3
-        email.value = null; // set token to cookie
+        const username = useCookie('username'); // useCookie new hook in nuxt 3
+        username.value = null; // set token to cookie
+
+        const role = useCookie('role'); // useCookie new hook in nuxt 3
+        role.value = null;
 
         const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
         scopes.value = null;

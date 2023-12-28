@@ -34,7 +34,7 @@
               </nuxt-link>
             </div>
             <div class="bg-slate-700 bg-opacity-80 p-2 cursor-pointer" @click="is_panel_open = !is_panel_open">
-              {{ email }}
+              {{ username }}
             </div>
           </div>
         </header>
@@ -65,7 +65,7 @@ const logout = () => {
   router.push('/login');
 };
 
-const email = useCookie('email');
+const username = useCookie('username');
 
 const is_panel_open = ref(false);
 

@@ -57,8 +57,12 @@ definePageMeta({
   layout: "clear",
   middleware: [
     function (to, from) {
-      if (!useAuthStore().checkScopes(["ap-user_permission-view", 'ap-user_permission-edit']))
+      // if (!useAuthStore().checkScopes(["ap-user_permission-view", 'ap-user_permission-edit']))
+      //   return navigateTo('/');
+
+      if (!useAuthStore().checkRole(["ClientPabrik", 'User']))
         return navigateTo('/');
+
     },
     // 'auth',
   ],
