@@ -109,6 +109,9 @@ export const useAuthStore = defineStore('auth', {
             const username = useCookie('username'); // useCookie new hook in nuxt 3
             username.value = data?.value?.user?.username; // set token to cookie
 
+            const fullname = useCookie('fullname'); // useCookie new hook in nuxt 3
+            fullname.value = data?.value?.user?.fullname; // set token to cookie
+
             const role = useCookie('role'); // useCookie new hook in nuxt 3
             role.value = data?.value?.user?.role; // set token to cookie
 

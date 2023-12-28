@@ -26,15 +26,15 @@
           <div id="panel" class="h-7 text-xs relative">
             <div v-show="is_panel_open"
               class="w-full absolute bottom-full mb-2 bg-slate-700 bg-opacity-80 cursor-pointer">
-              <button class="w-full text-left p-2 hover:bg-slate-900">
+              <nuxt-link to="/profile" class="block w-full text-left p-2 hover:bg-slate-900">
                 Setting
-              </button>
+              </nuxt-link>
               <nuxt-link v-if="authenticated" class="block w-full text-left p-2 hover:bg-slate-900" @click="logout">
                 Logout
               </nuxt-link>
             </div>
             <div class="bg-slate-700 bg-opacity-80 p-2 cursor-pointer" @click="is_panel_open = !is_panel_open">
-              {{ username }}
+              {{ fullname }}
             </div>
           </div>
         </header>
@@ -51,6 +51,8 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '~/store/auth';
+
+import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 
 const router = useRouter();
@@ -59,14 +61,31 @@ const { logUserOut } = useAuthStore();
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive
 const { triggerSidebar } = useCommonStore(); // make authenticated state reactive
 const { is_sidebar_open } = storeToRefs(useCommonStore()); // make authenticated state reactive
+const token = useCookie('token');
 
-const logout = () => {
-  logUserOut();
-  router.push('/login');
+const logout = async() => {
+  useCommonStore().loading_full = true;
+  const { data, error, status }: any = await useFetch("/api/logout", {
+    method: "post",
+    headers: {
+      'Authorization': `Bearer ${token.value}`,
+      'Accept': 'application/json',
+    },    
+    retry: 0,
+  });
+  useCommonStore().loading_full = false;
+  if (status.value === 'error') {
+    useErrorStore().trigger(error);
+    return;
+  }else{
+    logUserOut();
+    router.push('/login');
+  }
+
 };
 
 const username = useCookie('username');
-
+const fullname = useCookie('fullname');
 const is_panel_open = ref(false);
 
 if (process.client) {

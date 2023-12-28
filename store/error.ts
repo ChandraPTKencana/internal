@@ -61,6 +61,9 @@ export const useErrorStore = defineStore('error', {
         const username = useCookie('username'); // useCookie new hook in nuxt 3
         username.value = null; // set token to cookie
 
+        const fullname = useCookie('fullname'); // useCookie new hook in nuxt 3
+        fullname.value = null; // set token to cookie
+        
         const role = useCookie('role'); // useCookie new hook in nuxt 3
         role.value = null;
 

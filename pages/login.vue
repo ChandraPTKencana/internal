@@ -35,6 +35,17 @@ const login = async () => {
     finally {
     }
 };
+
+
+if (process.client) {
+  window.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      login();
+    }    
+  });
+}
+
+
 </script>
 <template>
     <div class="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
