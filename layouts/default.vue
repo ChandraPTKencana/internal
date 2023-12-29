@@ -13,6 +13,8 @@
           <ul class="grow overflow-auto">
             <li><nuxt-link to="/">Dashboard</nuxt-link></li>
             <li><nuxt-link to="/data_satuan">Satuan</nuxt-link></li>
+            <li><nuxt-link to="/data_gudang">Gudang</nuxt-link></li>
+            <li><nuxt-link to="/data_item">Item</nuxt-link></li>
             <!-- <li><nuxt-link to="/events">Events</nuxt-link></li>
             <li><nuxt-link to="/user">User</nuxt-link></li>
             <li><nuxt-link to="/institute">Institute</nuxt-link></li>

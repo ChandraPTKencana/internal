@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <Header :title="'List unit'" />
+    <Header :title="'List warehouse'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
         <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
@@ -46,7 +46,7 @@
       </div>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="units.length == 0" class="">
+        <div v-if="warehouses.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -64,15 +64,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(unit, index) in units" :key="index" @click="selected = index"
+              <tr v-for="(warehouse, index) in warehouses" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="sticky left-0 !z-[1] bold">{{ unit.id }}</td>
-                <td>{{ unit.name }}</td>
-                <td>{{ $moment(unit.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ unit.creator.username }}</td>
-                <td>{{ $moment(unit.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ unit.updator.username }}</td>
+                <td class="sticky left-0 !z-[1] bold">{{ warehouse.id }}</td>
+                <td>{{ warehouse.name }}</td>
+                <td>{{ $moment(warehouse.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ warehouse.creator.username }}</td>
+                <td>{{ $moment(warehouse.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ warehouse.updator.username }}</td>
               </tr>
             </tbody>
           </table>
@@ -81,7 +81,6 @@
     </div>
 
     <PopupDelete :show="delete_box" :delete_data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
-
   </div>
 </template>
 
@@ -98,7 +97,7 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-unit-view']))
+      // if (!useAuthStore().checkScopes(['ap-warehouse-view']))
       //   return navigateTo('/');
       if (!useAuthStore().checkRole(["ClientPabrik", 'User']))
       return navigateTo('/');
@@ -112,9 +111,9 @@ const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 
 const token = useCookie('token');
-const { data: units } = await useAsyncData(async () => {
+const { data: warehouses } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/units", {
+  const { data, error, status } = await useFetch("/api/warehouses", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -162,12 +161,12 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
-  if (params.page == 1) units.value = [];
+  if (params.page == 1) warehouses.value = [];
   if(params.page > 1){
-    params.firstRow_created_at = units.value[0].created_at;
+    params.firstRow_created_at = warehouses.value[0].created_at;
     // params.firstRow_id = warehouses.value[0].id;
   }
-  const { data, error, status } = await useFetch("/api/units", {
+  const { data, error, status } = await useFetch("/api/warehouses", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -185,10 +184,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    units.value = data.value.data;
+    warehouses.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    units.value = [...units.value, ...data.value.data];
+    warehouses.value = [...warehouses.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -225,7 +224,7 @@ const searching = () => {
 const router = useRouter();
 
 const form_add = () => {
-  router.push({ name: 'data_satuan-form', query: { id: "" } });
+  router.push({ name: 'data_gudang-form', query: { id: "" } });
 }
 
 const { display } = useAlertStore();
@@ -235,10 +234,9 @@ const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    router.push({ name: 'data_satuan-form', query: { id: units.value[selected.value].id } });
+    router.push({ name: 'data_gudang-form', query: { id: warehouses.value[selected.value].id } });
   }
 };
-
 
 const delete_data = ref({});
 const delete_box = ref(false);
@@ -253,10 +251,7 @@ const remove = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    delete_data.value = {
-      id : units.value[selected.value].id,
-      name : units.value[selected.value].name,
-    };
+    delete_data.value = {id : warehouses.value[selected.value].id};
     delete_box.value = true;
   }
 };
@@ -265,10 +260,10 @@ const confirmed_delete = async() => {
   useCommonStore().loading_full = true;
 
   const data_in = new FormData();
-  data_in.append("id", units.value[selected.value].id);  
+  data_in.append("id", warehouses.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useFetch("/api/unit", {
+  const { data, error, status } = await useFetch("/api/warehouse", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -282,7 +277,9 @@ const confirmed_delete = async() => {
     useErrorStore().trigger(error);
     return;
   }
-  units.value.splice(selected.value,1);
+  warehouses.value.splice(selected.value,1);
   delete_box.value = false;
 }
+
+
 </script>
