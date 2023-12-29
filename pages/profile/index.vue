@@ -24,7 +24,7 @@
             <p class="text-red-500">{{ field_errors.phone_number }}</p>
           </div>
           <div class="w-full flex flex-col flex-wrap p-1">
-            <label for="">Foto {{ user.photo }}</label>
+            <label for="">Foto</label>
             <div  class="flex justify-center items-center w-24 h-24">
                 <img :src="user.photo || 'user-default.png'" alt="" class=" max-w-full max-h-full">
             </div>

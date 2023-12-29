@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <Header :title="'List Member'" />
+    <Header :title="'List unit'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
         <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
@@ -23,10 +23,8 @@
           <div class="font-bold"> Sort By </div>
           <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
             <option value=""></option>
-            <option value="username">Username</option>
-            <option value="email">Email</option>
-            <option value="fullname">Fullname</option>
-            <!-- <option value="role">Role</option> -->
+            <option value="id">ID</option>
+            <option value="name">Name</option>
           </select>
         </div>
         <div class="pl-1">
@@ -44,7 +42,7 @@
       </div>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="members.length == 0" class="">
+        <div v-if="units.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -53,32 +51,24 @@
             <thead>
               <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
-                <th class="sticky left-0 !z-[2]">Username</th>
-                <th>Email</th>
-                <th>Fullname</th>
-                <!-- <th>Photo</th> -->
-                <th>Can Login</th>
+                <th class="sticky left-0 !z-[2]">ID</th>
+                <th>Name</th>
                 <th>Created At</th>
-                <th>Creator</th>
+                <th>Created By</th>
                 <th>Updated At</th>
-                <th>Updator</th>
+                <th>Updated By</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(member, index) in members" :key="index" @click="selected = index"
+              <tr v-for="(unit, index) in units" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="sticky left-0 !z-[1] bold">{{ member.username }}</td>
-                <td>{{ member.email }}</td>
-                <td>{{ member.fullname }}</td>
-                <!-- <td>
-                  <img :src="member.photo" />
-                </td> -->
-                <td>{{ member.can_login ? 'Ya' : 'Tidak' }}</td>
-                <td>{{ $moment(member.internal_created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ member.internal_creator.email }}</td>
-                <td>{{ $moment(member.internal_updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ member.internal_updator.email }}</td>
+                <td class="sticky left-0 !z-[1] bold">{{ unit.id }}</td>
+                <td>{{ unit.name }}</td>
+                <td>{{ $moment(unit.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ unit.creator.username }}</td>
+                <td>{{ $moment(unit.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ unit.updator.username }}</td>
               </tr>
             </tbody>
           </table>
@@ -101,7 +91,7 @@ definePageMeta({
   // layout: "clear",
   middleware: [
     function (to, from) {
-      // if (!useAuthStore().checkScopes(['ap-member-view']))
+      // if (!useAuthStore().checkScopes(['ap-unit-view']))
       //   return navigateTo('/');
       if (!useAuthStore().checkRole(["ClientPabrik", 'User']))
       return navigateTo('/');
@@ -115,9 +105,9 @@ const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 
 const token = useCookie('token');
-const { data: members } = await useAsyncData(async () => {
+const { data: units } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/members", {
+  const { data, error, status } = await useFetch("/api/units", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -151,7 +141,7 @@ const scrolling = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,username:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%,role:%${search.value}%`;
+    params.like = `id:%${search.value}%,name:%${search.value}%`;
   }
   params.sort = "";
   if (sort.field) {
@@ -165,8 +155,8 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
-  if (params.page == 1) members.value = [];
-  const { data, error, status } = await useFetch("/api/members", {
+  if (params.page == 1) units.value = [];
+  const { data, error, status } = await useFetch("/api/units", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -184,10 +174,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    members.value = data.value.data;
+    units.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    members.value = [...members.value, ...data.value.data];
+    units.value = [...units.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -224,7 +214,7 @@ const searching = () => {
 const router = useRouter();
 
 const form_add = () => {
-  router.push({ name: 'member-form', query: { id: "" } });
+  router.push({ name: 'data_satuan-form', query: { id: "" } });
 }
 
 const { display } = useAlertStore();
@@ -234,15 +224,7 @@ const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    router.push({ name: 'member-form', query: { id: members.value[selected.value].id } });
+    router.push({ name: 'data_satuan-form', query: { id: units.value[selected.value].id } });
   }
 };
-
-// const form_permission = () => {
-//   if (selected.value == -1) {
-//     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
-//   } else {
-//     router.push({ name: 'member-permission', query: { id: members.value[selected.value].id } });
-//   }
-// };
 </script>
