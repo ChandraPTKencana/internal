@@ -20,6 +20,8 @@
               <nuxt-link to="/data_gudang" @click="activeMenu = '/data_gudang'">Gudang</nuxt-link></li>
             <li :class="activeMenu == '/data_item'?'active':''" >
               <nuxt-link to="/data_item" @click="activeMenu = '/data_item'">Item</nuxt-link></li>
+            <li :class="activeMenu == '/data_transaksi'?'active':''" >
+              <nuxt-link to="/data_transaksi" @click="activeMenu = '/data_transaksi'">Transaksi</nuxt-link></li>
             <!-- <li><nuxt-link to="/events">Events</nuxt-link></li>
             <li><nuxt-link to="/user">User</nuxt-link></li>
             <li><nuxt-link to="/institute">Institute</nuxt-link></li>
@@ -66,7 +68,15 @@ import { useCommonStore } from '~/store/common';
 const router = useRouter();
 const route = useRoute();
 
-const activeMenu = ref(route.path);
+const activeMenu = ref('');
+watch(() => route.path, (newVal, oldVal) => {
+  let splitPath = newVal.split("/");
+  activeMenu.value = "/"+(splitPath.length > 1 ? splitPath[1] : '');
+}, {
+  immediate: true
+});
+
+console.log(activeMenu);
 
 const { logUserOut } = useAuthStore();
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive

@@ -1,7 +1,7 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Search And Select Unit'" :fn="fnClose" class="w-100 d-flex align-items-center"
+      <HeaderPopup :title="'Search And Select Unit'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
       <div class="w-full flex p-1">
@@ -61,7 +61,7 @@
           </table>
         </div>
       </div>
-      <div class="d-flex" style="justify-content:end; padding:5px;">
+      <div class="flex" style="justify-content:end; padding:5px;">
         <button @click="selectRow()" class="w-36 m-1 bg-blue-600 text-white p-2 rounded-sm">
           Select
         </button>
