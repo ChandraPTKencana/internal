@@ -73,7 +73,7 @@
                 <td class="bold">{{ item.id }}</td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.unit.name }}</td>
-                <td>{{ item.value }}</td>
+                <td>{{ pointFormat(item.value) }}</td>
                 <td>{{ item.note }}</td>
                 <td>{{ $moment(item.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ item.creator.username }}</td>
@@ -100,6 +100,7 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
+const { pointFormat } = useUtils();
 
 definePageMeta({
   // layout: "clear",
@@ -232,7 +233,7 @@ const searching = () => {
 const router = useRouter();
 
 const form_add = () => {
-  router.push({ name: 'item-form', query: { id: "" } });
+  router.push({ name: 'data_item-form', query: { id: "" } });
 }
 
 const { display } = useAlertStore();
@@ -242,7 +243,7 @@ const form_edit = () => {
   if (selected.value == -1) {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
-    router.push({ name: 'item-form', query: { id: items.value[selected.value].id } });
+    router.push({ name: 'data_item-form', query: { id: items.value[selected.value].id } });
   }
 };
 

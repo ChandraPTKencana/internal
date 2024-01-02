@@ -8,8 +8,14 @@ export const useUtils = () => {
 
     };
 
+    const pointFormat = (value:any) =>{
+        if (!value) return 0
+        return new Intl.NumberFormat('id-ID',{minimumFractionDigits: 0}).format(value);
+    }
+
 
     return {
         sayHello,
+        pointFormat
     }
 }

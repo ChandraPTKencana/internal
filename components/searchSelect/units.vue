@@ -1,7 +1,7 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Search And Select Employees'" :fn="fnClose" class="w-100 d-flex align-items-center"
+      <HeaderPopup :title="'Search And Select Unit'" :fn="fnClose" class="w-100 d-flex align-items-center"
         style="color:white;" />
 
       <div class="w-full flex p-1">
@@ -14,8 +14,8 @@
           <div class="font-bold"> Sort By </div>
           <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
             <option value=""></option>
-            <option value="email">Email</option>
-            <option value="fullname">Fullname</option>
+            <option value="id">ID</option>
+            <option value="name">Nama</option>
           </select>
         </div>
         <div class="pl-1">
@@ -33,7 +33,7 @@
       </div>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="users.length == 0" class="">
+        <div v-if="units.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -42,22 +42,20 @@
             <thead>
               <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
-                <th>Email</th>
-                <th>Fullname</th>
-                <th>Role</th>
-                <th>Tanggal Dibuat</th>
-                <th>Tanggal Diubah</th>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Created At</th>
+                <th>Updated At</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(user, index) in users" :key="index" @click="selected = index"
+              <tr v-for="(unit, index) in units" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="bold">{{ user.email }}</td>
-                <td>{{ user.fullname }}</td>
-                <td>{{ user.role }}</td>
-                <td>{{ $moment(user.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(user.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td class="bold">{{ unit.id }}</td>
+                <td>{{ unit.name }}</td>
+                <td>{{ $moment(unit.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(unit.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
               </tr>
             </tbody>
           </table>
@@ -109,7 +107,7 @@ const props = defineProps({
 
 const token = useCookie('token');
 
-const users = ref([]);
+const units = ref([]);
 
 
 const search = ref("");
@@ -144,12 +142,12 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
-  if (params.page == 1) users.value = [];
+  if (params.page == 1) units.value = [];
   if(params.page > 1){
-    params.firstRow_created_at = users.value[0].created_at;
+    params.firstRow_created_at = units.value[0].created_at;
     // params.firstRow_id = warehouses.value[0].id;
   }
-  const { data, error, status } = await useFetch("/api/users", {
+  const { data, error, status } = await useFetch("/api/units", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -172,10 +170,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    users.value = data.value.data;
+    units.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    users.value = [...users.value, ...data.value.data];
+    units.value = [...units.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -211,12 +209,11 @@ const searching = () => {
 
 const selectRow = () => {
   if (selected.value > -1) {
-    props.fnSelect(users.value[selected.value]);
+    props.fnSelect(units.value[selected.value]);
   } else {
     props.fnSelect({
       id: "",
-      email: "",
-      fullname: ""
+      name: "",
     });
   }
 }

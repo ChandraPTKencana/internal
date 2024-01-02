@@ -148,7 +148,10 @@ const callData = async () => {
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
   if (params.page == 1) members.value = [];
-
+  if(params.page > 1){
+    params.firstRow_created_at = members.value[0].created_at;
+    // params.firstRow_id = warehouses.value[0].id;
+  }
   const { data, error, status } = await useFetch("/api/members", {
     method: 'get',
     headers: {
