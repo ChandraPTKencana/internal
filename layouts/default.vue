@@ -2,7 +2,8 @@
   <div class="w-full h-full flex">
 
     <nav :class="is_sidebar_open ? 'left-0' : 'right-full'"
-      class="bg-slate-800 h-full w-48 fixed sm:relative sm:right-0 text-white z-10">
+      class="bg-slate-800 h-full min-w-[150px] max-w-[150px] fixed sm:relative sm:right-0 text-white z-10"
+      style="width:320px;">
       <div class="relative h-full">
         <button class="absolute left-full h-12 text-2xl text-white bg-slate-500 sm:hidden"
           @click="triggerSidebar(!is_sidebar_open)">
@@ -11,10 +12,14 @@
         </button>
         <header class="h-full flex flex-col p-2 overflow-hidden">
           <ul class="grow overflow-auto">
-            <li><nuxt-link to="/">Dashboard</nuxt-link></li>
-            <li><nuxt-link to="/data_satuan">Satuan</nuxt-link></li>
-            <li><nuxt-link to="/data_gudang">Gudang</nuxt-link></li>
-            <li><nuxt-link to="/data_item">Item</nuxt-link></li>
+            <li :class="activeMenu == '/'?'active':''" >
+              <nuxt-link to="/" @click="activeMenu = '/'">Dashboard</nuxt-link></li>
+            <li :class="activeMenu == '/data_satuan'?'active':''" >
+              <nuxt-link to="/data_satuan" @click="activeMenu = '/data_satuan'">Satuan</nuxt-link></li>
+            <li :class="activeMenu == '/data_gudang'?'active':''" >
+              <nuxt-link to="/data_gudang" @click="activeMenu = '/data_gudang'">Gudang</nuxt-link></li>
+            <li :class="activeMenu == '/data_item'?'active':''" >
+              <nuxt-link to="/data_item" @click="activeMenu = '/data_item'">Item</nuxt-link></li>
             <!-- <li><nuxt-link to="/events">Events</nuxt-link></li>
             <li><nuxt-link to="/user">User</nuxt-link></li>
             <li><nuxt-link to="/institute">Institute</nuxt-link></li>
@@ -59,6 +64,9 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 
 const router = useRouter();
+const route = useRoute();
+
+const activeMenu = ref(route.path);
 
 const { logUserOut } = useAuthStore();
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive
@@ -103,4 +111,19 @@ if (process.client) {
     }
   });
 }
+
+
 </script>
+<style>
+  ul li{
+    padding:5px;
+  }
+
+  ul li.active{
+    background-color: #2e5289;
+  }
+
+  ul li a{
+    display: block;
+  }
+</style>
