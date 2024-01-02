@@ -9,7 +9,7 @@
 
 const props = defineProps({
   value: {
-    type: String,
+    type: Number,
     required: true,
     default: 0,
   },
@@ -50,7 +50,6 @@ const oriIDFormat=(m:any)=>{
 };
 
 const change=(val:any)=>{
-  
   if(val.target) val.preventDefault();
   let result = (typeof val == 'object' ? val.target.value : val).toString();  
   if(result && result.match(/[a-z]+/ig)){
@@ -63,7 +62,7 @@ const blur=(val:any)=>{
   let result = typeof val == 'object' ? val.target.value : val;
   if(result){    
     inputVal.value = blurIDFormat(result);
-    emit('input',oriIDFormat(result)); 
+    emit('input',Number(oriIDFormat(result))); 
   }
 }
 
