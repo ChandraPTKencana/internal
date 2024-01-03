@@ -26,7 +26,7 @@
         <div class="pl-1">
           <div class="font-bold"> Sort By </div>
           <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
-            <option value=""></option>
+            <option value="created_at">Created At</option>
             <option value="id">ID</option>
             <option value="name">Name</option>
           </select>
@@ -109,7 +109,7 @@ definePageMeta({
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
-
+params.sort ="created_at:desc";
 const token = useCookie('token');
 const { data: warehouses } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
@@ -133,8 +133,8 @@ const { data: warehouses } = await useAsyncData(async () => {
 
 const search = ref("");
 const sort = ref({
-  field: "",
-  by: "asc"
+  field: "created_at",
+  by: "desc"
 });
 const selected = ref(-1);
 const scrolling = ref({
@@ -163,8 +163,7 @@ const callData = async () => {
   params.page = scrolling.value.page;
   if (params.page == 1) warehouses.value = [];
   if(params.page > 1){
-    params.firstRow_created_at = warehouses.value[0].created_at;
-    // params.firstRow_id = warehouses.value[0].id;
+    params.first_row = JSON.stringify(warehouses.value[0]);
   }
   const { data, error, status } = await useFetch("/api/warehouses", {
     method: 'get',

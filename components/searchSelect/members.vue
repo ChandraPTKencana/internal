@@ -13,8 +13,8 @@
         <div class="pl-1">
           <div class="font-bold"> Sort By </div>
           <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
-            <option value=""></option>
-            <option value="Username">Username</option>
+            <option value="created_at">Created At</option>
+            <option value="username">Username</option>
             <option value="email">Email</option>
             <option value="fullname">Fullname</option>
           </select>
@@ -115,8 +115,8 @@ const members = ref([]);
 
 const search = ref("");
 const sort = ref({
-  field: "",
-  by: "asc"
+  field: "created_at",
+  by: "desc"
 });
 const selected = ref(-1);
 const scrolling = ref({
@@ -149,8 +149,7 @@ const callData = async () => {
   params.page = scrolling.value.page;
   if (params.page == 1) members.value = [];
   if(params.page > 1){
-    params.firstRow_created_at = members.value[0].created_at;
-    // params.firstRow_id = warehouses.value[0].id;
+    params.first_row = JSON.stringify(members.value[0]);
   }
   const { data, error, status } = await useFetch("/api/members", {
     method: 'get',

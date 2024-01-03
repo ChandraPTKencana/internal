@@ -26,7 +26,7 @@
         <div class="pl-1">
           <div class="font-bold"> Sort By </div>
           <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
-            <option value=""></option>
+            <option value="created_at">Created At</option>
             <option value="name">Name</option>
             <option value="value">Value</option>
           </select>
@@ -62,7 +62,7 @@
                 <th>Note</th>
                 <th>Created At</th>
                 <th>Created By</th>
-                <th>Updated By</th>
+                <th>Updated At</th>
                 <th>Updated By</th>
               </tr>
             </thead>
@@ -118,6 +118,7 @@ definePageMeta({
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
+params.sort ="created_at:desc";
 
 const token = useCookie('token');
 const { data: items } = await useAsyncData(async () => {
@@ -142,8 +143,8 @@ const { data: items } = await useAsyncData(async () => {
 
 const search = ref("");
 const sort = ref({
-  field: "",
-  by: "asc"
+  field: "created_at",
+  by: "desc"
 });
 const selected = ref(-1);
 const scrolling = ref({
@@ -156,7 +157,7 @@ const scrolling = ref({
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,name:%${search.value}%,address:%${search.value}%,contact_number:%${search.value}%,contact_person:%${search.value}%`;
+    params.like = `id:%${search.value}%,name:%${search.value}%,value:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -172,8 +173,7 @@ const callData = async () => {
   params.page = scrolling.value.page;
   if (params.page == 1) items.value = [];
   if(params.page > 1){
-    params.firstRow_created_at = items.value[0].created_at;
-    // params.firstRow_id = warehouses.value[0].id;
+    params.first_row = JSON.stringify(items.value[0]);
   }
   const { data, error, status } = await useFetch("/api/items", {
     method: 'get',

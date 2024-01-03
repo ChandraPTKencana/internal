@@ -13,7 +13,7 @@
         <div class="pl-1">
           <div class="font-bold"> Sort By </div>
           <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
-            <option value=""></option>
+            <option value="created_at">Created At</option>
             <option value="id">ID</option>
             <option value="name">Nama</option>
           </select>
@@ -114,8 +114,8 @@ const items = ref([]);
 
 const search = ref("");
 const sort = ref({
-  field: "",
-  by: "asc"
+  field: "created_at",
+  by: "desc"
 });
 const selected = ref(-1);
 const scrolling = ref({
@@ -130,7 +130,7 @@ params._TimeZoneOffset = new Date().getTimezoneOffset();
 const inject_params = () => {
   params.like = "";
   if (search.value != "") {
-    params.like = `id:%${search.value}%,email:%${search.value}%,fullname:%${search.value}%`;
+    params.like = `id:%${search.value}%,name:%${search.value}%`;
   }
   params.sort = "";
   if (sort.value.field) {
@@ -146,8 +146,7 @@ const callData = async () => {
   params.page = scrolling.value.page;
   if (params.page == 1) items.value = [];
   if(params.page > 1){
-    params.firstRow_created_at = items.value[0].created_at;
-    // params.firstRow_id = warehouses.value[0].id;
+    params.first_row = JSON.stringify(items.value[0]);
   }
   const { data, error, status } = await useFetch("/api/items", {
     method: 'get',

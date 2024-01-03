@@ -1,7 +1,7 @@
 <template>
   <section v-show="show" class="box-fixed">
     <div>
-      <HeaderPopup :title="'Search And Select Unit'" :fn="fnClose" class="w-100 flex align-items-center"
+      <HeaderPopup :title="'Search And Select Warehouse'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
       <div class="w-full flex p-1">
@@ -33,7 +33,7 @@
       </div>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="units.length == 0" class="">
+        <div v-if="warehouses.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -49,13 +49,13 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(unit, index) in units" :key="index" @click="selected = index"
+              <tr v-for="(warehouse, index) in warehouses" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td class="bold">{{ unit.id }}</td>
-                <td>{{ unit.name }}</td>
-                <td>{{ $moment(unit.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(unit.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td class="bold">{{ warehouse.id }}</td>
+                <td>{{ warehouse.name }}</td>
+                <td>{{ $moment(warehouse.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(warehouse.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
               </tr>
             </tbody>
           </table>
@@ -107,7 +107,7 @@ const props = defineProps({
 
 const token = useCookie('token');
 
-const units = ref([]);
+const warehouses = ref([]);
 
 
 const search = ref("");
@@ -142,11 +142,12 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
-  if (params.page == 1) units.value = [];
+  if (params.page == 1) warehouses.value = [];
+  
   if(params.page > 1){
-    params.first_row = JSON.stringify(units.value[0]);
+    params.first_row = JSON.stringify(warehouses.value[0]);
   }
-  const { data, error, status } = await useFetch("/api/units", {
+  const { data, error, status } = await useFetch("/api/hrm_revisi_lokasis", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -169,10 +170,10 @@ const callData = async () => {
   }
 
   if (scrolling.value.page == 1) {
-    units.value = data.value.data;
+    warehouses.value = data.value.data;
     if (loadRef.value) loadRef.value.scrollTop = 0;
   } else if (scrolling.value.page > 1) {
-    units.value = [...units.value, ...data.value.data];
+    warehouses.value = [...warehouses.value, ...data.value.data];
   }
   if (data.value.data.length == 0) {
     scrolling.value.is_last_record = true;
@@ -208,7 +209,7 @@ const searching = () => {
 
 const selectRow = () => {
   if (selected.value > -1) {
-    props.fnSelect(units.value[selected.value]);
+    props.fnSelect(warehouses.value[selected.value]);
   } else {
     props.fnSelect({
       id: "",

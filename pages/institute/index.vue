@@ -132,7 +132,7 @@ const { data: institutes } = await useAsyncData(async () => {
 const search = ref("");
 const sort = ref({
   field: "",
-  by: "asc"
+  by: "desc"
 });
 const selected = ref(-1);
 const scrolling = ref({
