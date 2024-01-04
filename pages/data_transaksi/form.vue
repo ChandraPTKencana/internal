@@ -155,7 +155,7 @@
     :excludes="'item_had_which_item_id'" />
   
   <SearchSelectHrmRevisiLokasis :show="show_warehouse" :fnClose="closeSNSWarehouse" :fnSelect="selectSNSWarehouse"
-  :excludes="'item_had_which_item_id'" />
+  :opt="selected_warehouse" :exclude="exclude_id"/>
 </template>
 
 <script lang="ts" setup>
@@ -343,6 +343,19 @@ const doSave = async () => {
   }
   router.go(-1);
 }
+
+// const exclude_id = computed({
+//   get(){
+//     return transaction.value.warehouse?.id || transaction.value.warehouse_target?.id;
+//   },
+//   set(){
+    
+//   }
+// })
+
+const exclude_id = computed(()=>{
+  return transaction.value.warehouse?.id || transaction.value.warehouse_target?.id || 0;
+})
 
 
 </script>

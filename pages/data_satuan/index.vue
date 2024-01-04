@@ -80,7 +80,7 @@
       </div>
     </div>
 
-    <PopupDelete :show="delete_box" :delete_data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
+    <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
 
   </div>
 </template>

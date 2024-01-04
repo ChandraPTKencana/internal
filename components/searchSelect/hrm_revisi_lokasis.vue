@@ -92,8 +92,13 @@ const props = defineProps({
     type: Function,
     required: false,
   },
-  excludes: {
+  opt: {
     type: String,
+    required: false,
+    // default: '',
+  },
+  exclude: {
+    type: Number,
     required: false,
     // default: '',
   },
@@ -141,6 +146,8 @@ const loadRef = ref(null);
 const callData = async () => {
   useCommonStore().loading_full = true;
   scrolling.value.may_get_data = false;
+  params.opt = props.opt;
+  params.exclude = props.exclude;
   params.page = scrolling.value.page;
   if (params.page == 1) warehouses.value = [];
   

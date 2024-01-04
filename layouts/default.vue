@@ -76,7 +76,6 @@ watch(() => route.path, (newVal, oldVal) => {
   immediate: true
 });
 
-console.log(activeMenu);
 
 const { logUserOut } = useAuthStore();
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive
