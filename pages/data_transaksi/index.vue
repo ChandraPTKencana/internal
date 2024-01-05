@@ -7,6 +7,14 @@
           @click="form_add()">
           <IconsPlus />
         </button>
+        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+          @click="form_edit()">
+          <IconsEdit />
+        </button>
+        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+          @click="remove()">
+          <IconsDelete />
+        </button>
         <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl relative"
           @click="popup_request=true">
           <IconsCheckList /> 
@@ -14,10 +22,10 @@
             <div v-if="request_notif > 0" class=" w-2 h-2 rounded-full bg-red-700 border-2 border-solid border-red-950"></div>
           </div>
         </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <!-- <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
           @click="popup_summary=true">
           <IconsTable2Column />
-        </button>
+        </button> -->
       </div>
 
       <div class="w-full flex p-1">
@@ -109,6 +117,7 @@
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
     <TransactionsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/>
+    <TransactionsSummary :show="popup_summary" :fnClose="()=>{ popup_summary = false; }"/>
 
   </div>
 </template>

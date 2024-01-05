@@ -120,12 +120,12 @@
 
         <div v-if="transaction.type=='in'" class="w-full flex flex-col flex-wrap p-1">
           <label for="">Qty In</label>
-          <InputPointFormat class="w-full border-black border-solid border-2 p-1" type="text" :value="transaction.qty_in" @input="transaction.qty_in = $event"/>
+          <InputPointFormat class="w-full border-black border-solid border-2 p-1" type="text" :value="transaction.qty_in || 0" @input="transaction.qty_in = $event"/>
           <p class="text-red-500">{{ field_errors.qty_in }}</p>
         </div>
         <div v-if="transaction.type=='transfer' || transaction.type=='used'" class="w-full flex flex-col flex-wrap p-1">
           <label for="">Qty Out</label>
-          <InputPointFormat class="w-full border-black border-solid border-2 p-1" type="text" :value="transaction.qty_out" @input="transaction.qty_out = $event"/>
+          <InputPointFormat class="w-full border-black border-solid border-2 p-1" type="text" :value="transaction.qty_out || 0" @input="transaction.qty_out = $event"/>
           <p class="text-red-500">{{ field_errors.qty_out }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
