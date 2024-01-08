@@ -20,7 +20,8 @@ div#__nuxt>div {
 
 
 table.tacky {
-    @apply whitespace-nowrap m-0 border-none border-collapse border-spacing-0 table-fixed;
+    @apply whitespace-nowrap m-0 border-none border-collapse border-spacing-0 ;
+    @apply table-fixed;
 }
 
 // table.sticky:focus {
@@ -31,7 +32,8 @@ table.tacky {
 table.tacky thead th,
 table.tacky tbody td,
 table.tacky tbody th {
-    @apply border-2 border-solid border-slate-700 p-1 w-[25vw];
+    @apply border-2 border-solid border-slate-700 p-1; 
+    @apply w-[25vw];
 }
 
 table.tacky thead th {
@@ -40,7 +42,7 @@ table.tacky thead th {
 }
 
 table.tacky td {
-    @apply bg-white py-1 px-2 text-center;
+    @apply bg-white py-1 px-2 text-center h-1;
 }
 
 table.tacky tbody th {
@@ -57,3 +59,29 @@ tr.active td,
 tr.active th {
     @apply bg-green-300;
 }
+
+.unselectable,
+.unselectable td,
+.unselectable th {
+    @apply  cursor-default;
+    @apply bg-gray-400 #{!important};
+}
+
+table.sticky thead th.tools {
+    @apply p-3 w-10
+}
+
+table.sticky tbody td.tools {
+    @apply p-3 w-10
+}
+
+
+td.cell {
+    @apply p-0 #{!important};
+}
+
+.cell button {
+    @apply border-none;
+}
+
+

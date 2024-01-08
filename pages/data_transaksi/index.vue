@@ -70,11 +70,6 @@
                 <th>Updated At</th>
                 <th>ID</th>
                 <th>Warehouse Name</th>
-                <th>Item Name</th>
-                <th>Unit Name</th>
-                <th>Qty In</th>
-                <th>Qty Out</th>
-                <th>Qty Reminder</th>
                 <th>Note</th>
                 <th>Status</th>
                 <th>Type</th>
@@ -94,11 +89,11 @@
                 <td>{{ $moment(transaction.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td class="bold">{{ transaction.id }}</td>
                 <td>{{ transaction.warehouse?.name }}</td>
-                <td>{{ transaction.item?.name }}</td>
+                <!--<td>{{ transaction.item?.name }}</td>
                 <td>{{ transaction.item?.unit?.name }}</td>
-                <td>{{ pointFormat(transaction.qty_in) }}</td>
+                 <td>{{ pointFormat(transaction.qty_in) }}</td>
                 <td>{{ pointFormat(transaction.qty_out) }}</td>
-                <td>{{ transaction.qty_reminder || transaction.qty_reminder===0  ? pointFormat(transaction.qty_reminder) : ''  }}</td>
+                <td>{{ transaction.qty_reminder || transaction.qty_reminder===0  ? pointFormat(transaction.qty_reminder) : ''  }}</td> -->
                 <td>{{ transaction.note }}</td>
                 <td>{{ transaction.status }}</td>
                 <td>{{ transaction.type }}</td>

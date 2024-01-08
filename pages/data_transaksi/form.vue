@@ -2,142 +2,167 @@
   <div class="w-full h-full flex flex-col">
     <HeaderCustom :title="'Form Item'" :back="true" />
     <div class="w-full flex grow flex-col h-0 overflow-auto bg-white">
-      <div class="w-full align-items-center justify-content-center grow overflow-auto">
-        <!-- <div class="w-full flex flex-col flex-wrap p-1">
-          <label for="">Name</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="item.name">
-          <p class="text-red-500">{{ field_errors.name }}</p>
-        </div> -->
-        <div class="w-full flex flex-col flex-wrap p-1">
-          <label for="">Type</label>
-          <select class="w-full border-black border-solid border-2 p-1" v-model="transaction.type">
-            <option value="used">Used</option>
-            <option value="in">In</option>
-            <option value="transfer">Transfer</option>
-          </select>
-          <p class="text-red-500">{{ field_errors.type }}</p>
-        </div>
-        <!-- <div class="w-full flex flex-col flex-wrap p-1">
-          <label for="">Name</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="item.name">
-          <p class="text-red-500">{{ field_errors.name }}</p>
-        </div> -->
+      <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
+        <div class="w-full flex flex-row flex-wrap">
 
-        <div class="w-full flex flex-col flex-wrap p-1">
-          <label for="">From Warehouse</label>
-          <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
-            <div v-if="!transaction.warehouse || !transaction.warehouse.id" class="w-full flex">
-              <button @click="searchWarehouse('from')" class="flex items-center grow">
-                <IconsSearch class="text-2xl text-black" />
-                <div class="flex items-center grow p-1">
-                  Pilih Warehouse yang dikelola
-                </div>
-              </button>
-            </div>
-            <div v-else class="w-full flex" style="">
-              <div class="flex flex-row flex-wrap grow">
-                <div class="p-1">
-                  <div class="text-sm text-gray-600">ID</div>
-                  <div class="bold">{{ transaction.warehouse.id }}</div>
-                </div>
-                <div class="p-1">
-                  <div class="text-sm text-gray-600">Name</div>
-                  <div class="bold">{{ transaction.warehouse.name }}</div>
-                </div>
-              </div>
-              <button class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('from')">
-                <IconsDelete class="text-2xl text-white" />
-              </button>
-            </div>
+          <div class="w-full flex flex-col flex-wrap p-1">
+            <label for="">Type</label>
+            <select class="w-full border-black border-solid border-2 p-1" v-model="transaction.type">
+              <option value="used">Used</option>
+              <option value="in">In</option>
+              <option value="transfer">Transfer</option>
+            </select>
+            <p class="text-red-500">{{ field_errors.type }}</p>
           </div>
-          <p class="text-red-500">{{ field_errors.warehouse_id }}</p>
-        </div>
-
-        <div v-if="transaction.type =='transfer'" class="w-full flex flex-col flex-wrap p-1">
-          <label for="">To Warehouse</label>
-          <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
-            <div v-if="!transaction.warehouse_target || !transaction.warehouse_target.id" class="w-full flex">
-              <button @click="searchWarehouse('to')" class="flex items-center grow">
-                <IconsSearch class="text-2xl text-black" />
-                <div class="flex items-center grow p-1">
-                  Pilih Warehouse Target
-                </div>
-              </button>
-            </div>
-            <div v-else class="w-full flex" style="">
-              <div class="flex flex-row flex-wrap grow">
-                <div class="p-1">
-                  <div class="text-sm text-gray-600">ID</div>
-                  <div class="bold">{{ transaction.warehouse_target.id }}</div>
-                </div>
-                <div class="p-1">
-                  <div class="text-sm text-gray-600">Name</div>
-                  <div class="bold">{{ transaction.warehouse_target.name }}</div>
-                </div>
+  
+          <div class="w-full flex flex-col flex-wrap p-1">
+            <label for="">From Warehouse</label>
+            <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
+              <div v-if="!transaction.warehouse || !transaction.warehouse.id" class="w-full flex">
+                <button @click="searchWarehouse('from')" class="flex items-center grow">
+                  <IconsSearch class="text-2xl text-black" />
+                  <div class="flex items-center grow p-1">
+                    Pilih Warehouse yang dikelola
+                  </div>
+                </button>
               </div>
-              <button class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('to')">
-                <IconsDelete class="text-2xl text-white" />
-              </button>
+              <div v-else class="w-full flex" style="">
+                <div class="flex flex-row flex-wrap grow">
+                  <div class="p-1">
+                    <div class="text-sm text-gray-600">ID</div>
+                    <div class="bold">{{ transaction.warehouse.id }}</div>
+                  </div>
+                  <div class="p-1">
+                    <div class="text-sm text-gray-600">Name</div>
+                    <div class="bold">{{ transaction.warehouse.name }}</div>
+                  </div>
+                </div>
+                <button class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('from')">
+                  <IconsDelete class="text-2xl text-white" />
+                </button>
+              </div>
             </div>
+            <p class="text-red-500">{{ field_errors.warehouse_id }}</p>
           </div>
-          <p class="text-red-500">{{ field_errors.warehouse_target_id }}</p>
+  
+          <div v-if="transaction.type =='transfer'" class="w-full flex flex-col flex-wrap p-1">
+            <label for="">To Warehouse</label>
+            <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
+              <div v-if="!transaction.warehouse_target || !transaction.warehouse_target.id" class="w-full flex">
+                <button @click="searchWarehouse('to')" class="flex items-center grow">
+                  <IconsSearch class="text-2xl text-black" />
+                  <div class="flex items-center grow p-1">
+                    Pilih Warehouse Target
+                  </div>
+                </button>
+              </div>
+              <div v-else class="w-full flex" style="">
+                <div class="flex flex-row flex-wrap grow">
+                  <div class="p-1">
+                    <div class="text-sm text-gray-600">ID</div>
+                    <div class="bold">{{ transaction.warehouse_target.id }}</div>
+                  </div>
+                  <div class="p-1">
+                    <div class="text-sm text-gray-600">Name</div>
+                    <div class="bold">{{ transaction.warehouse_target.name }}</div>
+                  </div>
+                </div>
+                <button class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('to')">
+                  <IconsDelete class="text-2xl text-white" />
+                </button>
+              </div>
+            </div>
+            <p class="text-red-500">{{ field_errors.warehouse_target_id }}</p>
+          </div>
+          
+          
+          <div class="w-full flex flex-col flex-wrap p-1">
+            <label for="">Note</label>
+            <textarea class="w-full border-black border-solid border-2 p-1" v-model="transaction.note"></textarea>
+            <p class="text-red-500">{{ field_errors.note }}</p>
+          </div>
         </div>
         
-        <div class="w-full flex flex-col flex-wrap p-1">
-          <label for="">Item</label>
-          <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
-            <div v-if="!transaction.item || !transaction.item.id" class="w-full flex">
-              <button @click="searchItem()" class="flex items-center grow">
-                <IconsSearch class="text-2xl text-black" />
-                <div class="flex items-center grow p-1">
-                  Pilih Item
-                </div>
-              </button>
-            </div>
-            <div v-else class="w-full flex" style="">
-              <div class="flex flex-row flex-wrap grow">
-                <div class="p-1">
-                  <div class="text-sm text-gray-600">ID</div>
-                  <div class="bold">{{ transaction.item.id }}</div>
-                </div>
-                <div class="p-1">
-                  <div class="text-sm text-gray-600">Name</div>
-                  <div class="bold">{{ transaction.item.name }}</div>
-                </div>
-                <div class="p-1">
-                  <div class="text-sm text-gray-600">"Unit"</div>
-                  <div class="bold">{{ transaction.item.unit.name }}</div>
-                </div>
-              </div>
-              <button class="w-10 bg-red-600 flex items-center justify-center" @click="clearItem()">
-                <IconsDelete class="text-2xl text-white" />
-              </button>
-            </div>
+        <div class="w-full flex grow p-1 overflow-auto">
+          <div role="sticky" ref="loadRef">
+            <table class="tacky w-full" style="white-space:normal;">
+              <thead >
+                <tr class="sticky top-0 !z-[2]">
+                  <th class="min-w-[50px] !w-[50px] max-w-[50px] "></th>
+                  <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
+                  <th class="min-w-[50px] !w-[50px] max-w-[50px] "></th>
+                  <th class="min-w-[50px] !w-[50px] max-w-[50px] ">ID Item</th>
+                  <th>Nama Item</th>
+                  <th class="min-w-[80px] !w-[80px] max-w-[80px]">Qty In</th>
+                  <th class="min-w-[80px] !w-[80px] max-w-[80px]">Qty Out</th>
+                  <th>Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-for="(detail, index) in details" :key="index">
+                  <tr v-if="detail.status!='Remove'">
+                    <td class="tools cell">
+                      <div class="w-full h-full flex items-center justify-center">
+                        <button  type="button" name="button"
+                          @click="showAction($event, index)">
+                          <IconsTools />
+                        </button>
+                      </div>
+                    </td>
+                    <td>{{ index + 1 }}.</td>
+                    <td class="cell">
+                      <div class="w-full h-full flex items-center justify-center">
+                        <button v-if="!detail.item_id" type="button" name="button" @click="showSNSItem($event, index)">
+                          ...
+                        </button>
+                        <button v-else @click="deleteItem($event, index)" :disabled="detail.confirm_by">
+                          <IconsTimes class=" font-bold text-2xl"/>
+                        </button>
+                      </div>
+                    </td>
+                    <td class="cell bold" :class="detail.confirm_by ? 'unselectable' : ''">
+                      <div class="w-full h-full flex items-center justify-center">
+                        {{ detail.item.id }}
+                      </div>
+                    </td>
+                    <td class="cell" :class="detail.confirm_by ? 'unselectable' : ''">
+                      <div class="w-full h-full flex items-center justify-center">
+                        {{ detail.item.name }}
+                      </div>
+                    </td>
+                    <td class="cell" :class="detail.confirm_by ? 'unselectable' : ''">
+                      <div class="w-full h-full flex items-center justify-center">
+                        <InputPointFormat :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_in || 0" @input="detail.qty_in = $event"/>
+                      </div>
+                    </td>
+                    <td class="cell">
+                      <div class="w-full h-full flex items-center justify-center">
+                        <InputPointFormat :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_out || 0" @input="detail.qty_out = $event"/>
+                      </div>
+                    </td>
+                    <td class="cell">
+                      <div class="w-full h-full flex items-center justify-center">
+                        <textarea class="border-black border-solid border-1 p-1 w-full" v-model="detail.note" cols="7" rows="2" :disabled="detail.confirm_by"></textarea>
+                      </div>
+                    </td>
+                  </tr>
+                </template>
+                
+                <tr>
+                  <td class="tools cell">
+                    <button type="button" name="button" @click="addList()">
+                      <IconsPlus />
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <p class="text-red-500">{{ field_errors.unit_id }}</p>
-
         </div>
-
-        <div v-if="transaction.type=='in'" class="w-full flex flex-col flex-wrap p-1">
-          <label for="">Qty In</label>
-          <InputPointFormat class="w-full border-black border-solid border-2 p-1" type="text" :value="transaction.qty_in || 0" @input="transaction.qty_in = $event"/>
-          <p class="text-red-500">{{ field_errors.qty_in }}</p>
-        </div>
-        <div v-if="transaction.type=='transfer' || transaction.type=='used'" class="w-full flex flex-col flex-wrap p-1">
-          <label for="">Qty Out</label>
-          <InputPointFormat class="w-full border-black border-solid border-2 p-1" type="text" :value="transaction.qty_out || 0" @input="transaction.qty_out = $event"/>
-          <p class="text-red-500">{{ field_errors.qty_out }}</p>
-        </div>
-        <div class="w-full flex flex-col flex-wrap p-1">
-          <label for="">Note</label>
-          <textarea class="w-full border-black border-solid border-2 p-1" v-model="transaction.note"></textarea>
-          <p class="text-red-500">{{ field_errors.note }}</p>
-        </div>
-        
-       
         
 
       </div>
+      
       <div class="w-full flex items-center justify-end">
         <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
           Cancel
@@ -149,13 +174,16 @@
     </div>
   </div>
 
-  <!-- <SearchSelectUsers /> -->
+
 
   <SearchSelectItems :show="show_item" :fnClose="closeSNSItem" :fnSelect="selectSNSItem"
-    :excludes="'item_had_which_item_id'" />
+    :exclude_lists="exclude_lists"/>
   
   <SearchSelectHrmRevisiLokasis :show="show_warehouse" :fnClose="closeSNSWarehouse" :fnSelect="selectSNSWarehouse"
   :opt="selected_warehouse" :exclude="exclude_id"/>
+
+  <ToolsPopup :show="tools_popup" :coor="coor" :fn="closeToolsPopup" @replyAct="replyAction($event)" />
+
 </template>
 
 <script lang="ts" setup>
@@ -199,8 +227,13 @@ let empty_item = {
 };
 
 
-const { data: transaction } = await useAsyncData(async () => {
+const { data: dt_async } = await useAsyncData(async () => {
   const id = route.query.id;
+  
+  let transaction:any = null;
+  let exclude_lists:any = null;
+  let details:any = null;
+
   if (id !== undefined && id !== "") {
     useCommonStore().loading_full = true;
     const { data, error, status }: any = await useFetch("/api/transaction", {
@@ -217,20 +250,23 @@ const { data: transaction } = await useAsyncData(async () => {
     if (status.value === 'error') {
       useErrorStore().trigger(error, field_errors);
     } else {
-      let data_get = data.value.data;
-      // if (data_get.members.length > 0) {
-      //   data_get["operator_member"] = data_get.members[0];
-      // } else {
-      //   data_get["operator_member"] = { ...emptyOperatorMember };
-      // }      
-      return data_get;
+      transaction = data.value.data;
+      details = data.value.data.details.map((x:any)=>{
+        x["status"]= "Edit";
+        x["key"] = x["ordinal"];
+        return x;
+      });
+
+      exclude_lists = data.value.data.details.map((x:any)=>{return x.item.id});  
     }
   }
-  return {
+  return {transaction,exclude_lists,details};
+    
+});
+
+const transaction:any = ref(dt_async.value?.transaction || {
     id: -1,
     type: "used",
-    qty_in: 0,
-    qty_out: 0,
     note: "",
     warehouse: {
       ...empty_warehouse
@@ -238,31 +274,72 @@ const { data: transaction } = await useAsyncData(async () => {
     warehouse_target: {
       ...empty_warehouse
     },
-    item: {
-      ...empty_item
-    },
-  };
+    details: []
+  });
+const exclude_lists = ref(dt_async.value?.exclude_lists || []);
+const details = ref(dt_async.value?.details || []);
+const loop_details = computed(()=>{
+  return details.value.filter((x:any)=>{return x.status !== 'Remove'})
 });
 
+// console.log(details.value,"d");
+//   console.log(loop_details.value,"l");
+// const details = ref<Record<any, any>>([]);
+const detail = ref({
+  ordinal:0,
+  item:{
+    id:"",
+    name:"",
+    unit:{
+      id:"",
+      name:"",
+    }
+  },
+  item_id:"",
+  qty_in:0,
+  qty_out:0,
+  note:"",
+  status:""
+});
 
-let show_item = ref(false);
-
-const clearItem = () => {
-  transaction.value.item = { ...empty_item };
-};
-
-const searchItem = () => {
-  show_item.value = true;
-};
+const show_item = ref(false);
 
 const closeSNSItem = () => {
   show_item.value = false;
 };
 
 const selectSNSItem = (item: any) => {
-  transaction.value.item = item;
+  details.value[row.value].item = item;
+  details.value[row.value].item_id = item.id;
+  exclude_lists.value.push(item.id);
   show_item.value = false;
 }
+
+
+const showSNSItem=(e, index)=>{
+  // console.log(details.value);
+  // console.log(loop_details.value);  
+  row.value = index;
+  // console.log(row.value,"row");
+  
+  show_item.value = true;
+};
+const deleteItem=(e, index)=>{
+  let item_id = details.value[index].item.id;
+  let el_index = exclude_lists.value.indexOf(item_id);
+  if (el_index > -1)
+    exclude_lists.value.splice(el_index, 1);
+
+  details.value[index].item_id = "";
+  details.value[index].item = {
+    id: "",
+    name: "",
+    unit: {
+      id:"",
+      name:""
+    }
+  };
+};
 
 let show_warehouse = ref(false);
 let selected_warehouse = "";
@@ -304,15 +381,19 @@ const doSave = async () => {
   // data_in.append("fullname", item.value.fullname);
   // data_in.append("role", item.value.role);
   // data_in.append("can_login", item.value.can_login);
+
   let data_in: Record<string, any> = {
     "type": transaction.value.type,
     "note": transaction.value.note,
-    "qty_in": transaction.value.qty_in,
-    "qty_out": transaction.value.qty_out,
-    "item_id": transaction.value.item.id,
+    // "qty_in": transaction.value.qty_in,
+    // "qty_out": transaction.value.qty_out,
+    // "item_id": transaction.value.item.id,
     "warehouse_id": transaction.value.warehouse.id,
     "warehouse_target_id": transaction.value.warehouse_target.id,
+    "details":JSON.stringify(details.value)
   };
+  console.log(details.value);
+  
   let $method: any = "post";
 
   let id = route.query.id;
@@ -356,6 +437,59 @@ const doSave = async () => {
 const exclude_id = computed(()=>{
   return transaction.value.warehouse?.id || transaction.value.warehouse_target?.id || 0;
 })
+
+
+const row = ref(-1);
+const tools_popup = ref(false);
+const coor = ref({
+  left:0,
+  top:0
+});
+
+
+const showAction=(e, index)=>{
+  row.value = index;
+  tools_popup.value = true;
+  coor.value = { left: e.clientX, top: e.clientY };
+};
+
+const addList=()=>{
+  details.value.push({
+    ...detail.value,
+    status: "Add",
+
+    // item: { ...this.item },
+    // unit: { ...this.unit },
+    // creator: { ...this.creator }
+  });
+};
+const closeToolsPopup=()=>{
+  tools_popup.value = false;
+};
+const replyAction=(act = "")=>{
+  if (act == "insert") {
+    details.value.splice(row.value, 0, {
+      ...detail.value,
+      status: "Add",
+
+      // item: { ...this.item },
+      // unit: { ...this.unit },
+      // creator: { ...this.creator }
+    });
+  } else if (act == "delete") {
+    let item_id = details.value[row.value].item.id;
+    let el_index = exclude_lists.value.indexOf(item_id);
+    if (el_index > -1)
+      exclude_lists.value.splice(el_index, 1);
+
+    if (details.value[row.value].status == "Edit")
+      details.value[row.value].status = "Remove";
+    else
+      details.value.splice(row.value, 1);
+    
+  }
+  tools_popup.value = false;
+};
 
 
 </script>
