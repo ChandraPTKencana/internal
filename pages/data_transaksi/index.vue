@@ -15,6 +15,10 @@
           @click="remove()">
           <IconsDelete />
         </button>
+        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+          @click="checkAndConfirm()">
+          <IconsSignature />
+        </button>
         <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl relative"
           @click="popup_request=true">
           <IconsCheckList /> 
@@ -273,6 +277,14 @@ const form_edit = () => {
     display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
   } else {
     router.push({ name: 'data_transaksi-form', query: { id: transactions.value[selected.value].id } });
+  }
+};
+
+const checkAndConfirm = () => {
+  if (selected.value == -1) {
+    display({ show: true, status: "Failed", message: "Silahkan Pilih Data Terlebih Dahulu" });
+  } else {
+    router.push({ name: 'data_transaksi-confirm', query: { id: transactions.value[selected.value].id } });
   }
 };
 

@@ -278,12 +278,8 @@ const transaction:any = ref(dt_async.value?.transaction || {
   });
 const exclude_lists = ref(dt_async.value?.exclude_lists || []);
 const details = ref(dt_async.value?.details || []);
-const loop_details = computed(()=>{
-  return details.value.filter((x:any)=>{return x.status !== 'Remove'})
-});
 
-// console.log(details.value,"d");
-//   console.log(loop_details.value,"l");
+
 // const details = ref<Record<any, any>>([]);
 const detail = ref({
   ordinal:0,
@@ -318,7 +314,6 @@ const selectSNSItem = (item: any) => {
 
 const showSNSItem=(e, index)=>{
   // console.log(details.value);
-  // console.log(loop_details.value);  
   row.value = index;
   // console.log(row.value,"row");
   
