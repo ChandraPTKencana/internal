@@ -7,7 +7,7 @@
 
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Type</label>
-            <select class="w-full border-black border-solid border-2 p-1" v-model="transaction.type">
+            <select :disabled="disabled" class="w-full border-black border-solid border-2 p-1" v-model="transaction.type">
               <option value="used">Used</option>
               <option value="in">In</option>
               <option value="transfer">Transfer</option>
@@ -26,7 +26,7 @@
                   </div>
                 </button>
               </div>
-              <div v-else class="w-full flex" style="">
+              <div v-else-if="transaction.ref_id==null" class="w-full flex" :class="disabled ? 'unselectable' : ''" style="">
                 <div class="flex flex-row flex-wrap grow">
                   <div class="p-1">
                     <div class="text-sm text-gray-600">ID</div>
@@ -37,7 +37,22 @@
                     <div class="bold">{{ transaction.warehouse.name }}</div>
                   </div>
                 </div>
-                <button class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('from')">
+                <button v-if="!disabled" class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('from')">
+                  <IconsDelete class="text-2xl text-white" />
+                </button>
+              </div>
+              <div v-else-if="transaction.ref_id!=null" class="w-full flex" :class="disabled ? 'unselectable' : ''" style="">
+                <div class="flex flex-row flex-wrap grow">
+                  <div class="p-1">
+                    <div class="text-sm text-gray-600">ID</div>
+                    <div class="bold">{{ transaction.warehouse_source.id }}</div>
+                  </div>
+                  <div class="p-1">
+                    <div class="text-sm text-gray-600">Name</div>
+                    <div class="bold">{{ transaction.warehouse_source.name }}</div>
+                  </div>
+                </div>
+                <button v-if="!disabled" class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('from')">
                   <IconsDelete class="text-2xl text-white" />
                 </button>
               </div>
@@ -56,7 +71,7 @@
                   </div>
                 </button>
               </div>
-              <div v-else class="w-full flex" style="">
+              <div v-else class="w-full flex" :class="disabled ? 'unselectable' : ''" style="">
                 <div class="flex flex-row flex-wrap grow">
                   <div class="p-1">
                     <div class="text-sm text-gray-600">ID</div>
@@ -67,7 +82,7 @@
                     <div class="bold">{{ transaction.warehouse_target.name }}</div>
                   </div>
                 </div>
-                <button class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('to')">
+                <button v-if="!disabled" class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('to')">
                   <IconsDelete class="text-2xl text-white" />
                 </button>
               </div>
@@ -78,7 +93,7 @@
           
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Note</label>
-            <textarea class="w-full border-black border-solid border-2 p-1" v-model="transaction.note"></textarea>
+            <textarea :disabled="disabled" class="w-full border-black border-solid border-2 p-1" v-model="transaction.note"></textarea>
             <p class="text-red-500">{{ field_errors.note }}</p>
           </div>
         </div>
@@ -88,9 +103,9 @@
             <table class="tacky w-full" style="white-space:normal;">
               <thead >
                 <tr class="sticky top-0 !z-[2]">
-                  <th class="min-w-[50px] !w-[50px] max-w-[50px] "></th>
+                  <th v-if="!disabled" class="min-w-[50px] !w-[50px] max-w-[50px] "></th>
                   <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
-                  <th class="min-w-[50px] !w-[50px] max-w-[50px] "></th>
+                  <th v-if="!disabled" class="min-w-[50px] !w-[50px] max-w-[50px] "></th>
                   <th class="min-w-[50px] !w-[50px] max-w-[50px] ">ID Item</th>
                   <th>Nama Item</th>
                   <th class="min-w-[80px] !w-[80px] max-w-[80px]">Qty In</th>
@@ -101,7 +116,7 @@
               <tbody>
                 <template v-for="(detail, index) in details" :key="index">
                   <tr v-if="detail.status!='Remove'">
-                    <td class="tools cell">
+                    <td v-if="!disabled" class="tools cell">
                       <div class="w-full h-full flex items-center justify-center">
                         <button  type="button" name="button"
                           @click="showAction($event, index)">
@@ -110,7 +125,7 @@
                       </div>
                     </td>
                     <td>{{ index + 1 }}.</td>
-                    <td class="cell">
+                    <td v-if="!disabled" class="cell">
                       <div class="w-full h-full flex items-center justify-center">
                         <button v-if="!detail.item_id" type="button" name="button" @click="showSNSItem($event, index)">
                           ...
@@ -120,35 +135,40 @@
                         </button>
                       </div>
                     </td>
-                    <td class="cell bold" :class="detail.confirm_by ? 'unselectable' : ''">
+                    <td class="cell bold" :class="disabled ? 'unselectable' : ''">
                       <div class="w-full h-full flex items-center justify-center">
                         {{ detail.item.id }}
                       </div>
                     </td>
-                    <td class="cell" :class="detail.confirm_by ? 'unselectable' : ''">
+                    <td class="cell" :class="disabled ? 'unselectable' : ''">
                       <div class="w-full h-full flex items-center justify-center">
                         {{ detail.item.name }}
                       </div>
                     </td>
-                    <td class="cell" :class="detail.confirm_by ? 'unselectable' : ''">
+                    <td class="cell">
                       <div class="w-full h-full flex items-center justify-center">
-                        <InputPointFormat :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_in || 0" @input="detail.qty_in = $event"/>
+                       
+                        <InputPointFormat
+                        :disabled="disabled || transaction.type=='used' || transaction.type=='transfer'"  
+                        :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_in || 0" @input="detail.qty_in = $event"/>
                       </div>
                     </td>
                     <td class="cell">
                       <div class="w-full h-full flex items-center justify-center">
-                        <InputPointFormat :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_out || 0" @input="detail.qty_out = $event"/>
+                        <InputPointFormat 
+                        :disabled="disabled || transaction.type=='in'" 
+                        :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_out || 0" @input="detail.qty_out = $event"/>
                       </div>
                     </td>
                     <td class="cell">
                       <div class="w-full h-full flex items-center justify-center">
-                        <textarea class="border-black border-solid border-1 p-1 w-full" v-model="detail.note" cols="7" rows="2" :disabled="detail.confirm_by"></textarea>
+                        <textarea :disabled="disabled" class="border-black border-solid border-1 p-1 w-full" v-model="detail.note" cols="7" rows="2"></textarea>
                       </div>
                     </td>
                   </tr>
                 </template>
                 
-                <tr>
+                <tr v-if="!disabled">
                   <td class="tools cell">
                     <button type="button" name="button" @click="addList()">
                       <IconsPlus />
@@ -164,10 +184,10 @@
       </div>
       
       <div class="w-full flex items-center justify-end">
-        <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
+        <button type="button" name="button" class="w-36 m-1 p-2" @click="$router.go(-1)">
           Cancel
         </button>
-        <button type="button" name="button" class="w-36 m-1 bg-blue-600 text-white p-2 rounded-sm" @click="doSave()">
+        <button v-if="!disabled" type="button" name="button" class="w-36 m-1 p-2 bg-blue-600 text-white  rounded-sm" @click="doSave()">
           Save
         </button>
       </div>
@@ -486,5 +506,7 @@ const replyAction=(act = "")=>{
   tools_popup.value = false;
 };
 
-
+const disabled = computed(()=>{
+  return transaction.value.confirmed_by || transaction.value.ref_id != null;
+})
 </script>

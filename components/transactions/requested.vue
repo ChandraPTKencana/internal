@@ -54,9 +54,6 @@
                 <th>Id</th>
                 <th>Source</th>
                 <th>Target</th>
-                <th>Item Name</th>
-                <th>Unit Name</th>
-                <th>Qty In</th>
                 <th>Status</th>
                 <th>Requested At</th>
                 <th>Requested By</th>
@@ -71,9 +68,6 @@
                 <td>{{ transaction.id }}</td>
                 <td>{{ transaction.warehouse_source?.name }}</td>
                 <td>{{ transaction.warehouse_target?.name }}</td>
-                <td>{{ transaction.item?.name }}</td>
-                <td>{{ transaction.item?.unit?.name }}</td>
-                <td>{{ pointFormat(transaction.qty_in) }}</td>
                 <td>{{ transaction.status }}</td>
                 <td>{{ $moment(transaction.requested_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ transaction.requester?.username }}</td>

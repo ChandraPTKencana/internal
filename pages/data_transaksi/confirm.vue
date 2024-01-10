@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <HeaderCustom :title="'Form Item'" :back="true" />
+    <HeaderCustom :title="'Form Confirmation'" :back="true" />
     <div class="w-full flex grow flex-col h-0 overflow-auto bg-white">
       <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
         <div class="w-full flex flex-row flex-wrap">
@@ -18,11 +18,11 @@
                 <div class="flex flex-row flex-wrap grow">
                   <div class="p-1">
                     <div class="text-sm text-gray-600">ID</div>
-                    <div class="bold">{{ transaction.warehouse.id }}</div>
+                    <div class="bold">{{ transaction.ref_id ? transaction.warehouse_source.id : transaction.warehouse.id }}</div>
                   </div>
                   <div class="p-1">
                     <div class="text-sm text-gray-600">Name</div>
-                    <div class="bold">{{ transaction.warehouse.name }}</div>
+                    <div class="bold">{{ transaction.ref_id ? transaction.warehouse_source.name :  transaction.warehouse.name }}</div>
                   </div>
                 </div>
                 
@@ -52,7 +52,7 @@
           </div>
           
           
-          <div class="w-full flex flex-col flex-wrap p-1">
+          <div v-if="transaction.note" class="w-full flex flex-col flex-wrap p-1">
             <label for="">Note</label>
             <div class="w-full border-black border-solid border-2 p-1">{{ transaction.note }}</div>
             <p class="text-red-500">{{ field_errors.note }}</p>
