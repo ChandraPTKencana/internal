@@ -21,15 +21,15 @@
           </ClientOnly>
           <p class="text-red-500">{{ field_errors.to }}</p>
         </div> -->
-        <div class="flex items-end pl-1">
+        <!-- <div class="flex items-end pl-1">
           <button class="w-full border-black border-solid border-2 p-1" type="button" name="button" @click="callData()">
             <IconsSearch class="text-2xl" />
           </button>
-        </div>
+        </div> -->
       </div>
-      <!-- <div class="w-full flex justify-center items-center grow h-0 p-1">
+      <div class="w-full flex justify-center items-center grow h-0 p-1">
 
-        <div v-if="transactions.length == 0" class="">
+        <div v-if="all.length == 0" class="">
           Maaf Tidak Ada Record
         </div>
 
@@ -37,25 +37,22 @@
           <table class="tacky">
             <thead>
               <tr class="sticky top-0 !z-[2]">
-                <th>No.</th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Id</th>
-                <th>Source</th>
-                <th>Target</th>
-                <th>Item Name</th>
-                <th>Unit Name</th>
-                <th>Qty In</th>
-                <th>Status</th>
-                <th>Requested At</th>
-                <th>Requested By</th>
+                <th></th>
+                <th v-for="ch in column_header"> {{ ch.lokasi }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(transaction, index) in transactions" :key="index" @click="selected = index"
+              <tr v-for="(row, index) in row_header" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
-                <td>{{ index + 1 }}.</td>
-                <td>{{ $moment(transaction.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ row.name }}.</td>
+                <td v-for="ch in column_header">
+                  <a class="text-blue-500 font-bold underline cursor-pointer" @click="open_details(returnSpesificData(ch.id,row.id))">
+                    {{ returnQtyReminder(ch.id,row.id) }}
+                  </a> 
+                </td>
+
+                <!-- <td>{{ index + 1 }}.</td> -->
+                <!-- <td>{{ $moment(transaction.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ $moment(transaction.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ transaction.id }}</td>
                 <td>{{ transaction.warehouse_source?.name }}</td>
@@ -65,22 +62,23 @@
                 <td>{{ pointFormat(transaction.qty_in) }}</td>
                 <td>{{ transaction.status }}</td>
                 <td>{{ $moment(transaction.requested_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ transaction.requester?.username }}</td>
+                <td>{{ transaction.requester?.username }}</td> -->
               </tr>
             </tbody>
           </table>
         </div>
-      </div> -->
-      <div class="flex" style="justify-content:end; padding:5px;">
+      </div>
+      <!-- <div class="flex" style="justify-content:end; padding:5px;">
         <button @click="fnClose()" class="w-36 m-1 text-black p-2 rounded-sm">
           Cancel
         </button>
         <button @click="confirm()" class="w-36 m-1 bg-blue-600 text-white p-2 rounded-sm">
           Confirm
         </button>
-      </div>
+      </div> -->
     </div>
   </section>
+  <TransactionsSummaryDetail :show="popup_details" :data="selected_data" :item_id="selected_item_id" :warehouse_id="selected_warehouse_id" :fnClose="()=>{popup_details = false}"/>
   <!-- <PopupMini :type="'custome'" :show="confirm_box" :data="confirm_data" :fnClose="togglePopupMiniBox" :fnConfirm="confirmOk" >
     <template #words>
       Data akan diproses dan <b>tidak dapat dikembalikan lagi</b>, yakin untuk melanjutkan ?
@@ -128,8 +126,15 @@ const filter = ref({
   to:"",
 });
 
-const transactions = ref([]);
+const all = ref([]);
+const column_header = ref([]);
+const row_header = ref([]);
 const selected = ref(-1);
+
+const popup_details = ref(false);
+const selected_data = ref({});
+const selected_item_id = ref(-1);
+const selected_warehouse_id = ref(-1);
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
@@ -139,7 +144,7 @@ const callData = async () => {
   params.page = 1;
   // params.from = filter.value.from;
   // params.to = filter.value.to;
-  transactions.value = [];
+  all.value = [];
 
   const { data, error, status } = await useFetch("/api/summary_transactions", {
     method: 'get',
@@ -156,7 +161,9 @@ const callData = async () => {
     useErrorStore().trigger(error);
     return;
   }
-  transactions.value = data.value.data;
+  all.value = data.value.all;
+  column_header.value = data.value.column_header;
+  row_header.value = data.value.row_header;
 }
 
 watch(() => props.show, (newVal, oldVal) => {
@@ -165,6 +172,25 @@ watch(() => props.show, (newVal, oldVal) => {
 }, {
   immediate: true
 });
+
+const returnSpesificData =(warehouse_id,item_id)=>{
+  let warehouse = all.value.filter((x)=>{return x.id == warehouse_id })[0]; 
+  const { items, ...rest } = warehouse;
+  let item = warehouse.items.filter((x)=>{return x.id == item_id})[0];
+  return {rest,item};
+}
+
+const returnQtyReminder=(warehouse_id,item_id)=>{
+  return all.value.filter((x)=>{return x.id == warehouse_id })[0].items.filter((x)=>{return x.id == item_id})[0].qty_reminder;
+}
+
+const open_details=(data,warehouse_id,item_id)=>{
+  selected_data.value = data;
+  selected_warehouse_id.value = warehouse_id;
+  selected_item_id.value = item_id;
+  popup_details.value = true;
+}
+
 
 </script>
 <style scoped="">
