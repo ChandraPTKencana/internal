@@ -9,7 +9,8 @@
         </button>
         <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
           @click="form_edit()">
-          <IconsEdit />
+          <IconsEdit v-if="selected==-1 || transactions[selected].ref_id == null && transactions[selected].confirmed_by == null"/>
+          <IconsEyes v-else />
         </button>
         <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
           @click="remove()">
