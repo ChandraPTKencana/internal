@@ -78,7 +78,7 @@
       </div> -->
     </div>
   </section>
-  <TransactionsSummaryDetail :show="popup_details" :data="selected_data" :item_id="selected_item_id" :warehouse_id="selected_warehouse_id" :fnClose="()=>{popup_details = false}"/>
+  <TransactionsSummaryDetail :show="popup_details" :data="selected_data" :fnClose="()=>{popup_details = false}"/>
   <!-- <PopupMini :type="'custome'" :show="confirm_box" :data="confirm_data" :fnClose="togglePopupMiniBox" :fnConfirm="confirmOk" >
     <template #words>
       Data akan diproses dan <b>tidak dapat dikembalikan lagi</b>, yakin untuk melanjutkan ?
@@ -133,8 +133,6 @@ const selected = ref(-1);
 
 const popup_details = ref(false);
 const selected_data = ref({});
-const selected_item_id = ref(-1);
-const selected_warehouse_id = ref(-1);
 
 const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
@@ -186,8 +184,6 @@ const returnQtyReminder=(warehouse_id,item_id)=>{
 
 const open_details=(data,warehouse_id,item_id)=>{
   selected_data.value = data;
-  selected_warehouse_id.value = warehouse_id;
-  selected_item_id.value = item_id;
   popup_details.value = true;
 }
 

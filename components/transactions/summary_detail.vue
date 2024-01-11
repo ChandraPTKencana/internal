@@ -8,20 +8,20 @@
         <div class="w-full sm:w-1/3 md:w-1/3 lg:w-1/4 p-1">
           <div class="font-bold"> Warehouse Name </div>
           <div class="w-full p-1">
-            {{ props.data.rest.lokasi }}
+            {{ props.data?.rest?.lokasi }}
           </div>
         </div>
         <div class="w-full sm:w-1/3 md:w-1/3 lg:w-1/4 p-1">
           <div class="font-bold"> Item Name </div>
           <div class="w-full p-1">
-            {{ props.data.item.name }}
+            {{ props.data?.item?.name }}
           </div>
         </div>
 
         <div class="w-full sm:w-1/3 md:w-1/3 lg:w-1/4 p-1">
           <div class="font-bold"> Last Stock </div>
           <div class="w-full p-1">
-            {{ props.data.item.qty_reminder }} {{ props.data.item.unit_name }}
+            {{ props.data?.item?.qty_reminder }} {{ props.data?.item?.unit_name }}
           </div>
         </div>
 
@@ -62,9 +62,9 @@
                   <br>
                   {{ transaction.type =='transfer' ? "To : "+transaction.lokasi : "" }}
                 </td>
-                <td>{{ transaction.qty_in ? pointFormat(transaction.qty_in) +  ` ${props.data.item.unit_name}` : "" }}</td>
-                <td>{{ transaction.qty_out ? pointFormat(transaction.qty_out) + ` ${props.data.item.unit_name}` : "" }}</td>
-                <td>{{ transaction.qty_reminder ? pointFormat(transaction.qty_reminder) +  ` ${props.data.item.unit_name}` : ''  }}</td>
+                <td>{{ transaction.qty_in ? pointFormat(transaction.qty_in) +  ` ${props.data?.item?.unit_name}` : "" }}</td>
+                <td>{{ transaction.qty_out ? pointFormat(transaction.qty_out) + ` ${props.data?.item?.unit_name}` : "" }}</td>
+                <td>{{ transaction.qty_reminder ? pointFormat(transaction.qty_reminder) +  ` ${props.data?.item?.unit_name}` : ''  }}</td>
                 <td>{{ transaction.note }}</td>
                 <td>{{ transaction.confirmed_at ? $moment(transaction.confirmed_at).format("DD-MM-Y HH:mm:ss") : '' }}</td>
               </tr>
