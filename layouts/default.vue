@@ -16,8 +16,8 @@
               <nuxt-link to="/" @click="activeMenu = '/'">Dashboard</nuxt-link></li>
             <li :class="activeMenu == '/data_satuan'?'active':''" >
               <nuxt-link to="/data_satuan" @click="activeMenu = '/data_satuan'">Satuan</nuxt-link></li>
-            <li :class="activeMenu == '/data_gudang'?'active':''" >
-              <nuxt-link to="/data_gudang" @click="activeMenu = '/data_gudang'">Gudang</nuxt-link></li>
+            <!-- <li :class="activeMenu == '/data_gudang'?'active':''" >
+              <nuxt-link to="/data_gudang" @click="activeMenu = '/data_gudang'">Gudang</nuxt-link></li> -->
             <li :class="activeMenu == '/data_item'?'active':''" >
               <nuxt-link to="/data_item" @click="activeMenu = '/data_item'">Item</nuxt-link></li>
             <li :class="activeMenu == '/data_transaksi'?'active':''" >
