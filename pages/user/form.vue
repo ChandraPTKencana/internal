@@ -64,7 +64,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-user-add', 'ap-user-edit']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["ClientPabrik", 'User']))
+      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik", 'User']))
       return navigateTo('/');
     },
     // 'auth',

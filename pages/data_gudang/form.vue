@@ -36,7 +36,7 @@ definePageMeta({
       
       // if (!useAuthStore().checkScopes(['ap-warehouse-add', 'ap-warehouse-edit']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(['User']))
+      if (!useAuthStore().checkRole(['Super Admin','User']))
       return navigateTo('/');
     },
     // 'auth',

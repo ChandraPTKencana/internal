@@ -123,7 +123,7 @@ definePageMeta({
       
       // if (!useAuthStore().checkScopes(['ap-member-add', 'ap-member-edit']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["ClientPabrik", 'User']))
+      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik", 'User']))
       return navigateTo('/');
     },
     // 'auth',
