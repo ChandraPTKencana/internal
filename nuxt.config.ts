@@ -43,6 +43,9 @@ export default defineNuxtConfig({
       // "/proxy/**": { proxy: '/api/**' },
     }
   },
+  experimental: {
+    payloadExtraction: false
+  }
   // proxy: {
   //   '/api/': {
   //     target: process.env.API_URL,
