@@ -102,7 +102,7 @@ params._TimeZoneOffset = new Date().getTimezoneOffset();
 const token = useCookie('token');
 const { data: users } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/users", {
+  const { data, error, status } = await useMyFetch("/api/users", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

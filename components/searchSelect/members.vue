@@ -151,7 +151,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(members.value[0]);
   }
-  const { data, error, status } = await useFetch("/api/members", {
+  const { data, error, status } = await useMyFetch("/api/members", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

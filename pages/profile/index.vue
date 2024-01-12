@@ -71,7 +71,7 @@
   const { data: user } = await useAsyncData(async () => {
   
     useCommonStore().loading_full = true;
-      const { data, error, status }: any = await useFetch("/api/profile", {
+      const { data, error, status }: any = await useMyFetch("/api/profile", {
         method: 'get',
         headers: {
           'Authorization': `Bearer ${token.value}`,
@@ -159,7 +159,7 @@ const fullname = useCookie('fullname');
         data_in.append("_method", "PUT");
     }
   
-    const { data, error, status }: any = await useFetch("/api/update_profile", {
+    const { data, error, status }: any = await useMyFetch("/api/update_profile", {
       method: req_method,
       headers: {
         'Authorization': `Bearer ${token.value}`,

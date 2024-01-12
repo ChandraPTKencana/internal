@@ -123,7 +123,7 @@ params.sort ="created_at:desc";
 const token = useCookie('token');
 const { data: items } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/items", {
+  const { data, error, status } = await useMyFetch("/api/items", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -175,7 +175,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(items.value[0]);
   }
-  const { data, error, status } = await useFetch("/api/items", {
+  const { data, error, status } = await useMyFetch("/api/items", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -273,7 +273,7 @@ const confirmed_delete = async() => {
   data_in.append("id", items.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useFetch("/api/item", {
+  const { data, error, status } = await useMyFetch("/api/item", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,

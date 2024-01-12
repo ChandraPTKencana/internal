@@ -19,7 +19,7 @@ export const useAuthStore = defineStore('auth', {
     async authenticateUser({ username, password }: UserPayloadInterface) {
       return new Promise<any>(async (resolve, reject) => {
 
-        const { data, error, status, pending }: any = useLazyFetch('/api/login', {
+        const { data, error, status, pending }: any = useMyLazyFetch('/api/login', {
           method: 'post',
           headers: {
             // 'Content-Type': 'application/json'
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore('auth', {
         }
 
 
-        // const { data, error, status, pending }: any = await useLazyFetch('/api/login', {
+        // const { data, error, status, pending }: any = await useMyLazyFetch('/api/login', {
         //   method: 'post',
         //   headers: { 'Content-Type': 'application/json' },
         //   body: {
@@ -77,7 +77,7 @@ export const useAuthStore = defineStore('auth', {
     async checkUser() {
       const token = useCookie('token'); // useCookie new hook in nuxt 3
 
-      const { data, error, status, pending }: any = useLazyFetch('/api/check_user', {
+      const { data, error, status, pending }: any = useMyLazyFetch('/api/check_user', {
         method: 'get',
         headers: {
           'Authorization': `Bearer ${token.value}`,

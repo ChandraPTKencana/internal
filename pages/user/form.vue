@@ -86,7 +86,7 @@ const { data: user } = await useAsyncData(async () => {
 
   if (id !== undefined && id !== "") {
     useCommonStore().loading_full = true;
-    const { data, error, status }: any = await useFetch("/api/user", {
+    const { data, error, status }: any = await useMyFetch("/api/user", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -147,7 +147,7 @@ const doSave = async () => {
     // data_in.append("_method", "PUT");
   }
 
-  const { data, error, status }: any = await useFetch("/api/user", {
+  const { data, error, status }: any = await useMyFetch("/api/user", {
     method: req_method,
     headers: {
       'Authorization': `Bearer ${token.value}`,

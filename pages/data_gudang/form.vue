@@ -58,7 +58,7 @@ const { data: warehouse } = await useAsyncData(async () => {
   const id = route.query.id;
   if (id !== undefined && id !== "") {
     useCommonStore().loading_full = true;
-    const { data, error, status }: any = await useFetch("/api/warehouse", {
+    const { data, error, status }: any = await useMyFetch("/api/warehouse", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -99,7 +99,7 @@ const doSave = async () => {
     data_in.append("_method", "PUT");
   }
 
-  const { data, error, status }: any = await useFetch("/api/warehouse", {
+  const { data, error, status }: any = await useMyFetch("/api/warehouse", {
     method: $method,
     headers: {
       'Authorization': `Bearer ${token.value}`,

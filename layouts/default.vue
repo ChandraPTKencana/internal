@@ -85,7 +85,7 @@ const token = useCookie('token');
 
 const logout = async() => {
   useCommonStore().loading_full = true;
-  const { data, error, status }: any = await useFetch("/api/logout", {
+  const { data, error, status }: any = await useMyFetch("/api/logout", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,

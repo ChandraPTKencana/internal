@@ -115,7 +115,7 @@ params.sort ="created_at:desc";
 const token = useCookie('token');
 const { data: units } = await useAsyncData(async () => {
   useCommonStore().loading_full = true;
-  const { data, error, status } = await useFetch("/api/units", {
+  const { data, error, status } = await useMyFetch("/api/units", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -167,7 +167,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(units.value[0]);
   }
-  const { data, error, status } = await useFetch("/api/units", {
+  const { data, error, status } = await useMyFetch("/api/units", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
@@ -268,7 +268,7 @@ const confirmed_delete = async() => {
   data_in.append("id", units.value[selected.value].id);  
   data_in.append("_method", "DELETE");
 
-  const { data, error, status } = await useFetch("/api/unit", {
+  const { data, error, status } = await useMyFetch("/api/unit", {
     method: "post",
     headers: {
       'Authorization': `Bearer ${token.value}`,

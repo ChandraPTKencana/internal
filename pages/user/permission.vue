@@ -95,7 +95,7 @@ const { data: data_lists, error, status }: any = await useAsyncData(async () => 
   let data_permissions: any = [];
 
   const [data1, data2, data3] = await Promise.all([
-    useFetch("/api/action_permissions", {
+    useMyFetch("/api/action_permissions", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -103,7 +103,7 @@ const { data: data_lists, error, status }: any = await useAsyncData(async () => 
       },
       retry: 0,
     }),
-    useFetch("/api/data_permissions", {
+    useMyFetch("/api/data_permissions", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -111,7 +111,7 @@ const { data: data_lists, error, status }: any = await useAsyncData(async () => 
       },
       retry: 0,
     }),
-    useFetch("/api/user/permissions", {
+    useMyFetch("/api/user/permissions", {
       method: 'get',
       headers: {
         'Authorization': `Bearer ${token.value}`,
@@ -178,7 +178,7 @@ const doSave = async () => {
   data_in.append("id", user_id);
   data_in.append("_method", "PUT");
 
-  const { data, error, status }: any = await useFetch("/api/user/permissions", {
+  const { data, error, status }: any = await useMyFetch("/api/user/permissions", {
     method: 'post',
     headers: {
       'Authorization': `Bearer ${token.value}`,

@@ -142,7 +142,7 @@ const callData = async () => {
   // params.to = filter.value.to;
   transactions.value = [];
 
-  const { data, error, status } = await useFetch("/api/summary_detail_transactions", {
+  const { data, error, status } = await useMyFetch("/api/summary_detail_transactions", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

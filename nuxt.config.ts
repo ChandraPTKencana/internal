@@ -2,6 +2,11 @@
 import { resolve } from 'path';
 export default defineNuxtConfig({
   // rootDir : "",
+  runtimeConfig: {
+    public: {
+      baseURL: process.env.MY_API_ADDR,
+    },
+  },
   app:{
     baseURL:process.env.MY_NODE_ENV === 'production' ? '/stok' : '/stok/dist',
   },
@@ -31,6 +36,7 @@ export default defineNuxtConfig({
     routeRules: {
       // "/api/**": { proxy: 'http://127.0.0.1:8000/api/internal/**' },
       "/api/**": { proxy: 'http://127.0.0.1/api/a9p/**' },
+      // "/api/**": { proxy: 'https://genkagromas.com/api/a9p/**' },
       // "^/stok/api/**": { proxy: 'http://127.0.0.1/api/a9p/**' },
       // "/stok/api/**": { proxy: 'http://127.0.0.1/api/a9p/**' }
       // '/proxy/example': { proxy: 'http://39.98.58.238:8594' },

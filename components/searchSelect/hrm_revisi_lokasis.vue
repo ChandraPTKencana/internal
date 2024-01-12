@@ -78,7 +78,6 @@ import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
 import { useAlertStore } from '~/store/alert';
 
-
 const props = defineProps({
   show: {
     type: Boolean,
@@ -154,7 +153,7 @@ const callData = async () => {
   if(params.page > 1){
     params.first_row = JSON.stringify(warehouses.value[0]);
   }
-  const { data, error, status } = await useFetch("/api/hrm_revisi_lokasis", {
+  const { data, error, status } = await useMyFetch("/api/hrm_revisi_lokasis", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,

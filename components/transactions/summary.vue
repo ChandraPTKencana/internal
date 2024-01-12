@@ -144,7 +144,7 @@ const callData = async () => {
   // params.to = filter.value.to;
   all.value = [];
 
-  const { data, error, status } = await useFetch("/api/summary_transactions", {
+  const { data, error, status } = await useMyFetch("/api/summary_transactions", {
     method: 'get',
     headers: {
       'Authorization': `Bearer ${token.value}`,
