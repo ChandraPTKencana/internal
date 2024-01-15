@@ -5,22 +5,22 @@
       <div class="w-full align-items-center justify-content-center grow overflow-auto">
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Email</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="user.email">
+          <input class="" type="text" v-model="user.email">
           <p class="text-red-500">{{ field_errors.email }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Nama Identitas</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="user.fullname">
+          <input class="" type="text" v-model="user.fullname">
           <p class="text-red-500">{{ field_errors.fullname }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Kata Sandi</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="password" v-model="user.password">
+          <input class="" type="password" v-model="user.password">
           <p class="text-red-500">{{ field_errors.password }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Jabatan</label>
-          <select class="w-full border-black border-solid border-2 p-1" v-model="user.role">
+          <select class="" v-model="user.role">
             <option value="User">User</option>
             <option value="Admin">Admin</option>
             <option value="Marketing">Marketing</option>
@@ -30,7 +30,7 @@
         </div>
         <div class="w-full flex" style="flex-flow:column wrap; padding:4px;">
           <label for="">Izinkan Masuk?</label>
-          <select class="w-full border-black border-solid border-2 p-1" v-model="user.can_login">
+          <select class="" v-model="user.can_login">
             <option value="1">Ya</option>
             <option value="0">Tidak</option>
           </select>

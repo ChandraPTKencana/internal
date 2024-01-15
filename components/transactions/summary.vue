@@ -22,7 +22,7 @@
           <p class="text-red-500">{{ field_errors.to }}</p>
         </div> -->
         <!-- <div class="flex items-end pl-1">
-          <button class="w-full border-black border-solid border-2 p-1" type="button" name="button" @click="callData()">
+          <button class="" type="button" name="button" @click="callData()">
             <IconsSearch class="text-2xl" />
           </button>
         </div> -->

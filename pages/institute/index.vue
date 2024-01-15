@@ -16,12 +16,12 @@
       <div class="w-full flex p-1">
         <div class="grow">
           <div class="font-bold"> Keyword </div>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="search" name="search"
+          <input class="" type="text" v-model="search" name="search"
             placeholder="Keyword">
         </div>
         <div class="pl-1">
           <div class="font-bold"> Sort By </div>
-          <select class="w-full border-black border-solid border-2 p-1" v-model="sort.field">
+          <select class="" v-model="sort.field">
             <option value=""></option>
             <option value="name">Name</option>
             <option value="contact_number">Contact Number</option>
@@ -30,13 +30,13 @@
         </div>
         <div class="pl-1">
           <div class="font-bold"> Sort Order </div>
-          <select class="w-full border-black border-solid border-2 p-1" v-model="sort.by">
+          <select class="" v-model="sort.by">
             <option value="asc">Asc</option>
             <option value="desc">Desc</option>
           </select>
         </div>
         <div class="flex items-end pl-1">
-          <button class="w-full border-black border-solid border-2 p-1" type="button" name="button" @click="searching()">
+          <button class="" type="button" name="button" @click="searching()">
             <IconsSearch class="text-2xl" />
           </button>
         </div>

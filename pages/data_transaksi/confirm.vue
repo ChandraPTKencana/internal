@@ -7,7 +7,7 @@
 
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Type</label>
-            <div class="w-full border-black border-solid border-2 p-1"> {{ transaction.type }}</div>
+            <div class="placeOfText"> {{ transaction.type }}</div>
             <p class="text-red-500">{{ field_errors.type }}</p>
           </div>
   
@@ -54,7 +54,7 @@
           
           <div v-if="transaction.note" class="w-full flex flex-col flex-wrap p-1">
             <label for="">Note</label>
-            <div class="w-full border-black border-solid border-2 p-1">{{ transaction.note }}</div>
+            <div class="placeOfText">{{ transaction.note }}</div>
             <p class="text-red-500">{{ field_errors.note }}</p>
           </div>
         </div>

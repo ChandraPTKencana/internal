@@ -5,27 +5,27 @@
       <div class="w-full align-items-center justify-content-center grow overflow-auto">
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Username</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="member.username">
+          <input class="" type="text" v-model="member.username">
           <p class="text-red-500">{{ field_errors.username }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Email</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="member.email">
+          <input class="" type="text" v-model="member.email">
           <p class="text-red-500">{{ field_errors.email }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Phone Number</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="member.phone_number">
+          <input class="" type="text" v-model="member.phone_number">
           <p class="text-red-500">{{ field_errors.phone_number }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Fullname</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="member.fullname">
+          <input class="" type="text" v-model="member.fullname">
           <p class="text-red-500">{{ field_errors.fullname }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Password</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="password" v-model="member.password">
+          <input class="" type="password" v-model="member.password">
           <p class="text-red-500">{{ field_errors.password }}</p>
         </div>
         <!-- <div class="w-full flex flex-col flex-wrap p-1">
@@ -69,7 +69,7 @@
         </div> -->
         <!-- <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Role</label>
-          <select class="w-full border-black border-solid border-2 p-1" v-model="member.role">
+          <select class="" v-model="member.role">
             <option value="Operator">Operator</option>
             <option value="Admin">Admin</option>
             <option value="Super_Admin">Super Admin</option>
@@ -89,7 +89,7 @@
         </div> -->
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Izinkan Masuk?</label>
-          <select class="w-full border-black border-solid border-2 p-1" v-model="member.can_login">
+          <select class="" v-model="member.can_login">
             <option value="1">Ya</option>
             <option value="0">Tidak</option>
           </select>

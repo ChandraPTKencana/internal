@@ -7,7 +7,7 @@
 
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Type</label>
-            <select :disabled="disabled" class="w-full border-black border-solid border-2 p-1" v-model="transaction.type">
+            <select :disabled="disabled" class="" v-model="transaction.type">
               <option value="used">Used</option>
               <option value="in">In</option>
               <option value="transfer">Transfer</option>
@@ -93,7 +93,7 @@
           
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Note</label>
-            <textarea :disabled="disabled" class="w-full border-black border-solid border-2 p-1" v-model="transaction.note"></textarea>
+            <textarea :disabled="disabled" class="" v-model="transaction.note"></textarea>
             <p class="text-red-500">{{ field_errors.note }}</p>
           </div>
         </div>

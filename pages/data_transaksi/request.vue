@@ -13,7 +13,7 @@
       <div class="w-full flex p-1">
         <div class="grow">
           <div class="font-bold"> Keyword </div>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="search" name="search"
+          <input class="" type="text" v-model="search" name="search"
             placeholder="Keyword">
         </div>
         <div class="flex flex-col ml-1">
@@ -23,7 +23,7 @@
           </select>
         </div>
         <div class="flex items-end pl-1">
-          <button class="w-full border-black border-solid border-2 p-1" type="button" name="button" @click="searching()">
+          <button class="" type="button" name="button" @click="searching()">
             <IconsSearch class="text-2xl" />
           </button>
         </div>

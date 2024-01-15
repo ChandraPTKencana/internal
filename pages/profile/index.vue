@@ -5,22 +5,22 @@
         <div class="w-full align-items-center justify-content-center grow overflow-auto">
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Username</label>
-            <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="user.username">
+            <input class="" type="text" v-model="user.username">
             <p class="text-red-500">{{ field_errors.username }}</p>
           </div>
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Nama Identitas</label>
-            <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="user.fullname">
+            <input class="" type="text" v-model="user.fullname">
             <p class="text-red-500">{{ field_errors.fullname }}</p>
           </div>
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Email</label>
-            <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="user.email">
+            <input class="" type="text" v-model="user.email">
             <p class="text-red-500">{{ field_errors.email }}</p>
           </div>
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Telepon</label>
-            <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="user.phone_number">
+            <input class="" type="text" v-model="user.phone_number">
             <p class="text-red-500">{{ field_errors.phone_number }}</p>
           </div>
           <div class="w-full flex flex-col flex-wrap p-1">

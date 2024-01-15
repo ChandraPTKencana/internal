@@ -5,17 +5,17 @@
       <div class="w-full align-items-center justify-content-center grow overflow-auto">
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Name</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="item.name">
+          <input class="" type="text" v-model="item.name">
           <p class="text-red-500">{{ field_errors.name }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Value</label>
-          <InputPointFormat class="w-full border-black border-solid border-2 p-1" type="text" :value="item.value" @input="item.value = $event"/>
+          <InputPointFormat class="" type="text" :value="item.value" @input="item.value = $event"/>
           <p class="text-red-500">{{ field_errors.value }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Note</label>
-          <textarea class="w-full border-black border-solid border-2 p-1" v-model="item.note"></textarea>
+          <textarea class="" v-model="item.note"></textarea>
           <p class="text-red-500">{{ field_errors.note }}</p>
         </div>
         
