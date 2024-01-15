@@ -5,27 +5,27 @@
       <div class="w-full align-items-center justify-content-center grow overflow-auto">
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Name</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="institute.name">
+          <input class="" type="text" v-model="institute.name">
           <p class="text-red-500">{{ field_errors.name }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Address</label>
-          <textarea class="w-full border-black border-solid border-2 p-1" v-model="institute.address"></textarea>
+          <textarea class="" v-model="institute.address"></textarea>
           <p class="text-red-500">{{ field_errors.address }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Contact Number</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="institute.contact_number">
+          <input class="" type="text" v-model="institute.contact_number">
           <p class="text-red-500">{{ field_errors.contact_number }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Contact Person</label>
-          <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="institute.contact_person">
+          <input class="" type="text" v-model="institute.contact_person">
           <p class="text-red-500">{{ field_errors.contact_person }}</p>
         </div>
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Active Until</label>
-          <!-- <input class="w-full border-black border-solid border-2 p-1" type="text" v-model="institute.active_until"> -->
+          <!-- <input class="" type="text" v-model="institute.active_until"> -->
           <ClientOnly>
             <vue-date-picker class="border-black border-solid border-2" v-model="institute.active_until" text-input
               teleport-center></vue-date-picker>
@@ -65,7 +65,7 @@
         </div>
         <!-- <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Jabatan</label>
-          <select class="w-full border-black border-solid border-2 p-1" v-model="institute.role">
+          <select class="" v-model="institute.role">
             <option value="Institute">Institute</option>
             <option value="Admin">Admin</option>
             <option value="Super_Admin">Super Admin</option>
@@ -74,7 +74,7 @@
         </div> -->
         <!-- <div class="w-full flex" style="flex-flow:column wrap; padding:4px;">
           <label for="">Izinkan Masuk?</label>
-          <select class="w-full border-black border-solid border-2 p-1" v-model="institute.can_login">
+          <select class="" v-model="institute.can_login">
             <option value="1">Ya</option>
             <option value="0">Tidak</option>
           </select>
@@ -117,7 +117,7 @@
         <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
           Cancel
         </button>
-        <button type="button" name="button" class="w-36 m-1 bg-blue-600 text-white p-2 rounded-sm" @click="doSave()">
+        <button type="button" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click="doSave()">
           Save
         </button>
       </div>

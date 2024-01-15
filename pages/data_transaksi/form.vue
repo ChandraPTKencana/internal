@@ -184,10 +184,10 @@
       </div>
       
       <div class="w-full flex items-center justify-end">
-        <button type="button" name="button" class="w-36 m-1 p-2" @click="$router.go(-1)">
+        <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
           Cancel
         </button>
-        <button v-if="!disabled" type="button" name="button" class="w-36 m-1 p-2 bg-blue-600 text-white  rounded-sm" @click="doSave()">
+        <button v-if="!disabled" type="button" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click="doSave()">
           Save
         </button>
       </div>

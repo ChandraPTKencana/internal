@@ -65,7 +65,7 @@
         </div>
       </div>
       <div class="flex" style="justify-content:end; padding:5px;">
-        <button @click="selectRow()" class="w-36 m-1 bg-blue-600 text-white p-2 rounded-sm">
+        <button @click="selectRow()" class="w-36 m-1 bg-blue-600 text-white rounded-sm">
           Select
         </button>
       </div>

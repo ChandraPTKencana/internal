@@ -77,10 +77,10 @@
         </div>
       </div>
       <div class="flex" style="justify-content:end; padding:5px;">
-        <button @click="fnClose()" class="w-36 m-1 text-black p-2 rounded-sm">
+        <button @click="fnClose()" class="w-36 m-1 text-black rounded-sm">
           Cancel
         </button>
-        <button @click="confirm()" class="w-36 m-1 bg-blue-600 text-white p-2 rounded-sm">
+        <button @click="confirm()" class="w-36 m-1 bg-blue-600 text-white rounded-sm">
           Confirm
         </button>
       </div>
