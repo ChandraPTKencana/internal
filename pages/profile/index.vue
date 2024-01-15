@@ -26,7 +26,7 @@
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Foto</label>
             <div  class="flex justify-center items-center w-24 h-24">
-                <img :src="user.photo || 'user-default.png'" alt="" class=" max-w-full max-h-full">
+                <img :src="user.photo || '/stok/user-default.png'" alt="" class=" max-w-full max-h-full">
             </div>
             <button v-show="photo" class="bg-gray-600 w-24 text-white" @click="resetPhoto()">Remove</button>
             <input v-show="!photo" @change="changePhoto($event)" ref="photo_input" type="file" name="photo" value="">

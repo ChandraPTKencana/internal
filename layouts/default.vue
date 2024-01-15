@@ -13,15 +13,33 @@
         <header class="h-full flex flex-col p-2 overflow-hidden">
           <ul class="grow overflow-auto">
             <li :class="activeMenu == '/'?'active':''" >
-              <nuxt-link to="/" @click="activeMenu = '/'">Dashboard</nuxt-link></li>
-            <li v-if="useAuthStore().checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
-              <nuxt-link to="/data_satuan" @click="activeMenu = '/data_satuan'">Satuan</nuxt-link></li>
+              <nuxt-link to="/" @click="activeMenu = '/'">
+                <IconsHome class="mr-1"/>
+                Dashboard
+              </nuxt-link>
+            </li>
+            <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
+              <nuxt-link to="/data_satuan" @click="activeMenu = '/data_satuan'">
+                <IconsScale class="mr-1"/>
+                Satuan
+              </nuxt-link>
+            </li>
             <!-- <li :class="activeMenu == '/data_gudang'?'active':''" >
-              <nuxt-link to="/data_gudang" @click="activeMenu = '/data_gudang'">Gudang</nuxt-link></li> -->
-            <li v-if="useAuthStore().checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_item'?'active':''" >
-              <nuxt-link to="/data_item" @click="activeMenu = '/data_item'">Item</nuxt-link></li>
-            <li v-if="useAuthStore().checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_transaksi'?'active':''" >
-              <nuxt-link to="/data_transaksi" @click="activeMenu = '/data_transaksi'">Transaksi</nuxt-link></li>
+              <nuxt-link to="/data_gudang" @click="activeMenu = '/data_gudang'">Gudang
+              </nuxt-link>
+            </li> -->
+            <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_item'?'active':''" >
+              <nuxt-link to="/data_item" @click="activeMenu = '/data_item'">
+                <IconsProduct class="mr-1"/>
+                Item
+              </nuxt-link>
+            </li>
+            <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_transaksi'?'active':''" >
+              <nuxt-link to="/data_transaksi" @click="activeMenu = '/data_transaksi'">
+                <IconsCreditCard class="mr-1"/>
+                Transaksi
+              </nuxt-link>
+            </li>
             <!-- <li><nuxt-link to="/events">Events</nuxt-link></li>
             <li><nuxt-link to="/user">User</nuxt-link></li>
             <li><nuxt-link to="/institute">Institute</nuxt-link></li>
@@ -120,6 +138,10 @@ if (process.client) {
     }
   });
 }
+const role = useCookie('role'); // useCookie new hook in nuxt 3
+const checkRole=(list:Array<string>)=>{
+  return (list).includes(role.value as string);
+};
 
 
 </script>
@@ -133,6 +155,8 @@ if (process.client) {
   }
 
   ul li a{
-    display: block;
+    display: flex;
+    width:100%;
+    align-items: center;
   }
 </style>

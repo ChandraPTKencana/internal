@@ -10,7 +10,8 @@ export default defineNuxtConfig({
   app:{
     baseURL:process.env.MY_NODE_ENV === 'production' ? '/stok' : '/stok/dist',
   },
-  ssr: true,
+  // ssr: true,
+  ssr: false,
   devtools: { enabled: true },
   alias: {
     '@': resolve(__dirname, '/'),

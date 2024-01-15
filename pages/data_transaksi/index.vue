@@ -116,7 +116,7 @@
     </div>
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
-    <TransactionsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/>
+    <!-- <TransactionsRequested :show="popup_request" :fnClose="()=>{ popup_request = false; }" @update_request_notif="request_notif = $event"/> -->
     <TransactionsSummary :show="popup_summary" :fnClose="()=>{ popup_summary = false; }"/>
 
   </div>
@@ -173,7 +173,7 @@ const { data: dt_async } = await useAsyncData(async () => {
 
 const transactions = ref(dt_async.value.transactions);
 const request_notif = ref(dt_async.value.request_notif);
-const popup_request = ref(false);
+// const popup_request = ref(false);
 
 const search = ref("");
 const sort = ref({
