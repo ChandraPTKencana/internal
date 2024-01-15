@@ -90,11 +90,23 @@ td.cell {
 }
 
 
-.placeOfText,input,select,textarea, button{
+.card-border,input,select,textarea, button{
     @apply block rounded-md border-0 px-1.5 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-300;
 }
 
-.placeOfText,input,select,textarea{
+.card-border,input,select,textarea{
     @apply w-full;
 }
 
+button{
+    @apply text-center;
+}
+
+table input,table select,table textarea, table button{
+    @apply block rounded-none border-0 px-1.5 py-1.5 text-gray-900 shadow-none ring-0 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-indigo-300;
+    @apply w-full;
+}
+
+table button{
+    @apply flex justify-center;
+}

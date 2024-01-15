@@ -7,13 +7,13 @@
 
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Type</label>
-            <div class="placeOfText"> {{ transaction.type }}</div>
+            <div class="card-border"> {{ transaction.type }}</div>
             <p class="text-red-500">{{ field_errors.type }}</p>
           </div>
   
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">From Warehouse</label>
-            <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
+            <div class="card-border flex flex-row flex-wrap">
               <div class="w-full flex" style="">
                 <div class="flex flex-row flex-wrap grow">
                   <div class="p-1">
@@ -33,7 +33,7 @@
   
           <div v-if="transaction.type =='transfer'" class="w-full flex flex-col flex-wrap p-1">
             <label for="">To Warehouse</label>
-            <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
+            <div class="card-border flex flex-row flex-wrap ">
               <div class="w-full flex" style="">
                 <div class="flex flex-row flex-wrap grow">
                   <div class="p-1">
@@ -54,7 +54,7 @@
           
           <div v-if="transaction.note" class="w-full flex flex-col flex-wrap p-1">
             <label for="">Note</label>
-            <div class="placeOfText">{{ transaction.note }}</div>
+            <div class="card-border">{{ transaction.note }}</div>
             <p class="text-red-500">{{ field_errors.note }}</p>
           </div>
         </div>

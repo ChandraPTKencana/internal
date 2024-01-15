@@ -21,7 +21,7 @@
         
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Unit</label>
-          <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
+          <div class="card-border flex flex-row flex-wrap">
             <div v-if="!item.unit || !item.unit.id" class="w-full flex">
               <button @click="searchUnit()" class="flex items-center grow">
                 <IconsSearch class="text-2xl text-black" />

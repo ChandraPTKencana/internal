@@ -17,7 +17,7 @@
   
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">From Warehouse</label>
-            <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
+            <div class="card-border flex flex-row flex-wrap ">
               <div v-if="!transaction.warehouse || !transaction.warehouse.id" class="w-full flex">
                 <button @click="searchWarehouse('from')" class="flex items-center grow">
                   <IconsSearch class="text-2xl text-black" />
@@ -62,7 +62,7 @@
   
           <div v-if="transaction.type =='transfer'" class="w-full flex flex-col flex-wrap p-1">
             <label for="">To Warehouse</label>
-            <div class="w-full flex flex-row flex-wrap border-black border-solid border-2">
+            <div class="card-border flex flex-row flex-wrap ">
               <div v-if="!transaction.warehouse_target || !transaction.warehouse_target.id" class="w-full flex">
                 <button @click="searchWarehouse('to')" class="flex items-center grow">
                   <IconsSearch class="text-2xl text-black" />

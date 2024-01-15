@@ -3,15 +3,15 @@
     <Header :title="'List Item'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <button type="button" name="button" class="p-1 m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <button type="button" name="button" class="p-1 m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit />
         </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <button type="button" name="button" class="p-1 m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
         </button>

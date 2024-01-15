@@ -4,7 +4,7 @@
     <HeaderCustom :title="'List Transaction'" :back="true" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <button type="button" name="button" class=" m-1 text-2xl "
           @click="checkAndConfirm()">
           <IconsSignature />
         </button>
@@ -18,7 +18,7 @@
         </div>
         <div class="flex flex-col ml-1">
           <div class="font-bold"> Filter </div>
-          <select class="w-full grow border-black border-solid border-2 p-1" v-model="selected_filter_likes">
+          <select class="w-full grow " v-model="selected_filter_likes">
             <option v-for="filter_like in filter_likes" :value="filter_like.var">{{filter_like.val}}</option>
           </select>
         </div>

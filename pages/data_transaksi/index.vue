@@ -3,31 +3,31 @@
     <Header :title="'List Transaction'" />
     <div class="w-full flex grow flex-col overflow-auto h-0">
       <div class="w-full flex">
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <button type="button" name="button" class="m-1 text-2xl "
           @click="form_add()">
           <IconsPlus />
         </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <button type="button" name="button" class="m-1 text-2xl "
           @click="form_edit()">
           <IconsEdit v-if="selected==-1 || transactions[selected].ref_id == null && transactions[selected].confirmed_by == null"/>
           <IconsEyes v-else />
         </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <button type="button" name="button" class="m-1 text-2xl "
           @click="remove()">
           <IconsDelete />
         </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <button type="button" name="button" class="m-1 text-2xl "
           @click="checkAndConfirm()">
           <IconsSignature />
         </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl relative"
+        <button type="button" name="button" class="m-1 text-2xl relative"
           @click="goToRequest()">
           <IconsCheckList /> 
           <div class="text-sm absolute top-0 right-0 flex justify-end">
             <div v-if="request_notif > 0" class=" w-2 h-2 rounded-full bg-red-700 border-2 border-solid border-red-950"></div>
           </div>
         </button>
-        <button type="button" name="button" class="border-black border-solid border-2 p-1 m-1 text-2xl "
+        <button type="button" name="button" class="m-1 text-2xl "
           @click="popup_summary=true">
           <IconsTable2Column />
         </button>
