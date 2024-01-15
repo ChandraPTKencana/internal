@@ -146,6 +146,7 @@ const callData = async () => {
   params.page = scrolling.value.page;
   if (params.page == 1) items.value = [];
   if(props.exclude_lists) params.exclude_lists = JSON.stringify(props.exclude_lists);
+  if(params.first_row) delete params.first_row;
   if(params.page > 1){
     params.first_row = JSON.stringify(items.value[0]);
   }

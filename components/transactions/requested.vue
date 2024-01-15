@@ -186,6 +186,7 @@ const callData = async () => {
   scrolling.value.may_get_data = false;
   params.page = scrolling.value.page;
   if (params.page == 1) transactions.value = [];
+  if(params.first_row) delete params.first_row;
   if(params.page > 1){
     params.first_row = JSON.stringify(transactions.value[0]);
   }
