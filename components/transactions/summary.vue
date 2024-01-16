@@ -13,19 +13,25 @@
           </ClientOnly>
           <p class="text-red-500">{{ field_errors.from }}</p>
         </div> -->
-        <!-- <div class="w-full flex flex-col flex-wrap p-1">
-          <label for="">To</label>
-          <ClientOnly>
-            <vue-date-picker class="border-black border-solid border-2" v-model="filter.to" text-input
+        <div class="w-full flex flex-row flex-wrap p-1 items-center">
+          <label for="" class="pr-1">To</label>
+          <div class="grow" >
+            <ClientOnly>
+              <vue-date-picker  v-model="filter_date.to" 
+              type="datetime" 
+              format="dd-MM-yyyy"
+              :enable-time-picker = "false" 
+              text-input
               teleport-center></vue-date-picker>
-          </ClientOnly>
+            </ClientOnly>
+          </div>
           <p class="text-red-500">{{ field_errors.to }}</p>
-        </div> -->
-        <!-- <div class="flex items-end pl-1">
-          <button class="" type="button" name="button" @click="callData()">
+        </div>
+        <div class="flex items-end p-1">
+          <button style="width:38px; height:38px;" type="button" name="button" @click="callData()">
             <IconsSearch class="text-2xl" />
           </button>
-        </div> -->
+        </div>
       </div>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
@@ -121,10 +127,11 @@ const props = defineProps({
     // default: '',
   },
 })
-const filter = ref({
+const filter_date = ref({
   from:"",
-  to:"",
+  to:new Date(),
 });
+const field_errors = ref({})
 
 const all = ref([]);
 const column_header = ref([]);
@@ -141,7 +148,7 @@ const callData = async () => {
   useCommonStore().loading_full = true;
   params.page = 1;
   // params.from = filter.value.from;
-  // params.to = filter.value.to;
+  params.to = filter_date.value.to;
   all.value = [];
 
   const { data, error, status } = await useMyFetch("/api/summary_transactions", {
@@ -186,8 +193,6 @@ const open_details=(data,warehouse_id,item_id)=>{
   selected_data.value = data;
   popup_details.value = true;
 }
-
-
 </script>
 <style scoped="">
 table.sticky thead th:nth-child(2) {

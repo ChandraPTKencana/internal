@@ -110,3 +110,8 @@ table input,table select,table textarea, table button{
 table button{
     @apply flex justify-center;
 }
+
+.dp__main button{
+    @apply ring-0;
+
+}
