@@ -5,7 +5,7 @@
       class="bg-slate-800 h-full min-w-[150px] max-w-[150px] fixed sm:relative sm:right-0 text-white z-10"
       style="width:320px;">
       <div class="relative h-full">
-        <button class="absolute left-full h-12 text-2xl text-white bg-slate-500 sm:hidden"
+        <button class="absolute left-full h-12 text-2xl text-white bg-slate-500 sm:hidden bg-opacity-0 ring-0 focus:ring-0"
           @click="triggerSidebar(!is_sidebar_open)">
           <IconsTimes v-if="is_sidebar_open" />
           <IconsBurger v-else />
@@ -13,29 +13,29 @@
         <header class="h-full flex flex-col p-2 overflow-hidden">
           <ul class="grow overflow-auto">
             <li :class="activeMenu == '/'?'active':''" >
-              <nuxt-link to="/" @click="activeMenu = '/'">
+              <nuxt-link class="cursor-pointer" @click="goTo('/')">
                 <IconsHome class="mr-1"/>
                 Dashboard
               </nuxt-link>
             </li>
             <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
-              <nuxt-link to="/data_satuan" @click="activeMenu = '/data_satuan'">
+              <nuxt-link class="cursor-pointer" @click="goTo('/data_satuan')">
                 <IconsScale class="mr-1"/>
                 Satuan
               </nuxt-link>
             </li>
             <!-- <li :class="activeMenu == '/data_gudang'?'active':''" >
-              <nuxt-link to="/data_gudang" @click="activeMenu = '/data_gudang'">Gudang
+              <nuxt-link class="cursor-pointer" to="/data_gudang" @click="goTo('/data_gudang')">Gudang
               </nuxt-link>
             </li> -->
             <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_item'?'active':''" >
-              <nuxt-link to="/data_item" @click="activeMenu = '/data_item'">
+              <nuxt-link class="cursor-pointer" @click="goTo('/data_item')">
                 <IconsProduct class="mr-1"/>
                 Item
               </nuxt-link>
             </li>
             <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_transaksi'?'active':''" >
-              <nuxt-link to="/data_transaksi" @click="activeMenu = '/data_transaksi'">
+              <nuxt-link class="cursor-pointer" @click="goTo('/data_transaksi')">
                 <IconsCreditCard class="mr-1"/>
                 Transaksi
               </nuxt-link>
@@ -142,6 +142,13 @@ const role = useCookie('role'); // useCookie new hook in nuxt 3
 const checkRole=(list:Array<string>)=>{
   return (list).includes(role.value as string);
 };
+
+const goTo=(url:any)=>{
+  if(activeMenu.value == url) return;
+  activeMenu.value = url;
+  is_sidebar_open.value=false;
+  router.push(url);
+}
 
 
 </script>
