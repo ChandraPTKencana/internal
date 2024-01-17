@@ -5,6 +5,11 @@
       <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
         <div class="w-full flex flex-row flex-wrap">
 
+          <div v-if="transaction.confirmed_by" class="w-full flex flex-col flex-wrap p-1">
+            <label for="">Input At</label>
+            <div class="card-border"> {{ $moment(transaction.input_at).format("DD-MM-Y HH:mm:ss") }}</div>
+          </div>
+
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Type</label>
             <div class="card-border"> {{ transaction.type }}</div>
@@ -116,12 +121,32 @@
         <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
           Cancel
         </button>
-        <button type="button" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click="doConfirm()">
+        <button type="button" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click="confirm()">
           Confirm
         </button>
       </div>
     </div>
   </div>
+
+  <PopupMini :type="'custome'" :show="confirm_box" :data="confirm_data" :fnClose="togglePopupMiniBox" :fnConfirm="confirmOk" :enabledOk="enabledOk">
+    <template #words>
+      Data akan diproses dan <b>tidak dapat dikembalikan lagi</b>, yakin untuk melanjutkan ?
+    </template>
+    <template #footer>
+      Pilih Tanggal Transaksi:
+      <div class="grow mb-5" >
+        <ClientOnly>
+          <vue-date-picker  v-model="filter_date.to" 
+          type="datetime" 
+          format="dd-MM-yyyy"
+          :enable-time-picker = "false" 
+          text-input
+          teleport-center @open="isOpened()" @closed="isClosed()"></vue-date-picker>
+        </ClientOnly>
+      </div>
+    </template>
+  </PopupMini>
+
 </template>
 
 <script lang="ts" setup>
@@ -200,6 +225,17 @@ const { data: dt_async } = await useAsyncData(async () => {
     
 });
 
+
+const enabledOk = ref(true);
+
+const isOpened=()=>{
+  enabledOk.value = false;
+}
+
+const isClosed=()=>{
+  enabledOk.value = true;
+}
+
 const transaction:any = ref(dt_async.value?.transaction || {
     id: -1,
     type: "used",
@@ -234,14 +270,37 @@ const detail = ref({
   status:""
 });
 
+const filter_date = ref({
+  from:"",
+  to:new Date(),
+});
 
+const confirm_data = ref({});
+const confirm_box = ref(false);
 
+const confirm = () => {
+  confirm_data.value = {
+      id : transaction.value.id,
+      type:transaction.value.type,
+      // source : transaction.value.warehouse.name,
+      target : transaction.value.warehouse_target.name,
+      // "qty in" : transaction.value.qty_in,
+    };
+    confirm_box.value = true;
+};
 
-const doConfirm = async () => {
+const togglePopupMiniBox = async()=>{  
+  if (confirm_box.value) {
+    confirm_box.value = false;
+  }
+};
+
+const confirmOk = async () => {
   useCommonStore().loading_full = true;
   field_errors.value = {};
 
   let data_in: Record<string, any> = {};
+  data_in['to'] = filter_date.value.to;
   
   let $method: any = "post";
 
@@ -273,4 +332,5 @@ const doConfirm = async () => {
   }
   router.go(-1);
 }
+
 </script>

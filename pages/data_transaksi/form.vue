@@ -5,6 +5,11 @@
       <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
         <div class="w-full flex flex-row flex-wrap">
 
+          <div v-if="transaction.confirmed_by" class="w-full flex flex-col flex-wrap p-1">
+            <label for="">Input At</label>
+            <div class="card-border"> {{ $moment(transaction.input_at).format("DD-MM-Y HH:mm:ss") }}</div>
+          </div>
+          
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Type</label>
             <select :disabled="disabled" class="" v-model="transaction.type">

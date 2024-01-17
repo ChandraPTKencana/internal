@@ -70,29 +70,29 @@
           <table class="tacky">
             <thead>
               <tr class="sticky top-0 !z-[2]">
-                <th>No.</th>
-                <th>Created At</th>
-                <th>Updated At</th>
+                <!-- <th>No.</th> -->
+                <!-- <th>Updated At</th> -->
                 <th>ID</th>
+                <th>Confirmed At</th>
                 <th>Warehouse Name</th>
                 <th>Note</th>
                 <th>Status</th>
                 <th>Type</th>
                 <th>Warehouse Source Name</th>
                 <th>Warehouse Target Name</th>
+                <th>Input At</th>
                 <th>Requested At</th>
                 <th>Requested By</th>
-                <th>Confirmed At</th>
                 <th>Confirmed By</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(transaction, index) in transactions" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
-                <td>{{ index + 1 }}.</td>
-                <td>{{ $moment(transaction.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(transaction.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <!-- <td>{{ index + 1 }}.</td> -->
+                <!-- <td>{{ $moment(transaction.updated_at).format("DD-MM-Y HH:mm:ss") }}</td> -->
                 <td class="bold">{{ transaction.id }}</td>
+                <td>{{ transaction.confirmed_at ? $moment(transaction.confirmed_at).format("DD-MM-Y HH:mm:ss") : '' }}</td>
                 <td>{{ transaction.warehouse?.name }}</td>
                 <!--<td>{{ transaction.item?.name }}</td>
                 <td>{{ transaction.item?.unit?.name }}</td>
@@ -104,10 +104,11 @@
                 <td>{{ transaction.type }}</td>
                 <td>{{ transaction.warehouse_source?.name }}</td>
                 <td>{{ transaction.warehouse_target?.name }}</td>
+                <td>{{ $moment(transaction.input_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ $moment(transaction.requested_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ transaction.requester?.username }}</td>
-                <td>{{ transaction.confirmed_at ? $moment(transaction.confirmed_at).format("DD-MM-Y HH:mm:ss") : '' }}</td>
                 <td>{{ transaction.confirmer?.username }}</td>
+
               </tr>
             </tbody>
           </table>

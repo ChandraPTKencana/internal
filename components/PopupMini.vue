@@ -27,9 +27,19 @@
         </table>
       </div>
 
+      <div class="w-full text-left mt-3">
+        <slot name="footer"></slot> 
+      </div>
+
       <div class="flex w-full justify-between mt-5">
         <button @click="fnClose()" class="w-full bg-blue-500 border-blue-500 border-solid border-2 p-1 text-white mr-2"> Batal </button>
-        <button @click="fnConfirm()" class="w-full bg-red-600 border-red-600 border-solid border-2 p-1 text-white"> Lanjutkan </button>
+
+        <button @click="fnConfirm()" :disabled="!props.enabledOk || countDown > 0" 
+        class="w-full  border-solid border-2 p-1 text-white"
+        :class="props.enabledOk && countDown <= 0 ? 'bg-red-600 border-red-600' : 'bg-slate-600 border-slate-600'"
+        >
+         Lanjutkan {{ countDown > 0 ? countDown : '' }}
+        </button>
       </div>
     </div>
   </div>
@@ -59,7 +69,57 @@ const props = defineProps({
     type: String,
     required: true,
   },
+  enabledOk: {
+    type: Boolean,
+    required: false,
+    default: true,
+  },
+
 })
+let interval: null | ReturnType<typeof setInterval>  = null;
+const countDown = ref(0);
+const startCounting = ()=>{
+  if(interval==null){
+    countDown.value=5;
+    interval = setInterval(()=>{
+      countDown.value--;
+      if(countDown.value<=0){
+        clearInterval(interval);
+        interval = null;
+      }
+    },1000);
+  }
+};
+
+
+watch(()=>props.show,(newVal, oldVal) => {
+
+  if(newVal)
+  startCounting();
+  else
+  {
+    clearInterval(interval);
+    interval = null;
+  }
+}, {
+  immediate: true,
+  deep:true
+});
+
+
+watch(()=>props.enabledOk,(newVal, oldVal) => {
+  if(newVal && props.show)
+  startCounting();
+}, {
+  immediate: true,
+  deep:true
+});
+
+onUnmounted(()=>{
+  clearInterval(interval);
+  interval = null;
+});
+
 
 // const router = useRouter();
 // const go_back = () => {

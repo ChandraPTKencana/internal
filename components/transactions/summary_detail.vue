@@ -39,7 +39,7 @@
             <thead>
               <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
-                <th>Created At</th>
+                <th>Input At</th>
                 <th>Updated At</th>
                 <th>ID</th>
                 <th>Type</th>
@@ -54,7 +54,7 @@
               <tr v-for="(transaction, index) in transactions" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td>{{ $moment(transaction.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ $moment(transaction.input_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ $moment(transaction.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td class="bold">{{ transaction.id }}</td>
                 <td>
