@@ -412,7 +412,7 @@ const doSave = async () => {
     "warehouse_target_id": transaction.value.warehouse_target.id,
     "details":JSON.stringify(details.value)
   };
-  console.log(details.value);
+  // console.log(details.value);
   
   let $method: any = "post";
 

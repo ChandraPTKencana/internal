@@ -57,7 +57,7 @@ table.tacky tbody td.tools {
 
 tr.active td,
 tr.active th {
-    @apply bg-green-300;
+    @apply bg-green-300 #{!important};
 }
 
 .unselectable *,

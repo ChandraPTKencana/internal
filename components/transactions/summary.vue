@@ -50,7 +50,7 @@
             <tbody>
               <tr v-for="(row, index) in row_header" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
-                <td>{{ row.name }}.</td>
+                <td class="font-bold !text-left">{{ row.name }}</td>
                 <td v-for="ch in column_header">
                   <a class="text-blue-500 font-bold underline cursor-pointer" @click="open_details(returnSpesificData(ch.id,row.id))">
                     {{ returnQtyReminder(ch.id,row.id) }}
@@ -204,6 +204,10 @@ table.sticky thead th:nth-child(2) {
 
 table.sticky thead tr {
   top: 0;
+}
+
+table tr:nth-child(even) td{
+  background:#dfdfdf;
 }
 
 .box-fixed {
