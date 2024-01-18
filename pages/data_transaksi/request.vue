@@ -55,7 +55,7 @@
               <tr v-for="(transaction, index) in transactions" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td>{{ $moment(transaction.input_at).format("DD-MM-Y HH:mm:ss") }}</td>
+                <td>{{ transaction.input_at ? $moment(transaction.input_at).format("DD-MM-Y") : '' }}</td>
                 <td>{{ $moment(transaction.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td class="bold">{{ transaction.id }}</td>
                 <td>{{ transaction.warehouse_source?.name }}</td>
