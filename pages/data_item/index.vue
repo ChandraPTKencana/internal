@@ -289,6 +289,7 @@ const confirmed_delete = async() => {
     return;
   }
   items.value.splice(selected.value,1);
+  selected.value = -1;
   delete_box.value = false;
 }
 </script>

@@ -278,6 +278,7 @@ const confirmed_delete = async() => {
     return;
   }
   warehouses.value.splice(selected.value,1);
+  selected.value = -1;
   delete_box.value = false;
 }
 
