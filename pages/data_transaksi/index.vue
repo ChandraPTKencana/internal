@@ -16,7 +16,7 @@
           @click="remove()">
           <IconsDelete />
         </button>
-        <button type="button" name="button" class="m-1 text-2xl "
+        <button type="button" name="button" class="m-1 text-2xl " :disabled="selected==-1 || transactions[selected].confirmed_by"
           @click="checkAndConfirm()">
           <IconsSignature />
         </button>

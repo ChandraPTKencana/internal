@@ -7,7 +7,7 @@
 
           <div v-if="transaction.confirmed_by" class="w-full flex flex-col flex-wrap p-1">
             <label for="">Input At</label>
-            <div class="card-border"> {{ $moment(transaction.input_at).format("DD-MM-Y HH:mm:ss") }}</div>
+            <div class="card-border"> {{ $moment(transaction.input_at).format("DD-MM-Y") }}</div>
           </div>
 
           <div class="w-full flex flex-col flex-wrap p-1">
@@ -121,7 +121,7 @@
         <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
           Cancel
         </button>
-        <button type="button" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click="confirm()">
+        <button v-if="transaction.confirmed_by==null" type="button" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click="confirm()">
           Confirm
         </button>
       </div>
