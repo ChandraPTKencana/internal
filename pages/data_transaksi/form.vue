@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full flex flex-col">
     <HeaderCustom :title="'Form Item'" :back="true" />
-    <div class="w-full flex grow flex-col h-0 overflow-auto bg-white">
+    <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
       <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
         <div class="w-full flex flex-row flex-wrap">
 
@@ -24,7 +24,7 @@
             <label for="">From Warehouse</label>
             <div class="card-border flex flex-row flex-wrap ">
               <div v-if="!transaction.warehouse || !transaction.warehouse.id" class="w-full flex">
-                <button @click="searchWarehouse('from')" class="flex items-center grow">
+                <button type="button" @click="searchWarehouse('from')" class="flex items-center grow">
                   <IconsSearch class="text-2xl text-black" />
                   <div class="flex items-center grow p-1">
                     Pilih Warehouse yang dikelola
@@ -42,7 +42,7 @@
                     <div class="bold">{{ transaction.warehouse.name }}</div>
                   </div>
                 </div>
-                <button v-if="!disabled" class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('from')">
+                <button type="button" v-if="!disabled" class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('from')">
                   <IconsDelete class="text-2xl text-white" />
                 </button>
               </div>
@@ -57,7 +57,7 @@
                     <div class="bold">{{ transaction.warehouse_source.name }}</div>
                   </div>
                 </div>
-                <button v-if="!disabled" class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('from')">
+                <button type="button" v-if="!disabled" class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('from')">
                   <IconsDelete class="text-2xl text-white" />
                 </button>
               </div>
@@ -69,7 +69,7 @@
             <label for="">To Warehouse</label>
             <div class="card-border flex flex-row flex-wrap ">
               <div v-if="!transaction.warehouse_target || !transaction.warehouse_target.id" class="w-full flex">
-                <button @click="searchWarehouse('to')" class="flex items-center grow">
+                <button type="button" @click="searchWarehouse('to')" class="flex items-center grow">
                   <IconsSearch class="text-2xl text-black" />
                   <div class="flex items-center grow p-1">
                     Pilih Warehouse Target
@@ -87,7 +87,7 @@
                     <div class="bold">{{ transaction.warehouse_target.name }}</div>
                   </div>
                 </div>
-                <button v-if="!disabled" class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('to')">
+                <button type="button" v-if="!disabled" class="w-10 bg-red-600 flex items-center justify-center" @click="clearWarehouse('to')">
                   <IconsDelete class="text-2xl text-white" />
                 </button>
               </div>
@@ -135,7 +135,7 @@
                         <button v-if="!detail.item_id" type="button" name="button" @click="showSNSItem($event, index)">
                           ...
                         </button>
-                        <button v-else @click="deleteItem($event, index)" :disabled="detail.confirm_by">
+                        <button type="button" v-else @click="deleteItem($event, index)" :disabled="detail.confirm_by">
                           <IconsTimes class=" font-bold text-2xl"/>
                         </button>
                       </div>
@@ -192,11 +192,11 @@
         <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
           Cancel
         </button>
-        <button v-if="!disabled" type="button" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click="doSave()">
+        <button v-if="!disabled" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white  rounded-sm" @click.prevent="doSave()">
           Save
         </button>
       </div>
-    </div>
+    </form>
   </div>
 
 

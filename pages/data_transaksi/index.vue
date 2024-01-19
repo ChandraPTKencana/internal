@@ -33,7 +33,7 @@
         </button>
       </div>
 
-      <div class="w-full flex p-1">
+      <form action="#" class="w-full flex p-1">
         <div class="grow">
           <div class="font-bold"> Keyword </div>
           <input class="" type="text" v-model="search" name="search"
@@ -55,11 +55,11 @@
           </select>
         </div> -->
         <div class="flex items-end pl-1">
-          <button class="" type="button" name="button" @click="searching()">
+          <button class="" type="submit" name="button" @click.prevent="searching()">
             <IconsSearch class="text-2xl" />
           </button>
         </div>
-      </div>
+      </form>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
         <div v-if="transactions.length == 0" class="">

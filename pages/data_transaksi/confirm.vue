@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full flex flex-col">
     <HeaderCustom :title="'Form Confirmation'" :back="true" />
-    <div class="w-full flex grow flex-col h-0 overflow-auto bg-white">
+    <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
       <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
         <div class="w-full flex flex-row flex-wrap">
 
@@ -121,11 +121,11 @@
         <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
           Cancel
         </button>
-        <button v-if="transaction.confirmed_by==null" type="button" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click="confirm()">
+        <button v-if="transaction.confirmed_by==null" type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click.prevent="confirm()">
           Confirm
         </button>
       </div>
-    </div>
+    </form>
   </div>
 
   <PopupMini :type="'custome'" :show="confirm_box" :data="confirm_data" :fnClose="togglePopupMiniBox" :fnConfirm="confirmOk" :enabledOk="enabledOk">

@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full flex flex-col">
     <HeaderCustom :title="'Form Item'" :back="true" />
-    <div class="w-full flex grow flex-col h-0 overflow-auto bg-white">
+    <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
       <div class="w-full align-items-center justify-content-center grow overflow-auto">
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Name</label>
@@ -23,7 +23,7 @@
           <label for="">Unit</label>
           <div class="card-border flex flex-row flex-wrap">
             <div v-if="!item.unit || !item.unit.id" class="w-full flex">
-              <button @click="searchUnit()" class="flex items-center grow">
+              <button type="button" @click="searchUnit()" class="flex items-center grow">
                 <IconsSearch class="text-2xl text-black" />
                 <div class="flex items-center grow p-1">
                   Pilih Unit
@@ -41,7 +41,7 @@
                   <div class="bold">{{ item.unit.name }}</div>
                 </div>
               </div>
-              <button class="w-10 bg-red-600 flex items-center justify-center" @click="clearUnit()">
+              <button type="button" class="w-10 bg-red-600 flex items-center justify-center" @click="clearUnit()">
                 <IconsDelete class="text-2xl text-white" />
               </button>
             </div>
@@ -56,11 +56,11 @@
         <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
           Cancel
         </button>
-        <button type="button" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click="doSave()">
+        <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click.prevent="doSave()">
           Save
         </button>
       </div>
-    </div>
+    </form>
   </div>
 
   <!-- <SearchSelectUsers /> -->

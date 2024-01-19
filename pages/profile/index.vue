@@ -1,7 +1,7 @@
 <template>
     <div class="w-full h-full flex flex-col">
       <HeaderCustom :title="'Profile'" :back="true" />
-      <div class="w-full flex grow flex-col h-0 overflow-auto bg-white">
+      <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
         <div class="w-full align-items-center justify-content-center grow overflow-auto">
           <div class="w-full flex flex-col flex-wrap p-1">
             <label for="">Username</label>
@@ -28,7 +28,7 @@
             <div  class="flex justify-center items-center w-24 h-24">
                 <img :src="user.photo || '/stok/user-default.png'" alt="" class=" max-w-full max-h-full">
             </div>
-            <button v-show="photo" class="bg-gray-600 w-24 text-white" @click="resetPhoto()">Remove</button>
+            <button type="button" v-show="photo" class="bg-gray-600 w-24 text-white" @click="resetPhoto()">Remove</button>
             <input v-show="!photo" @change="changePhoto($event)" ref="photo_input" type="file" name="photo" value="">
 
             <small>Upload file image : jpg, jpeg</small>
@@ -39,11 +39,11 @@
           <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
             Cancel
           </button>
-          <button type="button" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click="doSave()">
+          <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click.prevent="doSave()">
             Save
           </button>
         </div>
-      </div>
+      </form>
     </div>
   </template>
   

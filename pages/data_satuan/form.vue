@@ -1,7 +1,7 @@
 <template>
   <div class="w-full h-full flex flex-col">
     <HeaderCustom :title="'Form Unit'" :back="true" />
-    <div class="w-full flex grow flex-col h-0 overflow-auto bg-white">
+    <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
       <div class="w-full align-items-center justify-content-center grow overflow-auto">
         <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Name</label>
@@ -13,11 +13,11 @@
         <button type="button" name="button" class="w-36 m-1" @click="$router.go(-1)">
           Cancel
         </button>
-        <button type="button" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click="doSave()">
+        <button type="submit" name="button" class="w-36 m-1 bg-blue-600 text-white rounded-sm" @click.prevent="doSave()">
           Save
         </button>
       </div>
-    </div>
+    </form>
   </div>
 </template>
 

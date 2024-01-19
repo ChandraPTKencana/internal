@@ -4,7 +4,7 @@
       <HeaderPopup :title="'Summary'" :fn="fnClose" class="w-100 flex align-items-center"
         style="color:white;" />
 
-      <div class="w-full flex p-1">
+      <form action="#" class="w-full flex p-1">
         <!-- <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">From</label>
           <ClientOnly>
@@ -28,11 +28,11 @@
           <p class="text-red-500">{{ field_errors.to }}</p>
         </div>
         <div class="flex items-end p-1">
-          <button style="width:38px; height:38px;" type="button" name="button" @click="callData()">
+          <button style="width:38px; height:38px;" type="submit" name="button" @click.prevent="callData()">
             <IconsSearch class="text-2xl" />
           </button>
         </div>
-      </div>
+      </form>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
         <div v-if="all.length == 0" class="">
