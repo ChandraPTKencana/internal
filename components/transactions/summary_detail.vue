@@ -40,23 +40,20 @@
               <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
                 <th>Input At</th>
-                <th>Updated At</th>
-                <th>ID</th>
                 <th>Type</th>
                 <th>Qty In</th>
                 <th>Qty Out</th>
                 <th>Qty Reminder</th>
                 <th>Note</th>
-                <th>Requested At</th>
+                <th>Confirm At</th>
+                <th>Updated At</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="(transaction, index) in transactions" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
-                <td>{{ $moment(transaction.input_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td>{{ $moment(transaction.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
-                <td class="bold">{{ transaction.id }}</td>
+                <td>{{ $moment(transaction.input_at).format("DD-MM-Y") }}</td>
                 <td>
                   {{ transaction.type }}
                   <br>
@@ -67,6 +64,7 @@
                 <td>{{ transaction.qty_reminder ? pointFormat(transaction.qty_reminder) +  ` ${props.data?.item?.unit_name}` : ''  }}</td>
                 <td>{{ transaction.note }}</td>
                 <td>{{ transaction.confirmed_at ? $moment(transaction.confirmed_at).format("DD-MM-Y HH:mm:ss") : '' }}</td>
+                <td>{{ $moment(transaction.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
               </tr>
             </tbody>
           </table>
