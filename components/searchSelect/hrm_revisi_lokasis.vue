@@ -49,7 +49,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(warehouse, index) in warehouses" :key="index" @click="selected = index"
+              <tr v-for="(warehouse, index) in warehouses" :key="index" @click="countClickListFn(index,()=>{selected = index},selectRow)"
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
                 <td class="bold">{{ warehouse.id }}</td>
@@ -108,6 +108,7 @@ const props = defineProps({
   },
 })
 
+const { countClickListFn } = useUtils();
 
 const token = useCookie('token');
 
