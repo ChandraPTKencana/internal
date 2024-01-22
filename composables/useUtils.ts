@@ -15,7 +15,7 @@ export const useUtils = () => {
 
     let countClickList=0;
     let keyClickList=-1;
-    let timeoutClickList: null | ReturnType<typeof setInterval>  = null;
+    let timeoutClickList: null | ReturnType<typeof setTimeout>  = null;
     const countClickListFn=(key:any,...fn:any[])=>{
         if(keyClickList != key){
             keyClickList = key;

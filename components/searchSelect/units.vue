@@ -7,8 +7,8 @@
       <form action="#" class="w-full flex p-1">
         <div class="grow">
           <div class="font-bold"> Keyword </div>
-          <input class="" type="text" v-model="search" name="search"
-            placeholder="Keyword">
+          <input ref="ref_keyword" class="" type="text" v-model="search" name="search"
+            placeholder="Keyword" @keyup="autoSearchKeyword()">
         </div>
         <div class="pl-1">
           <div class="font-bold"> Sort By </div>
@@ -219,9 +219,24 @@ const selectRow = () => {
   }
 }
 
+const ref_keyword = ref(null);
+
+let autoSearchKeywordTimeout  = null;
+
+const autoSearchKeyword= (val)=>{
+  if(autoSearchKeywordTimeout) clearTimeout(autoSearchKeywordTimeout);
+  autoSearchKeywordTimeout = setTimeout(()=>{
+    searching()
+  },500);
+};
+
+
 watch(() => props.show, (newVal, oldVal) => {
   if (newVal == true)
     searching();
+    setTimeout(() => {
+      ref_keyword.value.focus();
+    }, 100);
 }, {
   immediate: true
 });

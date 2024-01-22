@@ -7,8 +7,8 @@
       <form action="#" class="w-full flex p-1">
         <div class="grow">
           <div class="font-bold"> Keyword </div>
-          <input class="" type="text" v-model="search" name="search"
-            placeholder="Keyword">
+          <input ref="ref_keyword" class="" type="text" v-model="search" name="search"
+            placeholder="Keyword" @keyup="autoSearchKeyword()">
         </div>
         <div class="pl-1">
           <div class="font-bold"> Sort By </div>
@@ -38,23 +38,27 @@
         </div>
 
         <div v-else class="w-full h-full overflow-auto" role="sticky" ref="loadRef" @scroll="loadMore">
-          <table class="tacky">
+          <table class="tacky w-full">
             <thead>
               <tr class="sticky top-0 !z-[2]">
-                <th>No.</th>
-                <th>ID</th>
+                <th v-if="enableMultiSelect" class="min-w-[28px] !w-[28px] max-w-[28px]"></th>
+                <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No.</th>
+                <th class="min-w-[50px] !w-[50px] max-w-[50px] ">ID</th>
                 <th>Name</th>
                 <th>Unit</th>
-                <th>Created At</th>
-                <th>Updated At</th>
+                <th class="min-w-[170px] !w-[170px] max-w-[170px] ">Created At</th>
+                <th class="min-w-[170px] !w-[170px] max-w-[170px] ">Updated At</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(item, index) in items" :key="index" @click="countClickListFn(index,()=>{selected = index},selectRow)"
+              <tr v-for="(item, index) in items" :key="index" @click="clickList(index)"
                 :class="selected == index ? 'active' : ''">
+                <td v-if="enableMultiSelect">
+                  <input type="checkbox" :checked="isExists(item)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" @click="addOrRemoveFromList(item)">
+                </td>
                 <td>{{ index + 1 }}.</td>
                 <td class="bold">{{ item.id }}</td>
-                <td>{{ item.name }}</td>
+                <td class="whitespace-normal break-words">{{ item.name }}</td>
                 <td>{{ item.unit.name }}</td>
                 <td>{{ $moment(item.created_at).format("DD-MM-Y HH:mm:ss") }}</td>
                 <td>{{ $moment(item.updated_at).format("DD-MM-Y HH:mm:ss") }}</td>
@@ -64,12 +68,19 @@
         </div>
       </div>
       <div class="flex" style="justify-content:end; padding:5px;">
+        <div v-if="enableMultiSelect" class="grow flex items-center">
+          Selected Items: {{ selected_items.length }} 
+          <button type="button" class="ml-3" @click="show_box=true"> View all Items </button>
+        </div>
         <button @click="selectRow()" class="w-36 m-1 bg-blue-600 text-white rounded-sm">
           Select
         </button>
       </div>
     </div>
   </section>
+
+  <PopupMiniMulti :show="show_box" :data="selected_items" :fnClose="toggleClose" :fnConfirm="selectRow" :multi_key ="multi_key" :fnRemoveFromList="removeList"/>
+
 </template>
 
 <script setup>
@@ -94,6 +105,15 @@ const props = defineProps({
     type: Function,
     required: false,
   },
+  fnSelectMulti: {
+    type: Function,
+    required: false,
+  },
+  enableMultiSelect: {
+    type: Boolean,
+    required: false
+    // default: '',
+  },
   excludes: {
     type: String,
     required: false,
@@ -102,6 +122,11 @@ const props = defineProps({
   exclude_lists: {
     type: Array,
     required: false,
+    // default: '',
+  },
+  multi_key: {
+    type: Array,
+    required: false
     // default: '',
   },
 })
@@ -211,20 +236,77 @@ const searching = () => {
   callData();
 }
 
+const show_box = ref(false);
+const selected_items = ref([]);
+
 const selectRow = () => {
-  if (selected.value > -1) {
-    props.fnSelect(items.value[selected.value]);
-  } else {
-    props.fnSelect({
-      id: "",
-      name: "",
-    });
+  if(props.enableMultiSelect){
+    props.fnSelectMulti(selected_items.value);
+    show_box.value = false;
+  }else{    
+    if (selected.value > -1) {
+      props.fnSelect(items.value[selected.value]);
+    } else {
+      props.fnSelect({
+        id: "",
+        name: "",
+      });
+    }
   }
 }
 
+const clickList = (index)=>{
+  if(props.enableMultiSelect){ return; }
+  countClickListFn(index,()=>{selected.value = index},selectRow);
+}
+
+const removeList =(key)=>{
+  selected_items.value.splice(key,1);
+}
+
+const toggleClose = async()=>{  
+  if (show_box.value) {
+    show_box.value = false;
+  }
+};
+
+const addOrRemoveFromList=(item)=>{
+  const index = selected_items.value.map((x)=>x.id).indexOf(item.id);
+  if (index === -1) {
+  // not exist in the list
+    selected_items.value.push(item);
+  }else{
+    // remove from the list
+    selected_items.value.splice(index, 1);
+  }
+};
+
+const isExists=(item)=>{
+  const index = selected_items.value.map((x)=>x.id).indexOf(item.id);
+  return index !== -1;
+}
+
+
+const ref_keyword = ref(null);
+
+let autoSearchKeywordTimeout  = null;
+
+const autoSearchKeyword= (val)=>{
+  if(autoSearchKeywordTimeout) clearTimeout(autoSearchKeywordTimeout);
+  autoSearchKeywordTimeout = setTimeout(()=>{
+    searching()
+  },500);
+};
+
+
 watch(() => props.show, (newVal, oldVal) => {
-  if (newVal == true)
+  if (newVal == true){
+    selected_items.value = [];
     searching();
+    setTimeout(() => {
+      ref_keyword.value.focus();
+    }, 100);
+  }
 }, {
   immediate: true
 });

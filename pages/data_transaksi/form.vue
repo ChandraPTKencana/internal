@@ -1,16 +1,16 @@
 <template>
   <div class="w-full h-full flex flex-col">
-    <HeaderCustom :title="'Form Item'" :back="true" />
+    <HeaderCustom :title="'Form Transaksi'" :back="true" />
     <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
       <div class="w-full flex flex-col items-center justify-center grow overflow-auto">
         <div class="w-full flex flex-row flex-wrap">
 
-          <div v-if="transaction.confirmed_by" class="w-full flex flex-col flex-wrap p-1">
+          <div v-if="transaction.confirmed_by" class="w-full sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
             <label for="">Input At</label>
             <div class="card-border"> {{ $moment(transaction.input_at).format("DD-MM-Y") }}</div>
           </div>
           
-          <div class="w-full flex flex-col flex-wrap p-1">
+          <div class="w-full flex flex-col flex-wrap p-1 sm:w-4/12 md:w-3/12 lg:w-2/12">
             <label for="">Type</label>
             <select :disabled="disabled" class="" v-model="transaction.type">
               <option value="used">Used</option>
@@ -20,7 +20,7 @@
             <p class="text-red-500">{{ field_errors.type }}</p>
           </div>
   
-          <div class="w-full flex flex-col flex-wrap p-1">
+          <div class="w-full sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1 ">
             <label for="">From Warehouse</label>
             <div class="card-border flex flex-row flex-wrap ">
               <div v-if="!transaction.warehouse || !transaction.warehouse.id" class="w-full flex">
@@ -65,7 +65,7 @@
             <p class="text-red-500">{{ field_errors.warehouse_id }}</p>
           </div>
   
-          <div v-if="transaction.type =='transfer'" class="w-full flex flex-col flex-wrap p-1">
+          <div v-if="transaction.type =='transfer'" class="w-full sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
             <label for="">To Warehouse</label>
             <div class="card-border flex flex-row flex-wrap ">
               <div v-if="!transaction.warehouse_target || !transaction.warehouse_target.id" class="w-full flex">
@@ -96,19 +96,23 @@
           </div>
           
           
-          <div class="w-full flex flex-col flex-wrap p-1">
+          <div class="w-full sm:w-4/12 md:w-3/12 lg:w-3/12 flex flex-col flex-wrap p-1">
             <label for="">Note</label>
             <textarea :disabled="disabled" class="" v-model="transaction.note"></textarea>
             <p class="text-red-500">{{ field_errors.note }}</p>
           </div>
         </div>
-        
+
         <div class="w-full flex grow p-1 overflow-auto">
           <div role="sticky" ref="loadRef">
             <table class="tacky w-full" style="white-space:normal;">
               <thead >
                 <tr class="sticky top-0 !z-[2]">
-                  <th v-if="!disabled" class="min-w-[50px] !w-[50px] max-w-[50px] "></th>
+                  <th v-if="!disabled" class="min-w-[50px] !w-[50px] max-w-[50px] ">
+                    <button type="button" name="button" class="bg-yellow-600" @click="showSNSMultiItem()">
+                      Bulk Add
+                    </button>
+                  </th>
                   <th class="min-w-[50px] !w-[50px] max-w-[50px] ">No</th>
                   <th v-if="!disabled" class="min-w-[50px] !w-[50px] max-w-[50px] "></th>
                   <th class="min-w-[50px] !w-[50px] max-w-[50px] ">ID Item</th>
@@ -201,8 +205,8 @@
 
 
 
-  <SearchSelectItems :show="show_item" :fnClose="closeSNSItem" :fnSelect="selectSNSItem"
-    :exclude_lists="exclude_lists"/>
+  <SearchSelectItems :show="show_item" :fnClose="closeSNSItem" :fnSelect="selectSNSItem" :fnSelectMulti="selectMultiSNSItem"
+    :exclude_lists="exclude_lists" :enableMultiSelect="item_multi_enabled" :multi_key="['id','name']"/>
   
   <SearchSelectHrmRevisiLokasis :show="show_warehouse" :fnClose="closeSNSWarehouse" :fnSelect="selectSNSWarehouse"
   :opt="selected_warehouse" :exclude="exclude_id"/>
@@ -336,14 +340,37 @@ const selectSNSItem = (item: any) => {
   show_item.value = false;
 }
 
+const selectMultiSNSItem = (items: any) => {
+  items.forEach(v => {
+    let insert_dt ={
+      ...detail.value,
+      status: "Add",
+    };
+    insert_dt.item = v;
+    insert_dt.item_id = v.id;
+    exclude_lists.value.push(v.id);
+    details.value.push(insert_dt);
+  });
+  show_item.value = false;
+};
+
+const item_multi_enabled = ref(false);
 
 const showSNSItem=(e, index)=>{
   // console.log(details.value);
   row.value = index;
   // console.log(row.value,"row");
   
+  item_multi_enabled.value = false;
   show_item.value = true;
 };
+
+const showSNSMultiItem=(e, index)=>{
+  item_multi_enabled.value = true;
+  show_item.value = true;
+};
+
+
 const deleteItem=(e, index)=>{
   let item_id = details.value[index].item.id;
   let el_index = exclude_lists.value.indexOf(item_id);

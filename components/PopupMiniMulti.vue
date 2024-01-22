@@ -1,38 +1,32 @@
 <template lang="html">
   <div v-if="show" class="flex items-center justify-center fixed top-0 left-0 z-10 p-3 w-full h-full bg-black bg-opacity-80">
-    <div class="flex items-center max-w-xs w-full relative bg-white border-solid border-gray-600 border-2 p-3 flex-col flex-wrap">
+    <div class="flex items-center max-w-xs w-full h-5/6 relative bg-white border-solid border-gray-600 border-2 p-3 flex-col">
       <div class="absolute -top-7 right-0 py-1 px-2 bg-white border-solid border-2 border-gray-600 border-b-0 rounded-tl-md">
         <IconsTimes class="text-2xl text-black cursor-pointer"  @click="fnClose()"/>      
       </div>
-      <div class="flex items-center justify-center p-2 border-red-600 border-solid border-2 rounded-full">
-        <IconsExclamation class="text-4xl text-red-600"/>      
-      </div>
+      
+      <div class="w-full grow text-left mt-3 flex-col overflow-hidden" >
+        <b class="text-gray-600" >Selected List:</b>
+        <div class="w-full h-full grow overflow-auto p-2">
 
-      <div class=" mx-0 my-2 text-justify">
-        <div v-if="type=='custome'">
-          <slot name="words"></slot>  
+          <div v-for="(v, k) in data" class="w-full flex flex-row flex-wrap  items-center bg-blue-500 my-1 text-white rounded justify-between">
+            <div class="flex flex-row flex-wrap  items-center">
+              <div v-for="mk in multi_key" class="p-1">            
+                {{ v[mk] }}
+              </div>
+            </div>
+            <IconsTimes class="text-2xl cursor-pointer"  @click="fnRemoveFromList(k)"/>      
+          </div>
+          
         </div>
-        <div v-else-if="type=='delete'">
-          Data yang akan dihapus <b>tidak dapat dikembalikan lagi</b>, yakin untuk menghapus data ini ?        
-        </div>
       </div>
 
-      <div class="w-full text-left mt-3" >
-        <b class="text-gray-600" >Data Information :</b>
-        <table class="w-full border-solid border-2 border-black ">
-          <tr v-for="(v, k) in data">
-            <td class="border-solid border-2 border-black p-1 capitalize bg-slate-800 text-white text-right">{{ k }}</td>
-            <td class="border-solid border-2 border-black p-1 text-left">{{ v }}</td>
-          </tr>
-        </table>
-      </div>
-
-      <div class="w-full text-left mt-3">
+      <!-- <div class="w-full text-left mt-3">
         <slot name="footer"></slot> 
-      </div>
+      </div> -->
 
       <div class="flex w-full justify-between mt-5">
-        <button @click="fnClose()" class="w-full bg-blue-500 border-blue-500 border-solid border-2 p-1 text-white mr-2"> Batal </button>
+        <button @click="fnClose()" class="w-full bg-blue-500 border-blue-500 border-solid border-2 p-1 text-white mr-2"> Tutup </button>
 
         <button @click="fnConfirm()" :disabled="!props.enabledOk || countDown > 0" 
         class="w-full  border-solid border-2 p-1 text-white"
@@ -65,22 +59,26 @@ const props = defineProps({
     type: Function,
     required: true,
   },
-  type: {
-    type: String,
-    required: true,
-  },
+  fnRemoveFromList:{
+    type:Function,
+    required:true
+  },  
   enabledOk: {
     type: Boolean,
     required: false,
     default: true,
   },
-
+  multi_key: {
+    type: Array,
+    required: true
+    // default: '',
+  },
 })
 let interval: null | ReturnType<typeof setInterval>  = null;
 const countDown = ref(0);
 const startCounting = ()=>{
   if(interval==null){
-    countDown.value=2;
+    countDown.value=1;
     interval = setInterval(()=>{
       countDown.value--;
       if(countDown.value<=0){
@@ -93,7 +91,6 @@ const startCounting = ()=>{
 
 
 watch(()=>props.show,(newVal, oldVal) => {
-
   if(newVal)
   startCounting();
   else
