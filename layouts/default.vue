@@ -13,13 +13,13 @@
         <header class="h-full flex flex-col p-2 overflow-hidden">
           <ul class="grow overflow-auto">
             <li :class="activeMenu == '/'?'active':''" >
-              <nuxt-link class="cursor-pointer" @click="goTo('/')">
+              <nuxt-link to="/" class="cursor-pointer" @click="goTo('/')">
                 <IconsHome class="mr-1"/>
                 Dashboard
               </nuxt-link>
             </li>
             <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
-              <nuxt-link class="cursor-pointer" @click="goTo('/data_satuan')">
+              <nuxt-link to="/data_satuan"  class="cursor-pointer" @click="goTo('/data_satuan')">
                 <IconsScale class="mr-1"/>
                 Satuan
               </nuxt-link>
@@ -29,13 +29,13 @@
               </nuxt-link>
             </li> -->
             <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_item'?'active':''" >
-              <nuxt-link class="cursor-pointer" @click="goTo('/data_item')">
+              <nuxt-link to="/data_item"  class="cursor-pointer" @click="goTo('/data_item')">
                 <IconsProduct class="mr-1"/>
                 Item
               </nuxt-link>
             </li>
             <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_transaksi'?'active':''" >
-              <nuxt-link class="cursor-pointer" @click="goTo('/data_transaksi')">
+              <nuxt-link to="/data_transaksi"  class="cursor-pointer" @click="goTo('/data_transaksi')">
                 <IconsCreditCard class="mr-1"/>
                 Transaksi
               </nuxt-link>
@@ -147,7 +147,7 @@ const goTo=(url:any)=>{
   if(activeMenu.value == url) return;
   activeMenu.value = url;
   is_sidebar_open.value=false;
-  router.push(url);
+  // router.push(url);
 }
 
 
