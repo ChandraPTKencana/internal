@@ -51,7 +51,7 @@ table.tacky tbody th::before {
 
 table.tacky th *,
 table.tacky td *{
-    @apply relative z-10;
+    @apply relative;
 }
 
 
