@@ -33,6 +33,19 @@
           </button>
         </div>
       </form>
+
+      <div class="w-full flex">
+        <div class="p-1">
+          <input type="text" v-model="item_name" placeholder="Item Name"/>
+        </div>
+        <div class="grow flex flex-row flex-wrap">
+          <div v-for="ch in column_header" class="p-1"> 
+            <div class="p-1 rounded ring-1 ring-slate-500 cursor-pointer" :class="isUnselectHeader(ch)?'bg-white text-black':'bg-slate-600 text-white'" @click="addOrRemoveHeader(ch)">
+              {{ ch.lokasi }}
+            </div>
+           </div>
+        </div>
+      </div>
       <div class="w-full flex justify-center items-center grow h-0 p-1">
 
         <div v-if="all.length == 0" class="">
@@ -44,14 +57,14 @@
             <thead>
               <tr class="sticky top-0 !z-[2]">
                 <th></th>
-                <th v-for="ch in column_header"> {{ ch.lokasi }}</th>
+                <th v-for="ch in column_header_filtered"> {{ ch.lokasi }}</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(row, index) in row_header" :key="index" @click="selected = index"
+              <tr v-for="(row, index) in row_header_filtered" :key="index" @click="selected = index"
                 :class="selected == index ? 'active' : ''">
-                <td class="font-bold !text-left">{{ row.name }}</td>
-                <td v-for="ch in column_header">
+                <th class="font-bold !text-left">{{ row.name }}</th>
+                <td v-for="ch in column_header_filtered">
                   <a class="text-blue-500 font-bold underline cursor-pointer" @click="open_details(returnSpesificData(ch.id,row.id))">
                     {{ returnQtyReminder(ch.id,row.id) }}
                   </a> 
@@ -193,16 +206,59 @@ const open_details=(data,warehouse_id,item_id)=>{
   selected_data.value = data;
   popup_details.value = true;
 }
+
+const item_name = ref("");
+const unselect_col_header = ref([]);
+
+const addOrRemoveHeader = (thead)=>{
+  let index = unselect_col_header.value.map((x)=>x.id).indexOf(thead.id);
+  if(index==-1){
+    //add to header
+    unselect_col_header.value.push(thead);
+  }else{
+    //remove from header
+    unselect_col_header.value.splice(index,1);
+  }
+}
+
+const isUnselectHeader=(thead)=>{
+  return unselect_col_header.value.some((x)=>{return x.id===thead.id});
+}
+
+const column_header_filtered = computed(()=>{
+  let result = [];
+
+  let mapID = unselect_col_header.value.map((x)=>x.id);
+  column_header.value.forEach(v => {
+    if(mapID.indexOf(v.id)==-1){
+      result.push(v);
+    }
+  });
+  return result;
+});
+
+const row_header_filtered = computed(()=>{
+  // let before = item_name.value;
+  // let nF = before.replace(/([.?*+^$[\]\\/(){}|-])/g, "");
+
+  let name_of_item = item_name.value;
+  const re = new RegExp("("+name_of_item+")","i");
+
+  return row_header.value.filter(x => {
+    return x.name.match(re);
+  });
+});
+
 </script>
 <style scoped="">
-table.sticky thead th:nth-child(2) {
+table.tacky thead th:nth-child(1) {
   position: -webkit-sticky;
   position: sticky;
   left: 0;
   z-index: 2;
 }
 
-table.sticky thead tr {
+table.tacky thead tr {
   top: 0;
 }
 
