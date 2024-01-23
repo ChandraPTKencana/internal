@@ -80,7 +80,7 @@ let interval: null | ReturnType<typeof setInterval>  = null;
 const countDown = ref(0);
 const startCounting = ()=>{
   if(interval==null){
-    countDown.value=2;
+    countDown.value=1;
     interval = setInterval(()=>{
       countDown.value--;
       if(countDown.value<=0){

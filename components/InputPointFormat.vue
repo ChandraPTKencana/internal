@@ -1,6 +1,7 @@
 <template>
-    <input type="text" :value="inputVal" 
-      @keyup="change($event)"
+    <input type="text" :value="inputVal"
+      @keydown ="checkKey($event)"
+      @keyup="change($event.target.value)" 
       @blur="blur($event),$emit('nextBlur',$event)"
     >
 </template>
@@ -49,21 +50,21 @@ const oriIDFormat=(m:any)=>{
   return m.toString().replace(/[^,0-9]/ig, '').replace(',','.').replace(/,/ig, '');
 };
 
-const change=(val:any)=>{
-  if(val.target) val.preventDefault();
-  let result = (typeof val == 'object' ? val.target.value : val).toString();  
-  if(result && result.match(/[a-z]+/ig)){
-    inputVal.value = 0;
-  }
-  else
-  inputVal.value = writeIDFormat(result);
-}
+// const change=(val:any)=>{
+//   // if(val.target) val.preventDefault();
+//   // let result = (typeof val == 'object' ? val.target.value : val).toString();  
+//   // // if(result && result.match(/[a-z]+/ig)){
+//   // //   inputVal.value = 0;
+//   // // }
+//   // // else
+//   // inputVal.value = writeIDFormat(result);
+// }
+
 const blur=(val:any)=>{
   let result = typeof val == 'object' ? val.target.value : val;
-  if(result){    
-    inputVal.value = blurIDFormat(result);
-    emit('input',Number(oriIDFormat(result))); 
-  }
+  result = result || 0;
+  inputVal.value = blurIDFormat(result);  
+  emit('input',Number(oriIDFormat(result))); 
 }
 
 onMounted(() => {
@@ -74,6 +75,33 @@ const point = computed((value) =>{
   if (!value) return 0
   return new Intl.NumberFormat('id-ID',{minimumFractionDigits: 2}).format(value);
 });
+
+
+const reAbj = /[a-zA-Z .,<>?/\\|:;'"\[\]{}=+=_()*&^%$#@!~`]/;
+// let full = before.replace(/([.?*+^$[\]\\/(){}|-])/g, "");
+
+const change=(val)=>{
+  let newVal = val;
+  
+  if(val.toString().length > 1)
+  newVal = val.toString().replace(/^0/g, "");
+  
+  inputVal.value = writeIDFormat(newVal);
+}
+
+const excludeList=["Backspace","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Delete"];
+
+const checkKey=(e)=>{
+  if(
+    e.ctrlKey==false && 
+    !excludeList.includes(e.key) && 
+    e.key.match(reAbj)
+  ) e.preventDefault();
+
+  if(e.key == '0' && (e.target.value === 0 || e.target.value === '0')) e.preventDefault();
+}
+
+
 
 // watch(inputVal, (newVal, oldVal) => {
 //   blur(newVal);

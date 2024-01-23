@@ -5,9 +5,9 @@
         <IconsTimes class="text-2xl text-black cursor-pointer"  @click="fnClose()"/>      
       </div>
       
-      <div class="w-full grow text-left mt-3 flex-col overflow-hidden" >
+      <div class="w-full grow text-left mt-3 flex flex-col overflow-hidden" >
         <b class="text-gray-600" >Selected List:</b>
-        <div class="w-full h-full grow overflow-auto p-2">
+        <div class="w-full grow overflow-auto p-2">
 
           <div v-for="(v, k) in data" class="w-full flex flex-row flex-wrap  items-center bg-blue-500 my-1 text-white rounded justify-between">
             <div class="flex flex-row flex-wrap  items-center">
@@ -25,7 +25,7 @@
         <slot name="footer"></slot> 
       </div> -->
 
-      <div class="flex w-full justify-between mt-5">
+      <div class="flex w-full justify-between mt-3">
         <button @click="fnClose()" class="w-full bg-blue-500 border-blue-500 border-solid border-2 p-1 text-white mr-2"> Tutup </button>
 
         <button @click="fnConfirm()" :disabled="!props.enabledOk || countDown > 0" 
