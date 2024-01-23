@@ -89,7 +89,7 @@ const change=(val)=>{
   inputVal.value = writeIDFormat(newVal);
 }
 
-const excludeList=["Backspace","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Delete"];
+const excludeList=["Backspace","ArrowLeft","ArrowRight","ArrowUp","ArrowDown","Delete","Tab"];
 
 const checkKey=(e)=>{
   if(

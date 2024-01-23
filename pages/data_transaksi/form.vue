@@ -159,19 +159,21 @@
                        
                         <InputPointFormat
                         :disabled="disabled || transaction.type=='used' || transaction.type=='transfer'"  
-                        :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_in || 0" @input="detail.qty_in = $event"/>
+                        :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_in || 0" @input="detail.qty_in = $event"
+                        :tabindex="(details.length * 0) + 1"/>
                       </div>
                     </td>
                     <td class="cell">
                       <div class="w-full h-full flex items-center justify-center">
                         <InputPointFormat 
                         :disabled="disabled || transaction.type=='in'" 
-                        :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_out || 0" @input="detail.qty_out = $event"/>
+                        :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_out || 0" @input="detail.qty_out = $event"
+                        :tabindex="(details.length * 1) + 1"/>
                       </div>
                     </td>
                     <td class="cell">
                       <div class="w-full h-full flex items-center justify-center">
-                        <textarea :disabled="disabled" class="border-black border-solid border-1 p-1 w-full" v-model="detail.note" cols="7" rows="2"></textarea>
+                        <textarea :disabled="disabled" class="border-black border-solid border-1 p-1 w-full" v-model="detail.note" cols="7" rows="2" :tabindex="(details.length * 2) + 1"></textarea>
                       </div>
                     </td>
                   </tr>
@@ -540,5 +542,10 @@ const replyAction=(act = "")=>{
 
 const disabled = computed(()=>{
   return transaction.value.confirmed_by || transaction.value.ref_id != null;
-})
+});
+
+
+const tabClicked=()=>{
+  console.log("tab")
+}
 </script>
