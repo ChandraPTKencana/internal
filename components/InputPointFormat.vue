@@ -3,6 +3,7 @@
       @keydown ="checkKey($event)"
       @keyup="change($event.target.value)" 
       @blur="blur($event),$emit('nextBlur',$event)"
+      @focus="blockAll($event)"
     >
 </template>
 
@@ -62,7 +63,7 @@ const oriIDFormat=(m:any)=>{
 
 const blur=(val:any)=>{
   let result = typeof val == 'object' ? val.target.value : val;
-  result = result || 0;
+  result = result || props.value;
   inputVal.value = blurIDFormat(result);  
   emit('input',Number(oriIDFormat(result))); 
 }
@@ -99,6 +100,11 @@ const checkKey=(e)=>{
   ) e.preventDefault();
 
   if(e.key == '0' && (e.target.value === 0 || e.target.value === '0')) e.preventDefault();
+}
+
+const blockAll=(e)=>{
+  e.target.select();
+  e.target.setSelectionRange(0, 99999);
 }
 
 
