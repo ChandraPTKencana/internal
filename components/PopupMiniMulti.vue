@@ -9,7 +9,8 @@
         <b class="text-gray-600" >Selected List:</b>
         <div class="w-full grow overflow-auto p-2">
 
-          <div v-for="(v, k) in data" class="w-full flex flex-row flex-wrap  items-center bg-blue-500 my-1 text-white rounded justify-between">
+          <div v-for="(v, k) in data" class="w-full flex flex-row flex-wrap  items-center bg-blue-500 my-1 text-white rounded justify-between"
+          draggable="true" @dragstart="handleDragStart($event,k)" @dragover.prevent @drop="handleDrop($event,k)">
             <div class="flex flex-row flex-wrap  items-center">
               <div v-for="mk in multi_key" class="p-1">            
                 {{ v[mk] }}
@@ -117,7 +118,16 @@ onUnmounted(()=>{
   interval = null;
 });
 
+const handleDragStart=(event,key)=>{
+  event.dataTransfer.setData('application/json',JSON.stringify(key));
+}
 
+const handleDrop=(event,key)=>{
+  let dragged_key = JSON.parse(event.dataTransfer.getData('application/json'));
+  let old = props.data[dragged_key];
+  props.data.splice(dragged_key,1);
+  props.data.splice(key,0,{...old});
+}
 // const router = useRouter();
 // const go_back = () => {
 //   if (props.fn) props.fn();

@@ -124,7 +124,7 @@
               </thead>
               <tbody>
                 <template v-for="(detail, index) in details" :key="index">
-                  <tr v-if="detail.status!='Remove'">
+                  <tr v-if="detail.status!='Remove'" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)">
                     <td v-if="!disabled" class="tools cell">
                       <div class="w-full h-full flex items-center justify-center">
                         <button  type="button" name="button"
@@ -213,7 +213,7 @@
   <SearchSelectHrmRevisiLokasis :show="show_warehouse" :fnClose="closeSNSWarehouse" :fnSelect="selectSNSWarehouse"
   :opt="selected_warehouse" :exclude="exclude_id"/>
 
-  <ToolsPopup :show="tools_popup" :coor="coor" :fn="closeToolsPopup" @replyAct="replyAction($event)" />
+  <ToolsPopup :show="tools_popup" :coor="coor" :fn="closeToolsPopup" :data="details" :data_index="row" @replyAct="replyAction($event)" />
 
 </template>
 
@@ -536,6 +536,14 @@ const replyAction=(act = "")=>{
     else
       details.value.splice(row.value, 1);
     
+  } else if(act=="move_top"){
+    let old = details.value[row.value];
+    details.value.splice(row.value,1);
+    details.value.splice(row.value - 1,0,{...old});
+  } else if(act=="move_bottom"){
+    let old = details.value[row.value];
+    details.value.splice(row.value,1);
+    details.value.splice(row.value + 1,0,{...old});
   }
   tools_popup.value = false;
 };
@@ -545,7 +553,16 @@ const disabled = computed(()=>{
 });
 
 
-const tabClicked=()=>{
-  console.log("tab")
+const handleDragStart=(event,key)=>{
+  event.dataTransfer.setData('application/json',JSON.stringify(key));
 }
+
+const handleDrop=(event,key)=>{
+  let dragged_key = JSON.parse(event.dataTransfer.getData('application/json'));
+  let old = details.value[dragged_key];
+  details.value.splice(dragged_key,1);
+  details.value.splice(key,0,{...old});
+}
+
+
 </script>
