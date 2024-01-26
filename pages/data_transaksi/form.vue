@@ -566,7 +566,7 @@ const handleDrop=(event,key)=>{
 
 const to_move = ref<HTMLElement | null>(null);
 onMounted(()=>{
-  useMoveDOM(to_move,details);
+  if(!disabled.value) useMoveDOM(to_move,details);
 });
 
 </script>
