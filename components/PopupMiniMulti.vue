@@ -7,9 +7,9 @@
       
       <div class="w-full grow text-left mt-3 flex flex-col overflow-hidden" >
         <b class="text-gray-600" >Selected List:</b>
-        <div class="w-full grow overflow-auto p-2">
+        <div class="w-full grow overflow-auto p-2" ref="to_move">
 
-          <div v-for="(v, k) in data" class="w-full flex flex-row flex-wrap  items-center bg-blue-500 my-1 text-white rounded justify-between"
+          <div v-for="(v, k) in data" :data-index="k" class="w-full flex flex-row flex-wrap  items-center bg-blue-500 my-1 text-white rounded justify-between"
           draggable="true" @dragstart="handleDragStart($event,k)" @dragover.prevent @drop="handleDrop($event,k)">
             <div class="flex flex-row flex-wrap  items-center">
               <div v-for="mk in multi_key" class="p-1">            
@@ -91,9 +91,15 @@ const startCounting = ()=>{
 };
 
 
+const to_move = ref<HTMLElement | null>(null);
+
 watch(()=>props.show,(newVal, oldVal) => {
-  if(newVal)
-  startCounting();
+  if(newVal){
+    startCounting();
+    setTimeout(() => {
+      useMoveDOM(to_move,{value:props.data});
+    }, 0);
+  }
   else
   {
     clearInterval(interval);

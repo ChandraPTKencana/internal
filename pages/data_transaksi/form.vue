@@ -122,9 +122,9 @@
                   <th>Keterangan</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody ref="to_move">
                 <template v-for="(detail, index) in details" :key="index">
-                  <tr v-if="detail.status!='Remove'" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)">
+                  <tr v-if="detail.status!='Remove'"  :data-index="index" draggable="true" @dragstart="handleDragStart($event,index)" @dragover.prevent @drop="handleDrop($event,index)">
                     <td v-if="!disabled" class="tools cell">
                       <div class="w-full h-full flex items-center justify-center">
                         <button  type="button" name="button"
@@ -564,5 +564,9 @@ const handleDrop=(event,key)=>{
   details.value.splice(key,0,{...old});
 }
 
+const to_move = ref<HTMLElement | null>(null);
+onMounted(()=>{
+  useMoveDOM(to_move,details);
+});
 
 </script>
