@@ -22,7 +22,7 @@
   
           <div class="w-full sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1 ">
             <label for="">From Warehouse</label>
-            <div class="card-border flex flex-row flex-wrap ">
+            <div class="w-full flex flex-row flex-wrap " :class="disabled ? 'unselectable' : ''">
               <div v-if="!transaction.warehouse || !transaction.warehouse.id" class="w-full flex">
                 <button type="button" @click="searchWarehouse('from')" class="flex items-center grow">
                   <IconsSearch class="text-2xl text-black" />
@@ -31,7 +31,7 @@
                   </div>
                 </button>
               </div>
-              <div v-else-if="transaction.ref_id==null" class="w-full flex" :class="disabled ? 'unselectable' : ''" style="">
+              <div v-else-if="transaction.ref_id==null" class="w-full flex" style="">
                 <div class="flex flex-row flex-wrap grow">
                   <div class="p-1">
                     <div class="text-sm text-gray-600">ID</div>
@@ -67,7 +67,7 @@
   
           <div v-if="transaction.type =='transfer'" class="w-full sm:w-4/12 md:w-3/12 lg:w-2/12 flex flex-col flex-wrap p-1">
             <label for="">To Warehouse</label>
-            <div class="card-border flex flex-row flex-wrap ">
+            <div class="w-full flex flex-row flex-wrap " :class="disabled ? 'unselectable' : ''">
               <div v-if="!transaction.warehouse_target || !transaction.warehouse_target.id" class="w-full flex">
                 <button type="button" @click="searchWarehouse('to')" class="flex items-center grow">
                   <IconsSearch class="text-2xl text-black" />
@@ -76,7 +76,7 @@
                   </div>
                 </button>
               </div>
-              <div v-else class="w-full flex" :class="disabled ? 'unselectable' : ''" style="">
+              <div v-else class="w-full flex"  style="">
                 <div class="flex flex-row flex-wrap grow">
                   <div class="p-1">
                     <div class="text-sm text-gray-600">ID</div>
@@ -155,11 +155,10 @@
                       </div>
                     </td>
                     <td class="cell">
-                      <div class="w-full h-full flex items-center justify-center">
-                       
+                      <div class="w-full h-full flex items-center justify-center">                       
                         <InputPointFormat
                         :disabled="disabled || transaction.type=='used' || transaction.type=='transfer'"  
-                        :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_in || 0" @input="detail.qty_in = $event"
+                        :key="index" class="w-full h-full p-1" type="text" :value="detail.qty_in || 0" @input="detail.qty_in = $event"
                         :tabindex="(details.length * 0) + 1"/>
                       </div>
                     </td>
@@ -167,13 +166,13 @@
                       <div class="w-full h-full flex items-center justify-center">
                         <InputPointFormat 
                         :disabled="disabled || transaction.type=='in'" 
-                        :key="index" class="w-full h-full border-black border-solid border-1 p-1" type="text" :value="detail.qty_out || 0" @input="detail.qty_out = $event"
+                        :key="index" class="w-full h-full p-1" type="text" :value="detail.qty_out || 0" @input="detail.qty_out = $event"
                         :tabindex="(details.length * 1) + 1"/>
                       </div>
                     </td>
                     <td class="cell">
                       <div class="w-full h-full flex items-center justify-center">
-                        <textarea :disabled="disabled" class="border-black border-solid border-1 p-1 w-full" v-model="detail.note" cols="7" rows="2" :tabindex="(details.length * 2) + 1"></textarea>
+                        <textarea :disabled="disabled" class="p-1 w-full" v-model="detail.note" cols="7" rows="2" :tabindex="(details.length * 2) + 1"></textarea>
                       </div>
                     </td>
                   </tr>
