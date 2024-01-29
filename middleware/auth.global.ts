@@ -1,5 +1,7 @@
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from '~/store/auth';
+import { useCommonStore } from '~/store/common';
+
 export default defineNuxtRouteMiddleware(async (to) => {
   // console.log("from global middleware", to);
   const { authenticated, done_get_user_info } = storeToRefs(useAuthStore()); // make authenticated state reactive
@@ -23,6 +25,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
     abortNavigation();
     return navigateTo('/login');
   }
+
+  useCommonStore().loading_full = true;
 
   if (to?.name !== 'login' && done_get_user_info.value == false) {
     const { checkUser } = useAuthStore();
