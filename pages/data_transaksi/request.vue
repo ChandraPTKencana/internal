@@ -91,7 +91,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-transaction-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik", 'User']))
+      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik",'KTU', 'User']))
       return navigateTo('/');
 
     },

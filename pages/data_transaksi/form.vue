@@ -230,9 +230,9 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-item-add', 'ap-item-edit']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik", 'User']))
+      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik",'KTU', 'User']))
       return navigateTo('/');
-
+      useCommonStore().loading_full = false;
     },
     // 'auth',
   ],

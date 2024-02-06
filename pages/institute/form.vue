@@ -147,7 +147,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-institute-add', 'ap-institute-edit']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik", 'User']))
+      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik",'KTU', 'User']))
       return navigateTo('/');
 
     },

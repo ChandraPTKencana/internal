@@ -25,8 +25,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
     abortNavigation();
     return navigateTo('/login');
   }
-
-  useCommonStore().loading_full = true;
+  
+  if(to?.name !== 'login'){
+    useCommonStore().loading_full = true;
+  }
 
   if (to?.name !== 'login' && done_get_user_info.value == false) {
     const { checkUser } = useAuthStore();

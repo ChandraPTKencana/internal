@@ -103,7 +103,7 @@ definePageMeta({
     function (to, from) {
       // if (!useAuthStore().checkScopes(['ap-member-view']))
       //   return navigateTo('/');
-      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik", 'User']))
+      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik",'KTU', 'User']))
       return navigateTo('/');
 
     },

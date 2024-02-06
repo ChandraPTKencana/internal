@@ -38,6 +38,7 @@ definePageMeta({
       //   return navigateTo('/');
       if (!useAuthStore().checkRole(['Super Admin','User']))
       return navigateTo('/');
+      useCommonStore().loading_full = false;
     },
     // 'auth',
   ],

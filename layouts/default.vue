@@ -18,7 +18,7 @@
                 Dashboard
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
+            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
               <nuxt-link to="/data_satuan"  class="cursor-pointer" @click="goTo('/data_satuan')">
                 <IconsScale class="mr-1"/>
                 Satuan
@@ -28,13 +28,13 @@
               <nuxt-link class="cursor-pointer" to="/data_gudang" @click="goTo('/data_gudang')">Gudang
               </nuxt-link>
             </li> -->
-            <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_item'?'active':''" >
+            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_item'?'active':''" >
               <nuxt-link to="/data_item"  class="cursor-pointer" @click="goTo('/data_item')">
                 <IconsProduct class="mr-1"/>
                 Item
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['Super Admin','ClientPabrik', 'User'])" :class="activeMenu == '/data_transaksi'?'active':''" >
+            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_transaksi'?'active':''" >
               <nuxt-link to="/data_transaksi"  class="cursor-pointer" @click="goTo('/data_transaksi')">
                 <IconsCreditCard class="mr-1"/>
                 Transaksi

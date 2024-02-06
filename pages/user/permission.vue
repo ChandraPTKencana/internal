@@ -60,7 +60,7 @@ definePageMeta({
       // if (!useAuthStore().checkScopes(["ap-user_permission-view", 'ap-user_permission-edit']))
       //   return navigateTo('/');
 
-      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik", 'User']))
+      if (!useAuthStore().checkRole(["Super Admin","ClientPabrik",'KTU', 'User']))
         return navigateTo('/');
 
     },
