@@ -56,6 +56,7 @@
               <tr class="sticky top-0 !z-[2]">
                 <th>No.</th>
                 <th>ID</th>
+                <th>Photo</th>
                 <th>Name</th>
                 <th>Unit</th>
                 <th>Value</th>
