@@ -4,6 +4,18 @@
     <form action="#" class="w-full flex grow flex-col h-0 overflow-auto bg-white">
       <div class="w-full align-items-center justify-content-center grow overflow-auto">
         <div class="w-full flex flex-col flex-wrap p-1">
+            <label for="">Foto</label>
+            <div  class="flex justify-center items-center w-24 h-24">
+                <img :src="item.photo || '/stok/user-default.png'" alt="" class=" max-w-full max-h-full">
+            </div>
+            <button type="button" v-show="photo" class="bg-gray-600 w-24 text-white" @click="resetPhoto()">Remove</button>
+            <input v-show="!photo" @change="changePhoto($event)" ref="photo_input" type="file" name="photo" value="">
+
+            <small>Upload file image : jpg, jpeg</small>
+            <p class="help-err">{{ field_errors.photo }}</p>
+            </div>
+        
+        <div class="w-full flex flex-col flex-wrap p-1">
           <label for="">Name</label>
           <input class="" type="text" v-model="item.name">
           <p class="text-red-500">{{ field_errors.name }}</p>
@@ -101,6 +113,8 @@ let empty_unit = {
   name: "",
 };
 
+const photo = ref(false);
+
 
 const { data: item } = await useAsyncData(async () => {
   const id = route.query.id;
@@ -121,6 +135,8 @@ const { data: item } = await useAsyncData(async () => {
       useErrorStore().trigger(error, field_errors);
     } else {
       let data_get = data.value.data;
+      // console.log(data.value.data)
+      if (data.value.data.photo) photo.value = true;
       // if (data_get.members.length > 0) {
       //   data_get["operator_member"] = data_get.members[0];
       // } else {
@@ -137,6 +153,7 @@ const { data: item } = await useAsyncData(async () => {
     unit: {
       ...empty_unit
     },
+    photo:""
   };
 });
 
@@ -172,21 +189,26 @@ const doSave = async () => {
   // data_in.append("fullname", item.value.fullname);
   // data_in.append("role", item.value.role);
   // data_in.append("can_login", item.value.can_login);
-  let data_in: Record<string, any> = {
-    "name": item.value.name,
-    "value": item.value.value,
-    "note": item.value.note,
-    "unit_id": item.value.unit.id,
-  };
+  const data_in= new FormData();
+  data_in.append("name", item.value.name);
+  data_in.append("value", item.value.value);
+  data_in.append("note", item.value.note);
+  data_in.append("unit_id", item.value.unit.id);
+  if (photo_input.value?.files)
+      data_in.append("photo", photo_input.value.files[0] || '');
+  if (photo_input.value)
+      data_in.append("photo_preview", item.value.photo);
+
+  
+ 
   let $method: any = "post";
 
   let id = route.query.id;
   if (id === "") {
   } else {
-    $method = "put";
-    data_in['id'] = id;
-    // data_in.append("id", id);
-    // data_in.append("_method", "PUT");
+    $method = "post";
+    data_in.append("id", id as string);
+    data_in.append("_method", "PUT");
   }
 
   const { data, error, status }: any = await useMyFetch("/api/item", {
@@ -210,4 +232,33 @@ const doSave = async () => {
 }
 
 
+const photo_input = ref<HTMLInputElement | null>(null);
+
+const changePhoto = ($e: any) => {
+
+var files = $e.target.files;
+if (files.length > 0) {
+  let reader = new FileReader();
+
+  reader.onload = function (e) {
+    let result = e.target?.result as string;
+
+    if (result.match(/image/)) {
+      item.value.photo = result;
+    }
+  }
+  reader.readAsDataURL(files[0]);
+  photo.value = true;
+}
+};
+
+
+const resetPhoto = () => {
+photo.value = false;
+item.value.photo = '';
+let elPhotoInput = photo_input.value;
+if (elPhotoInput) {
+  elPhotoInput.value = "";
+}
+};
 </script>

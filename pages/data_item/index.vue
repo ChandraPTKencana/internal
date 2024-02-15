@@ -71,6 +71,11 @@
                 :class="selected == index ? 'active' : ''">
                 <td>{{ index + 1 }}.</td>
                 <td class="bold">{{ item.id }}</td>
+                <td class="p-0"> 
+                  <div v-if="item.photo" class="absolute w-full h-full flex items-center justify-center cursor-pointer" @click="openBox(item.photo)">
+                    <img :src="item.photo || '/stok/user-default.png'" alt="" class=" max-w-full max-h-full">  
+                  </div>
+                </td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.unit.name }}</td>
                 <td>{{ pointFormat(item.value) }}</td>
@@ -87,7 +92,7 @@
     </div>
 
     <PopupMini :type="'delete'" :show="delete_box" :data="delete_data" :fnClose="toggleDeleteBox" :fnConfirm="confirmed_delete" />
-
+    <PopupSingleImage :show="show_box" :photo="photo" :fnClose="()=>{ show_box = false}"/>
   </div>
 </template>
 
@@ -291,5 +296,12 @@ const confirmed_delete = async() => {
   items.value.splice(selected.value,1);
   selected.value = -1;
   delete_box.value = false;
+}
+
+const show_box = ref(false);
+const photo = ref("");
+const openBox = (x)=>{
+  show_box.value = true;
+  photo.value = x;
 }
 </script>
