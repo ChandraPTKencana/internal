@@ -123,6 +123,10 @@ button{
     @apply text-center;
 }
 
+button:focus{
+    @apply ring-0;
+}
+
 table input,table select,table textarea{
     @apply block rounded-none border-0 px-1.5 py-1.5 text-gray-900 shadow-none ring-0 ring-inset ring-slate-700 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-indigo-300;
     // @apply block rounded-none border-0 px-1.5 py-1.5 text-gray-900 shadow-none ring-1 ring-inset ring-slate-700 placeholder:text-gray-400 focus:ring-0 focus:ring-inset focus:ring-indigo-300;

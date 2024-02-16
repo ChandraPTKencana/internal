@@ -20,7 +20,7 @@ const { show, status, message, permit_close } = storeToRefs(useAlertStore());
 <template>
     <div id="alert" class="fixed w-full h-14 bottom-0 text-white p-1 border-t-2 border-slate-700 z-10" :class="status=='Failed'?'bg-red-800 ':'bg-slate-800 '"
         v-show="show">
-        <div class="h-full flex flex-row flex-wrap">
+        <div class="h-full flex flex-row flex-wrap overflow-y-auto">
             <div class="flex flex-col flex-grow">
                 <ClientOnly>
                     <strong>

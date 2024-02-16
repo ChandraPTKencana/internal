@@ -5,45 +5,50 @@
       class="bg-slate-800 h-full min-w-[150px] max-w-[150px] fixed sm:relative sm:right-0 text-white z-10"
       style="width:320px;">
       <div class="relative h-full">
-        <button class="absolute left-full h-12 text-2xl text-white bg-slate-500 sm:hidden bg-opacity-0 ring-0 focus:ring-0"
+        <button v-if="is_sidebar_open"  class="absolute left-full h-12 text-2xl text-white bg-slate-800 sm:hidden ring-0 focus:ring-0 rounded-none rounded-br rounded-tr mt-1"
           @click="triggerSidebar(!is_sidebar_open)">
-          <IconsTimes v-if="is_sidebar_open" />
-          <IconsBurger v-else />
+          <IconsTimes />
+          <!-- <IconsBurger v-else /> -->
         </button>
         <header class="h-full flex flex-col p-2 overflow-hidden">
           <ul class="grow overflow-auto">
             <li :class="activeMenu == '/'?'active':''" >
               <nuxt-link to="/" class="cursor-pointer" @click="goTo('/')">
                 <IconsHome class="mr-1"/>
-                Dashboard
+                Tabs
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_satuan'?'active':''" >
-              <nuxt-link to="/data_satuan"  class="cursor-pointer" @click="goTo('/data_satuan')">
+            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
+              <nuxt-link class="cursor-pointer" @click="openCom(dt_satuan_index,'Satuan')">
                 <IconsScale class="mr-1"/>
                 Satuan
               </nuxt-link>
             </li>
-            <!-- <li :class="activeMenu == '/data_gudang'?'active':''" >
-              <nuxt-link class="cursor-pointer" to="/data_gudang" @click="goTo('/data_gudang')">Gudang
-              </nuxt-link>
-            </li> -->
-            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_item'?'active':''" >
-              <nuxt-link to="/data_item"  class="cursor-pointer" @click="goTo('/data_item')">
+            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
+              <nuxt-link class="cursor-pointer" @click="openCom(dt_item_index,'Item')">
                 <IconsProduct class="mr-1"/>
                 Item
               </nuxt-link>
             </li>
-            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/data_transaksi'?'active':''" >
-              <nuxt-link to="/data_transaksi"  class="cursor-pointer" @click="goTo('/data_transaksi')">
+            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
+              <nuxt-link class="cursor-pointer" @click="openCom(dt_transaksi_index,'Transaksi')">
                 <IconsCreditCard class="mr-1"/>
                 Transaksi
               </nuxt-link>
             </li>
-            <!-- <li><nuxt-link to="/events">Events</nuxt-link></li>
-            <li><nuxt-link to="/user">User</nuxt-link></li>
-            <li><nuxt-link to="/institute">Institute</nuxt-link></li>
-            <li><nuxt-link to="/member">Member</nuxt-link></li> -->
+
+            <!-- <li>
+              <nuxt-link class="cursor-pointer" @click="openCom(dt_test_index,'TEST',{show:'10'})">
+                TEST
+              </nuxt-link>
+            </li> -->
+
+            <!-- <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/tools_note'?'active':''" >
+              <nuxt-link to="/tools_note" class="cursor-pointer" @click="goTo('/tools_note')">
+                <IconsCreditCard class="mr-1"/>
+                Note
+              </nuxt-link>
+            </li> -->
             <!-- <li v-if="!authenticated" class="loginBtn" style="float: right">
               <nuxt-link to="/login">Login</nuxt-link>
             </li> -->
@@ -70,6 +75,7 @@
     </nav>
 
     <div class="grow flex flex-col overflow-hidden">
+      <TabBar />
       <slot />
     </div>
   </div>
@@ -82,6 +88,15 @@ import { useAuthStore } from '~/store/auth';
 
 import { useErrorStore } from '~/store/error';
 import { useCommonStore } from '~/store/common';
+
+// import dt_transaksi_index from '~/tabs/data_transaksi/index'
+// import dt_satuan_index from '~/tabs/data_satuan/index'
+// import dt_item_index from '~/tabs/data_item/index'
+
+const dt_transaksi_index = () => markRaw(defineAsyncComponent(() => import('~/tabs/data_transaksi/index.vue')));
+const dt_satuan_index = () => markRaw(defineAsyncComponent(() => import('~/tabs/data_satuan/index.vue')));
+const dt_item_index = () => markRaw(defineAsyncComponent(() => import('~/tabs/data_item/index.vue')));
+
 
 const router = useRouter();
 const route = useRoute();
@@ -117,6 +132,8 @@ const logout = async() => {
     return;
   }else{
     logUserOut();
+    useCommonStore().opened_component_idx = -1;
+    useCommonStore().opened_components = [];
     router.push('/login');
   }
 
@@ -143,12 +160,19 @@ const checkRole=(list:Array<string>)=>{
   return (list).includes(role.value as string);
 };
 
-const goTo=(url:any)=>{
+const openCom=async(location:any,title:string)=>{
+  await useCommonStore().setDynamicComponent(location,title);
+  // if(activeMenu.value == url) return;
+  // activeMenu.value = url;
+  is_sidebar_open.value=false;
+}
+
+const goTo=async(url)=>{
   if(activeMenu.value == url) return;
   activeMenu.value = url;
   is_sidebar_open.value=false;
-  // router.push(url);
 }
+
 
 
 </script>
