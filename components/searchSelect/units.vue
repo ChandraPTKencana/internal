@@ -263,6 +263,8 @@ table.sticky thead tr {
   align-items: center;
   justify-content: center;
   top: 0px;
+  left:0px;
+
 }
 
 .box-fixed>div {

@@ -451,10 +451,11 @@ const doSave = async () => {
   let $method: any = "post";
 
   let id = props.id;
-  if (id === "") {
+  if (id == undefined) {
   } else {
-    $method = "put";
+    $method = "post";
     data_in['id'] = id;
+    data_in['_method'] = "PUT";
     // data_in.append("id", id);
     // data_in.append("_method", "PUT");
   }

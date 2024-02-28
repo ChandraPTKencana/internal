@@ -214,7 +214,7 @@ const doSave = async () => {
   let $method: any = "post";
 
   let id = props.id;
-  if (id === "") {
+  if (id == undefined) {
   } else {
     $method = "post";
     data_in.append("id", id as string);

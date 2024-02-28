@@ -102,7 +102,7 @@ const doSave = async () => {
   let $method: any = "post";
 
   let id = props.id as string;
-  if (id === "") {
+  if (id == undefined) {
   } else {
     $method = "post";
     // data_in['id'] = id;

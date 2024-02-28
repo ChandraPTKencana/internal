@@ -311,7 +311,7 @@ const confirmOk = async () => {
   let $method: any = "post";
 
   let id = props.id;
-  if (id === "") {
+  if (id == undefined) {
   } else {
     $method = "put";
     data_in['id'] = id;
