@@ -132,9 +132,6 @@ const logout = async() => {
     return;
   }else{
     logUserOut();
-    useCommonStore().opened_component_idx = -1;
-    useCommonStore().opened_components = [];
-    router.push('/login');
   }
 
 };

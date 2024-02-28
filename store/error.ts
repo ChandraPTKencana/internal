@@ -52,27 +52,7 @@ export const useErrorStore = defineStore('error', {
       }
 
       if (errorStatusCode == 401) {
-        const token = useCookie('token');
-        token.value = null;
-
-        const { authenticated } = storeToRefs(useAuthStore());
-        authenticated.value = false;
-
-        const username = useCookie('username'); // useCookie new hook in nuxt 3
-        username.value = null; // set token to cookie
-
-        const fullname = useCookie('fullname'); // useCookie new hook in nuxt 3
-        fullname.value = null; // set token to cookie
-        
-        const role = useCookie('role'); // useCookie new hook in nuxt 3
-        role.value = null;
-
-        const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
-        scopes.value = null;
-
-        const router = useRouter();
-        router.push('/login');
-        return;
+        useAuthStore().clearAuth();
       }
 
     },

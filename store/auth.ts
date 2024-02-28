@@ -118,6 +118,9 @@ export const useAuthStore = defineStore('auth', {
             const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
             scopes.value = data?.value?.user?.scopes; // set token to cookie
 
+            const locs = useCookie('locs'); // useCookie new hook in nuxt 3
+            locs.value = data?.value?.user?.locs; // set token to cookie
+
             this.done_get_user_info = true;
           }
           resolve(data);
@@ -126,20 +129,7 @@ export const useAuthStore = defineStore('auth', {
       })
     },
     logUserOut() {
-      this.authenticated = false; // set authenticated  state value to false
-      this.done_get_user_info = false;
-
-      const token = useCookie('token'); // useCookie new hook in nuxt 3
-      token.value = null; // clear the token cookie
-
-      const username = useCookie('username'); // useCookie new hook in nuxt 3
-      username.value = null; // set token to cookie
-
-      const role = useCookie('role'); // useCookie new hook in nuxt 3
-      role.value = null;
-
-      const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
-      scopes.value = null;
+      this.clearAuth();      
     },
 
     checkScopes(scopes: Array<string> = []) {
@@ -154,6 +144,33 @@ export const useAuthStore = defineStore('auth', {
     checkRole(roles: Array<string> = []) {
       const role = useCookie('role'); // useCookie new hook in nuxt 3
       return roles.includes(role.value as string);
+    },
+
+    clearAuth(){
+      this.authenticated = false; // set authenticated  state value to false
+      this.done_get_user_info = false;
+
+      const token = useCookie('token'); // useCookie new hook in nuxt 3
+      token.value = null; // clear the token cookie
+
+      const username = useCookie('username'); // useCookie new hook in nuxt 3
+      username.value = null; // set token to cookie
+
+      const fullname = useCookie('fullname'); // useCookie new hook in nuxt 3
+      fullname.value = null; // set token to cookie
+
+      const role = useCookie('role'); // useCookie new hook in nuxt 3
+      role.value = null;
+
+      const scopes = useCookie('scopes'); // useCookie new hook in nuxt 3
+      scopes.value = null;
+
+      const locs = useCookie('locs'); // useCookie new hook in nuxt 3
+      locs.value = null;
+
+      const router = useRouter();
+      router.push('/login');
+      return;
     }
 
   },

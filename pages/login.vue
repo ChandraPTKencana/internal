@@ -6,6 +6,7 @@ definePageMeta({
 import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
 import { useAuthStore } from '~/store/auth'; // import the auth store we just created
 import { useErrorStore } from '~/store/error'; // import the auth store we just created
+import { useCommonStore } from '~/store/common';
 
 const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
 const { trigger } = useErrorStore();
@@ -19,6 +20,9 @@ const user = ref({
 
 const field_errors = ref<Record<string, any>>({})
 const router = useRouter();
+
+useCommonStore().opened_component_idx = -1;
+useCommonStore().opened_components = [];
 
 const login = async () => {
     try {

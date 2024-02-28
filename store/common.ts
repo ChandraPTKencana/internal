@@ -37,7 +37,7 @@ export const useCommonStore = defineStore('common', {
 
         this.opened_component_idx = this.opened_components.length - 1;
       }catch(err){
-        console.log(err) 
+        // console.log(err) 
       }
     },
     openDynamicComponent(component_index:any){

@@ -152,6 +152,9 @@ const params = {};
 params._TimeZoneOffset = new Date().getTimezoneOffset();
 const token = useCookie('token');
 const { data: dt_async } = await useAsyncData(async () => {
+  let transactions = [];
+  let request_notif = null;
+
   useCommonStore().loading_full = true;
   const { data, error, status } = await useMyFetch("/api/transactions", {
     method: 'get',
@@ -165,10 +168,11 @@ const { data: dt_async } = await useAsyncData(async () => {
   useCommonStore().loading_full = false;
   if (status.value === 'error') {
     useErrorStore().trigger(error);
-    return [];
+  }else{
+    transactions = data.value.data;
+    request_notif = data.value.request_notif;
   }
-  let transactions = data.value.data;
-  let request_notif = data.value.request_notif;
+
   return {transactions,request_notif};
 });
 

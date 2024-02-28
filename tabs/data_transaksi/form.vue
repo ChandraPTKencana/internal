@@ -315,6 +315,10 @@ const transaction:any = ref(dt_async.value?.transaction || {
 const exclude_lists = ref(dt_async.value?.exclude_lists || []);
 const details = ref(dt_async.value?.details || []);
 
+const user_locs = useCookie("locs");
+if(user_locs.value && user_locs.value.length == 1){
+ transaction.value.warehouse = {...{id:user_locs.value[0].id,name:user_locs.value[0].lokasi}};
+}
 
 // const details = ref<Record<any, any>>([]);
 const detail = ref({
