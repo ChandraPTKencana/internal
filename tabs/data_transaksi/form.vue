@@ -270,7 +270,7 @@ const { data: dt_async } = await useAsyncData(async () => {
   let exclude_lists:any = null;
   let details:any = null;
 
-  if (id !== undefined && id !== "") {
+  if (id != undefined && id !== "") {
     useCommonStore().loading_full = true;
     const { data, error, status }: any = await useMyFetch("/api/transaction", {
       method: 'get',

@@ -341,6 +341,10 @@ const confirmOk = async () => {
     status: "Success",
     message: "Data Tersimpan"
   })
+
+  confirm_box.value = false;
+  transaction.value.confirmed_by =data.value.data.confirmed_by;
+  transaction.value.input_at =data.value.data.input_at; 
   // router.go(-1);
 }
 
