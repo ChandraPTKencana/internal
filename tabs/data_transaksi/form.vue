@@ -488,6 +488,15 @@ const doSave = async () => {
   })
   // router.go(-1);
 
+
+  details.value = details.value.filter((x:any)=>x.status!="Remove").map((x:any,idx:number)=>{
+    if(!x.key){
+      x.key = idx+1;
+      x.status = "Edit";
+    }
+    return x;
+  });
+
 }
 
 // const exclude_id = computed({
