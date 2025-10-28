@@ -11,51 +11,85 @@
           <!-- <IconsBurger v-else /> -->
         </button>
         <header class="h-full flex flex-col p-2 overflow-hidden">
-          <ul class="grow overflow-auto">
-            <li :class="activeMenu == '/'?'active':''" >
-              <nuxt-link to="/" class="cursor-pointer" @click="goTo('/')">
-                <IconsHome class="mr-1"/>
-                Tabs
-              </nuxt-link>
-            </li>
-            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
-              <nuxt-link class="cursor-pointer" @click="openCom(dt_satuan_index,'Satuan')">
-                <IconsScale class="mr-1"/>
-                Satuan
-              </nuxt-link>
-            </li>
-            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
-              <nuxt-link class="cursor-pointer" @click="openCom(dt_item_index,'Item')">
-                <IconsProduct class="mr-1"/>
-                Item
-              </nuxt-link>
-            </li>
-            <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
-              <nuxt-link class="cursor-pointer" @click="openCom(dt_transaksi_index,'Transaksi')">
-                <IconsCreditCard class="mr-1"/>
-                Transaksi
-              </nuxt-link>
-            </li>
+          <div class="grow overflow-auto">
+            <ul>
+              <li class="text-xs text-slate-300">
+                Produksi
+              </li>
+              <li :class="activeMenu == '/'?'active':''" >
+                <nuxt-link to="/" class="cursor-pointer" @click="goTo('/')">
+                  <IconsHome class="mr-1"/>
+                  Tabs
+                </nuxt-link>
+              </li>
+              <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
+                <nuxt-link class="cursor-pointer" @click="openCom(dt_satuan_index,'Satuan')">
+                  <IconsScale class="mr-1"/>
+                  Satuan
+                </nuxt-link>
+              </li>
+              <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
+                <nuxt-link class="cursor-pointer" @click="openCom(dt_item_index,'Item')">
+                  <IconsProduct class="mr-1"/>
+                  Item
+                </nuxt-link>
+              </li>
+              <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
+                <nuxt-link class="cursor-pointer" @click="openCom(dt_transaksi_index,'Transaksi')">
+                  <IconsCreditCard class="mr-1"/>
+                  Transaksi
+                </nuxt-link>
+              </li>
 
-            <!-- <li>
-              <nuxt-link class="cursor-pointer" @click="openCom(dt_test_index,'TEST',{show:'10'})">
-                TEST
-              </nuxt-link>
-            </li> -->
+              <!-- <li>
+                <nuxt-link class="cursor-pointer" @click="openCom(dt_test_index,'TEST',{show:'10'})">
+                  TEST
+                </nuxt-link>
+              </li> -->
 
-            <!-- <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/tools_note'?'active':''" >
-              <nuxt-link to="/tools_note" class="cursor-pointer" @click="goTo('/tools_note')">
-                <IconsCreditCard class="mr-1"/>
-                Note
-              </nuxt-link>
-            </li> -->
-            <!-- <li v-if="!authenticated" class="loginBtn" style="float: right">
-              <nuxt-link to="/login">Login</nuxt-link>
-            </li> -->
-            <!-- <li v-if="authenticated" class="loginBtn" style="float: right">
-              <nuxt-link @click="logout">Logout</nuxt-link>
-            </li> -->
-          </ul>
+              <!-- <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" :class="activeMenu == '/tools_note'?'active':''" >
+                <nuxt-link to="/tools_note" class="cursor-pointer" @click="goTo('/tools_note')">
+                  <IconsCreditCard class="mr-1"/>
+                  Note
+                </nuxt-link>
+              </li> -->
+              <!-- <li v-if="!authenticated" class="loginBtn" style="float: right">
+                <nuxt-link to="/login">Login</nuxt-link>
+              </li> -->
+              <!-- <li v-if="authenticated" class="loginBtn" style="float: right">
+                <nuxt-link @click="logout">Logout</nuxt-link>
+              </li> -->
+            </ul>
+            <!-- <ul>
+              <li class="text-xs text-slate-300">
+                Logistik
+              </li>
+              <li :class="activeMenu == '/'?'active':''" >
+                <nuxt-link to="/" class="cursor-pointer" @click="goTo('/')">
+                  <IconsHome class="mr-1"/>
+                  Tabs
+                </nuxt-link>
+              </li>
+              <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
+                <nuxt-link class="cursor-pointer" @click="openCom(dt_satuan_index,'Satuan')">
+                  <IconsScale class="mr-1"/>
+                  Satuan
+                </nuxt-link>
+              </li>
+              <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
+                <nuxt-link class="cursor-pointer" @click="openCom(dt_item_index,'Item')">
+                  <IconsProduct class="mr-1"/>
+                  Item
+                </nuxt-link>
+              </li>
+              <li v-if="checkRole(['Super Admin','ClientPabrik','KTU', 'User'])" class="pl-6">
+                <nuxt-link class="cursor-pointer" @click="openCom(dt_transaksi_index,'Transaksi')">
+                  <IconsCreditCard class="mr-1"/>
+                  Transaksi
+                </nuxt-link>
+              </li>
+            </ul> -->
+          </div>
           <div id="panel" class="h-7 text-xs relative">
             <div v-show="is_panel_open"
               class="w-full absolute bottom-full mb-2 bg-slate-700 bg-opacity-80 cursor-pointer">
